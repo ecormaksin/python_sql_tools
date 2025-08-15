@@ -10,15 +10,15 @@ Author=
 MaxEntityRowShow=1000
 ReadOnlyRecommend=0
 Page=Main
-PageInfo="Main",2,"A3Landscape",$FFFFFF
+PageInfo="Main",4,"A1Landscape",$FFFFFF
 Domain=artist_id=BIGINT
 DomainInfo="artist_id","BIGINT","",""
-Domain=artist_name=@VARCHAR(255)
-DomainInfo="artist_name","@VARCHAR(255)","",""
+Domain=artist_name=@VARCHAR(120)
+DomainInfo="artist_name","@VARCHAR(120)","",""
 Domain=album_id=BIGINT
 DomainInfo="album_id","BIGINT","",""
-Domain=album_title=@VARCHAR(255)
-DomainInfo="album_title","@VARCHAR(255)","",""
+Domain=album_title=@VARCHAR(160)
+DomainInfo="album_title","@VARCHAR(160)","",""
 Domain=genre_id=@INT
 DomainInfo="genre_id","@INT","",""
 Domain=genre_name=@VARCHAR(255)
@@ -33,14 +33,44 @@ Domain=track_name=@VARCHAR(255)
 DomainInfo="track_name","@VARCHAR(255)","",""
 Domain=composer=@VARCHAR(255)
 DomainInfo="composer","@VARCHAR(255)","",""
+Domain=unit_price=@DECIMAL(9, 2)
+DomainInfo="unit_price","@DECIMAL(9, 2)","",""
 Domain=play_list_id=BIGINT
 DomainInfo="play_list_id","BIGINT","",""
 Domain=play_list_name=@VARCHAR(255)
 DomainInfo="play_list_name","@VARCHAR(255)","",""
+Domain=customer_id=BIGINT
+DomainInfo="customer_id","BIGINT","",""
+Domain=person_name_part=@VARCHAR(40)
+DomainInfo="person_name_part","@VARCHAR(40)","",""
+Domain=company_name=@VARCHAR(80)
+DomainInfo="company_name","@VARCHAR(80)","",""
+Domain=address=@VARCHAR(70)
+DomainInfo="address","@VARCHAR(70)","",""
+Domain=city=@VARCHAR(40)
+DomainInfo="city","@VARCHAR(40)","",""
+Domain=state=@VARCHAR(40)
+DomainInfo="state","@VARCHAR(40)","",""
+Domain=country=@VARCHAR(40)
+DomainInfo="country","@VARCHAR(40)","",""
+Domain=postal_code=@VARCHAR(10)
+DomainInfo="postal_code","@VARCHAR(10)","",""
+Domain=phone_number=@VARCHAR(24)
+DomainInfo="phone_number","@VARCHAR(24)","",""
+Domain=email_address=@VARCHAR(320)
+DomainInfo="email_address","@VARCHAR(320)","",""
+Domain=employee_id=BIGINT
+DomainInfo="employee_id","BIGINT","",""
+Domain=employee_title=@VARCHAR(30)
+DomainInfo="employee_title","@VARCHAR(30)","",""
+Domain=invoice_id=BIGINT
+DomainInfo="invoice_id","BIGINT","",""
+Domain=invoice_line_id=@INT
+DomainInfo="invoice_line_id","@INT","",""
 LogicalView=1
 DecodeDomain=0
 ViewModePageIndividually=1
-ViewMode=2
+ViewMode=4
 ViewFormat=0
 UseNondependenceDashLine=0
 FontName=Tahoma
@@ -71,16 +101,16 @@ LName=artist
 Comment=
 TableInnerOption=
 TableOption=
-Page=Main
-Left=400
-Top=150
+Page=MAIN
+Left=100
+Top=200
 Field="artist_id","artist_id","*artist_id","NOT NULL",0,"","",$FFFFFFFF,""
 Field="name","name","*artist_name","NOT NULL",,"","",$FFFFFFFF,""
 EffectMode=None
 Color=$000000
 BkColor=$FFFFFF
 ModifiedDateTime=20250814211925
-Position="Main",400,150
+Position="MAIN",100,200
 ZOrder=1
 
 [Entity]
@@ -89,18 +119,18 @@ LName=albumm
 Comment=
 TableInnerOption=
 TableOption=
-Page=Main
-Left=950
-Top=300
+Page=MAIN
+Left=1000
+Top=200
 Field="album_id","album_id","*album_id","NOT NULL",0,"","",$FFFFFFFF,""
 Field="title","title","*album_title","NOT NULL",,"","",$FFFFFFFF,""
 Field="artist_id","artist_id","*artist_id","NOT NULL",,"","",$FFFFFFFF,""
-Index==0,album_id
+Index==0,artist_id
 EffectMode=None
 Color=$000000
 BkColor=$FFFFFF
-ModifiedDateTime=20250814211903
-Position="Main",950,300
+ModifiedDateTime=20250815111628
+Position="MAIN",1000,200
 ZOrder=2
 
 [Relation]
@@ -112,15 +142,15 @@ Fields1=artist_id
 Fields2=artist_id
 Cardinarity1=
 Cardinarity2=
-Position="MAIN",0,6851,9012,718,R,R,""
+Position="MAIN",9,3232,5174,2942,R,R,""
 Dependence=0
 Caption=
 PName=
 ModifiedDateTime=20250814211320
-LineMode=0
-Bar1=685
-Bar2=901
-Bar3=72
+LineMode=9
+Bar1=323
+Bar2=517
+Bar3=294
 TermPos1=R
 TermPos2=R
 ZOrder=3
@@ -131,16 +161,16 @@ LName=genre
 Comment=
 TableInnerOption=
 TableOption=
-Page=Main
-Left=950
-Top=800
+Page=MAIN
+Left=100
+Top=550
 Field="genre_id","genre_id","*genre_id","NOT NULL",0,"","",$FFFFFFFF,""
 Field="name","name","*genre_name","NOT NULL",,"","",$FFFFFFFF,""
 EffectMode=None
 Color=$000000
 BkColor=$FFFFFF
 ModifiedDateTime=20250814211918
-Position="Main",950,800
+Position="MAIN",100,550
 ZOrder=4
 
 [Entity]
@@ -149,16 +179,16 @@ LName=media_type
 Comment=
 TableInnerOption=
 TableOption=
-Page=Main
-Left=950
-Top=1100
+Page=MAIN
+Left=100
+Top=850
 Field="media_type_id","media_type_id","*media_type_id","NOT NULL",0,"","",$FFFFFFFF,""
 Field="name","name","*media_type_name","NOT NULL",,"","",$FFFFFFFF,""
 EffectMode=None
 Color=$000000
 BkColor=$FFFFFF
 ModifiedDateTime=20250814212229
-Position="Main",950,1100
+Position="MAIN",100,850
 ZOrder=5
 
 [Entity]
@@ -167,9 +197,9 @@ LName=track
 Comment=
 TableInnerOption=
 TableOption=
-Page=Main
-Left=1550
-Top=700
+Page=MAIN
+Left=1800
+Top=550
 Field="track_id","track_id","*track_id","NOT NULL",0,"","",$FFFFFFFF,""
 Field="name","name","*track_name","NOT NULL",,"","",$FFFFFFFF,""
 Field="album_id","album_id","*album_id",,,"","",$FFFFFFFF,""
@@ -178,16 +208,17 @@ Field="genre_id","genre_id","*genre_id",,,"","",$FFFFFFFF,""
 Field="composer","composer","*composer",,,"","",$FFFFFFFF,""
 Field="milliseconds","milliseconds","@INT","NOT NULL",,"","",$FFFFFFFF,""
 Field="bytes","bytes","@INT",,,"","",$FFFFFFFF,""
-Field="unit_price","unit_price","@DECIMAL(9, 2)","NOT NULL",,"","",$FFFFFFFF,""
+Field="unit_price","unit_price","*unit_price","NOT NULL",,"","",$FFFFFFFF,""
 Index==0,name
 Index==0,album_id
 Index==0,genre_id
+Index==0,media_type_id
 Index==0,composer
 EffectMode=None
 Color=$000000
 BkColor=$FFFFFF
-ModifiedDateTime=20250814231219
-Position="Main",1550,700
+ModifiedDateTime=20250815112215
+Position="MAIN",1800,550
 ZOrder=6
 
 [Relation]
@@ -199,12 +230,12 @@ Fields1=album_id
 Fields2=album_id
 Cardinarity1=
 Cardinarity2=
-Position="MAIN",0,3323,6677,1346,R,R,""
+Position="MAIN",9,3323,6677,1346,R,R,""
 Dependence=0
 Caption=
 PName=
 ModifiedDateTime=20250814214324
-LineMode=0
+LineMode=9
 Bar1=332
 Bar2=668
 Bar3=135
@@ -221,15 +252,15 @@ Fields1=genre_id
 Fields2=genre_id
 Cardinarity1=
 Cardinarity2=
-Position="MAIN",0,3323,6677,3045,R,R,""
+Position="MAIN",9,3323,6677,2991,R,R,""
 Dependence=0
 Caption=
 PName=
 ModifiedDateTime=20250814214358
-LineMode=0
+LineMode=9
 Bar1=332
 Bar2=668
-Bar3=304
+Bar3=299
 TermPos1=R
 TermPos2=R
 ZOrder=8
@@ -243,11 +274,11 @@ Fields1=media_type_id
 Fields2=media_type_id
 Cardinarity1=
 Cardinarity2=
-Position="MAIN",0,3323,6677,4118,R,R,""
+Position="MAIN",9,3323,6677,4118,R,R,""
 Dependence=0
 Caption=
 PName=
-LineMode=0
+LineMode=9
 Bar1=332
 Bar2=668
 Bar3=412
@@ -261,16 +292,16 @@ LName=play_list
 Comment=
 TableInnerOption=
 TableOption=
-Page=Main
-Left=1700
-Top=1550
+Page=MAIN
+Left=1800
+Top=200
 Field="play_list_id","play_list_id","*play_list_id","NOT NULL",0,"","",$FFFFFFFF,""
 Field="name","name","*genre_name","NOT NULL",,"","",$FFFFFFFF,""
 EffectMode=None
 Color=$000000
 BkColor=$FFFFFF
 ModifiedDateTime=20250814231100
-Position="Main",1700,1550
+Position="MAIN",1800,200
 ZOrder=10
 
 [Entity]
@@ -279,16 +310,17 @@ LName=playlist_track
 Comment=
 TableInnerOption=
 TableOption=
-Page=Main
-Left=1050
-Top=1500
+Page=MAIN
+Left=2900
+Top=750
 Field="play_list_id","play_list_id","*play_list_id","NOT NULL",0,"","",$FFFFFFFF,""
 Field="track_id","track_id","*track_id","NOT NULL",1,"","",$FFFFFFFF,""
+Index==0,track_id
 EffectMode=None
 Color=$000000
 BkColor=$FFFFFF
-ModifiedDateTime=20250814231433
-Position="Main",1050,1500
+ModifiedDateTime=20250815112115
+Position="MAIN",2900,750
 ZOrder=11
 
 [Relation]
@@ -300,14 +332,14 @@ Fields1=play_list_id
 Fields2=play_list_id
 Cardinarity1=
 Cardinarity2=
-Position="MAIN",0,5550,4450,5729,R,R,""
+Position="MAIN",9,5550,4450,3004,R,R,""
 Dependence=1
 Caption=
 PName=
-LineMode=0
+LineMode=9
 Bar1=555
 Bar2=445
-Bar3=573
+Bar3=300
 TermPos1=R
 TermPos2=R
 ZOrder=12
@@ -321,14 +353,242 @@ Fields1=track_id
 Fields2=track_id
 Cardinarity1=
 Cardinarity2=
-Position="MAIN",0,3000,7000,4308,R,R,""
+Position="MAIN",9,3000,7000,8212,R,R,""
 Dependence=1
 Caption=
 PName=
-LineMode=0
+LineMode=9
 Bar1=300
 Bar2=700
-Bar3=431
+Bar3=821
 TermPos1=R
 TermPos2=R
 ZOrder=13
+
+[Entity]
+PName=customer
+LName=customer
+Comment=
+TableInnerOption=
+TableOption=
+Page=MAIN
+Left=100
+Top=1300
+Field="customer_id","customer_id","*customer_id","NOT NULL",0,"","",$FFFFFFFF,""
+Field="first_name","first_name","*person_name_part","NOT NULL",,"","",$FFFFFFFF,""
+Field="last_name","last_name","*person_name_part","NOT NULL",,"","",$FFFFFFFF,""
+Field="company","company","*company_name",,,"","",$FFFFFFFF,""
+Field="address","address","*address",,,"","",$FFFFFFFF,""
+Field="city","city","*city",,,"","",$FFFFFFFF,""
+Field="state","state","*state",,,"","",$FFFFFFFF,""
+Field="country","country","*country",,,"","",$FFFFFFFF,""
+Field="postal_code","postal_code","*postal_code",,,"","",$FFFFFFFF,""
+Field="phone","phone","*phone_number",,,"","",$FFFFFFFF,""
+Field="fax","fax","*phone_number",,,"","",$FFFFFFFF,""
+Field="email","email","*email_address","NOT NULL",,"","",$FFFFFFFF,""
+Field="support_rep_id","support_rep_id","*employee_id",,,"","",$FFFFFFFF,""
+Index==0,first_name
+Index==0,last_name
+Index==0,email
+Index==0,support_rep_id
+EffectMode=None
+Color=$000000
+BkColor=$FFFFFF
+ModifiedDateTime=20250815111727
+Position="MAIN",100,1300
+ZOrder=14
+
+[Entity]
+PName=employee
+LName=employee
+Comment=
+TableInnerOption=
+TableOption=
+Page=MAIN
+Left=1000
+Top=1550
+Field="employee_id","employee_id","*employee_id","NOT NULL",0,"","",$FFFFFFFF,""
+Field="last_name","last_name","*person_name_part","NOT NULL",,"","",$FFFFFFFF,""
+Field="first_name","first_name","*person_name_part","NOT NULL",,"","",$FFFFFFFF,""
+Field="title","title","*employee_title",,,"","",$FFFFFFFF,""
+Field="reports_to","reports_to","*employee_id",,,"","",$FFFFFFFF,""
+Field="birth_date","birth_date","@DATE",,,"","",$FFFFFFFF,""
+Field="hire_date","hire_date","@DATE",,,"","",$FFFFFFFF,""
+Field="address","address","*address",,,"","",$FFFFFFFF,""
+Field="city","city","*city",,,"","",$FFFFFFFF,""
+Field="state","state","*state",,,"","",$FFFFFFFF,""
+Field="country","country","*country",,,"","",$FFFFFFFF,""
+Field="postal_code","postal_code","*postal_code",,,"","",$FFFFFFFF,""
+Field="phone","phone","*phone_number",,,"","",$FFFFFFFF,""
+Field="fax","fax","*phone_number",,,"","",$FFFFFFFF,""
+Field="email","email","*email_address","NOT NULL",,"","",$FFFFFFFF,""
+Index==0,last_name
+Index==0,first_name
+Index==0,email
+Index==0,reports_to
+EffectMode=None
+Color=$000000
+BkColor=$FFFFFF
+ModifiedDateTime=20250815111921
+Position="MAIN",1000,1550
+ZOrder=15
+
+[Relation]
+Entity1=employee
+Entity2=customer
+RelationType1=1
+RelationType2=3
+Fields1=employee_id
+Fields2=support_rep_id
+Cardinarity1=
+Cardinarity2=
+Position="MAIN",9,1539,8461,1776,R,R,""
+Dependence=0
+Caption=
+PName=
+ModifiedDateTime=20250815105123
+LineMode=9
+Bar1=154
+Bar2=846
+Bar3=178
+TermPos1=R
+TermPos2=R
+ZOrder=16
+
+[Relation]
+Entity1=employee
+Entity2=employee
+RelationType1=1
+RelationType2=3
+Fields1=employee_id
+Fields2=reports_to
+Cardinarity1=
+Cardinarity2=
+Position="MAIN",0,7500,2500,9500,R,R,""
+Dependence=0
+Caption=
+PName=
+ModifiedDateTime=20250815111855
+LineMode=0
+Bar1=750
+Bar2=250
+Bar3=950
+TermPos1=R
+TermPos2=R
+ZOrder=17
+
+[Entity]
+PName=invoice
+LName=invoice
+Comment=
+TableInnerOption=
+TableOption=
+Page=MAIN
+Left=1800
+Top=1200
+Field="invoice_id","invoice_id","*invoice_id","NOT NULL",0,"","",$FFFFFFFF,""
+Field="customer_id","customer_id","*customer_id","NOT NULL",,"","",$FFFFFFFF,""
+Field="invoice_date","invoice_date","@DATE","NOT NULL",,"","",$FFFFFFFF,""
+Field="billing_address","billing_address","*address",,,"","",$FFFFFFFF,""
+Field="billing_city","billing_city","*city",,,"","",$FFFFFFFF,""
+Field="billing_state","billing_state","*state",,,"","",$FFFFFFFF,""
+Field="billing_country","billing_country","*country",,,"","",$FFFFFFFF,""
+Field="billing_postal_code","billing_postal_code","*postal_code",,,"","",$FFFFFFFF,""
+Field="total","total","@INT","NOT NULL",,"","",$FFFFFFFF,""
+Index==0,customer_id
+Index==0,invoice_date
+EffectMode=None
+Color=$000000
+BkColor=$FFFFFF
+ModifiedDateTime=20250815105916
+Position="MAIN",1800,1200
+ZOrder=18
+
+[Entity]
+PName=invoice_line
+LName=invoice_line
+Comment=
+TableInnerOption=
+TableOption=
+Page=MAIN
+Left=2900
+Top=1300
+Field="invoice_line_id","invoice_line_id","*invoice_line_id","NOT NULL",0,"","",$FFFFFFFF,""
+Field="invoice_id","invoice_id","*invoice_id","NOT NULL",,"","",$FFFFFFFF,""
+Field="track_id","track_id","*track_id","NOT NULL",,"","",$FFFFFFFF,""
+Field="unit_price","unit_price","*unit_price","NOT NULL",,"","",$FFFFFFFF,""
+Field="quantity","quantity","@INT","NOT NULL",,"","",$FFFFFFFF,""
+Index==0,invoice_id
+Index==0,track_id
+EffectMode=None
+Color=$000000
+BkColor=$FFFFFF
+ModifiedDateTime=20250815110304
+Position="MAIN",2900,1300
+ZOrder=19
+
+[Relation]
+Entity1=invoice
+Entity2=invoice_line
+RelationType1=2
+RelationType2=4
+Fields1=invoice_id
+Fields2=invoice_id
+Cardinarity1=
+Cardinarity2=
+Position="MAIN",9,814,5967,3316,R,R,""
+Dependence=0
+Caption=
+PName=
+ModifiedDateTime=20250815110407
+LineMode=9
+Bar1=81
+Bar2=597
+Bar3=332
+TermPos1=R
+TermPos2=R
+ZOrder=20
+
+[Relation]
+Entity1=customer
+Entity2=invoice
+RelationType1=2
+RelationType2=4
+Fields1=customer_id
+Fields2=customer_id
+Cardinarity1=
+Cardinarity2=
+Position="MAIN",9,547,3576,1722,R,R,""
+Dependence=0
+Caption=
+PName=
+ModifiedDateTime=20250815110448
+LineMode=9
+Bar1=55
+Bar2=358
+Bar3=172
+TermPos1=R
+TermPos2=R
+ZOrder=21
+
+[Relation]
+Entity1=track
+Entity2=invoice_line
+RelationType1=2
+RelationType2=3
+Fields1=track_id
+Fields2=track_id
+Cardinarity1=
+Cardinarity2=
+Position="MAIN",9,8183,5967,694,R,R,""
+Dependence=0
+Caption=
+PName=
+ModifiedDateTime=20250815110507
+LineMode=9
+Bar1=818
+Bar2=597
+Bar3=69
+TermPos1=R
+TermPos2=R
+ZOrder=22
