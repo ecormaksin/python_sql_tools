@@ -13,3 +13,26 @@ class AppConfig:
     db_column_name_row_number: RowNumber
     data_type_row_number: RowNumber
     data_start_cell_position: CellPosition
+
+    def __eq__(self, other):
+        if not isinstance(other, AppConfig):
+            return NotImplemented
+        return self.__dict__ == other.__dict__
+
+    def __hash__(self):
+        return hash(tuple(sorted(self.__dict__.items())))
+
+    def __repr__(self):
+        table_name_definition_type = repr(self.table_name_definition_type)
+        table_name_cell_position = repr(self.table_name_cell_position) if self.table_name_cell_position else "None"
+        column_name_row = repr(self.db_column_name_row_number)
+        data_type_row = repr(self.data_type_row_number)
+        data_start_cell = repr(self.data_start_cell_position)
+
+        return "AppConfig(" \
+                f"table_name_definition_type={table_name_definition_type}, " \
+                f"table_name_cell_position={table_name_cell_position}, " \
+                f"db_column_name_row_number={column_name_row}, " \
+                f"data_type_row_number={data_type_row}, " \
+                f"data_start_cell_position={data_start_cell}" \
+                ")"

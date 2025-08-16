@@ -1,0 +1,10 @@
+{
+  // specify the one of the following: sheet, cell
+  "table_name": "sheet",
+  "column_name_row": 1,
+  "data_type_row": 3,
+  "data_start_cell": {
+    "row": 6,
+    "column": 2
+  }
+}
