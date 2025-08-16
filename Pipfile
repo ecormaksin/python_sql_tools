@@ -5,6 +5,9 @@ name = "pypi"
 
 [packages]
 openpyxl = "*"
+defusedxml = "*"
+pillow = "*"
+json5 = "*"
 
 [dev-packages]
 mypy = "*"
