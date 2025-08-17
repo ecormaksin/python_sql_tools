@@ -1,3 +1,5 @@
+from typing import Optional
+
 from shared_code.domain.app_config import AppConfig
 from shared_code.domain.db_column.column_name import ColumnName
 from shared_code.domain.db_column.data_type import DataType
@@ -6,6 +8,8 @@ from shared_code.domain.db_column.key_position import KeyPosition
 from shared_code.domain.db_column.no_quotation import NoQuotation
 
 from dataclasses import dataclass
+
+from shared_code.domain.row_number import RowNumber
 
 
 @dataclass(frozen=True)
@@ -20,21 +24,17 @@ class DBColumnBuilder:
         source_data = a_request.source_data
         app_config = a_request.app_config
 
-        column_name_str = source_data[app_config.db_column_name_row_number.value - 1]
-        data_type_str = source_data[app_config.data_type_row_number.value - 1]
-
-        key_position_row_number = app_config.key_position_row_number
-        key_position_str = (
-            source_data[key_position_row_number.value - 1]
-            if key_position_row_number
-            else ""
+        column_name_str = cls.__get_value(
+            source_data=source_data, row_number=app_config.db_column_name_row_number
         )
-
-        no_quotation_row_number = app_config.no_quotation_row_number
-        no_quotation_str = (
-            source_data[no_quotation_row_number.value - 1]
-            if no_quotation_row_number
-            else ""
+        data_type_str = cls.__get_value(
+            source_data=source_data, row_number=app_config.data_type_row_number
+        )
+        key_position_str = cls.__get_value(
+            source_data=source_data, row_number=app_config.key_position_row_number
+        )
+        no_quotation_str = cls.__get_value(
+            source_data=source_data, row_number=app_config.no_quotation_row_number
         )
 
         return DBColumn(
@@ -47,3 +47,11 @@ class DBColumnBuilder:
             if no_quotation_str
             else None,
         )
+
+    @staticmethod
+    def __get_value(source_data: list[str], row_number: Optional[RowNumber]) -> str:
+        if not row_number:
+            return ""
+
+        value_str = source_data[row_number.value - 1]
+        return "" if value_str == "None" else value_str
