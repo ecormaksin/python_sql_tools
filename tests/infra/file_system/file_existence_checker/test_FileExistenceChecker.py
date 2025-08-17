@@ -5,10 +5,7 @@ import pytest
 
 from shared_code.infra.file_system.file_existence_checker import FileExistenceChecker
 
-test_params = [
-    (1, "file exists"),
-    (2, "file does not exist"),
-]
+test_params = list(enumerate(["file exists", "file does not exist"]))
 
 
 @dataclass(frozen=True)
@@ -24,7 +21,10 @@ test_values = [
 
 
 class TestClass:
-    @pytest.mark.parametrize("no, description", test_params)
+    @pytest.mark.parametrize(
+        "no, description",
+        [(index + 1, description) for index, (description) in test_params],
+    )
     def test_pattern(self, no: int, description: str):
         test_value = test_values[no - 1]
 

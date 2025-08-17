@@ -2,6 +2,7 @@ from dataclasses import dataclass
 from typing import Optional
 
 from shared_code.domain.cell_position import CellPosition
+from shared_code.domain.number_of_lines_per_file import NumberOfLinesPerFile
 from shared_code.domain.row_number import RowNumber
 from shared_code.domain.table_name_definition_type import TableNameDefinitionType
 
@@ -13,6 +14,7 @@ class AppConfig:
     db_column_name_row_number: RowNumber
     data_type_row_number: RowNumber
     data_start_cell_position: CellPosition
+    number_of_lines_per_file: NumberOfLinesPerFile = NumberOfLinesPerFile.UNLIMITED
 
     def __eq__(self, other):
         if not isinstance(other, AppConfig):
@@ -28,11 +30,13 @@ class AppConfig:
         column_name_row = repr(self.db_column_name_row_number)
         data_type_row = repr(self.data_type_row_number)
         data_start_cell = repr(self.data_start_cell_position)
+        number_of_lines_per_file = repr(self.number_of_lines_per_file)
 
         return "AppConfig(" \
                 f"table_name_definition_type={table_name_definition_type}, " \
                 f"table_name_cell_position={table_name_cell_position}, " \
                 f"db_column_name_row_number={column_name_row}, " \
                 f"data_type_row_number={data_type_row}, " \
-                f"data_start_cell_position={data_start_cell}" \
+                f"data_start_cell_position={data_start_cell}, " \
+                f"number_of_lines_per_file={number_of_lines_per_file}" \
                 ")"

@@ -5,6 +5,10 @@ from dataclasses import dataclass
 class RowNumber:
     value: int
 
+    def __post_init__(self):
+        if type(self.value) is not int or self.value < 1:
+            raise ValueError("RowNumber must be greater than equals 1.")
+
     def __eq__(self, other):
         if not isinstance(other, RowNumber):
             return NotImplemented

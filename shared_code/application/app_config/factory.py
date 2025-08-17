@@ -15,6 +15,7 @@ from shared_code.application.app_config.validation.result_flag import (
 )
 from shared_code.domain.app_config import AppConfig
 from shared_code.domain.cell_position import CellPosition
+from shared_code.domain.number_of_lines_per_file import NumberOfLinesPerFile
 from shared_code.domain.row_number import RowNumber
 from shared_code.domain.table_name_definition_type import TableNameDefinitionType
 
@@ -93,11 +94,29 @@ class AppConfigFactory:
             return None
 
         table_name_cell = self.__config_data[property_name]
-        return CellPosition(row=int(table_name_cell["row"]), column=int(table_name_cell["column"]))
+
+        try:
+            return CellPosition(row=int(table_name_cell["row"]), column=int(table_name_cell["column"]))
+        except ValueError as exp:
+            self.__error_messages.append(str(exp))
+            return None
 
     def __get_row_number(self, property_name: str) -> Optional[RowNumber]:
         result_flag = self.__validate_required_property(property_name=property_name)
         if result_flag == ValidationResultFlag.NG:
             return None
 
-        return RowNumber(value=int(self.__config_data[property_name]))
+        try:
+            return RowNumber(value=int(self.__config_data[property_name]))
+        except ValueError as exp:
+            self.__error_messages.append(str(exp))
+            return None
+
+    def __get_number_of_lines_per_file(self) -> Optional[NumberOfLinesPerFile]:
+        number_of_lines_per_file = self.__config_data.get("number_of_lines_per_file", str(NumberOfLinesPerFile.UNLIMITED))
+
+        try:
+            return NumberOfLinesPerFile(value=int(number_of_lines_per_file))
+        except ValueError as exp:
+            self.__error_messages.append(str(exp))
+            return None
