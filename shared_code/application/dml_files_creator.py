@@ -1,22 +1,24 @@
-import traceback
+from dataclasses import dataclass
 
 from openpyxl import load_workbook
 
-from shared_code.application.dml_creator import DMLCreator
 from shared_code.domain.app_config import AppConfig
+from shared_code.domain.sink_dml_dir_path import SinkDMLDirectoryPath
+from shared_code.domain.source_data_xlsx_file_path import SourceDataXlsxFilePath
 from shared_code.domain.table_name import TableName
 from shared_code.domain.table_name_definition_type import TableNameDefinitionType
-from shared_code.infra.file_system.directory_creator import DirectoryCreator
-from shared_code.infra.file_system.file_existence_checker import FileExistenceChecker
+
+
+@dataclass(frozen=True)
+class DMLFilesCreationRequest:
+    source_data_xlsx_file_path: SourceDataXlsxFilePath
+    sink_dml_dir_path: SinkDMLDirectoryPath
+    app_config: AppConfig
 
 
 class DMLFilesCreator:
-    def __init__(
-        self, src_xlsx_file_path: str, sink_dml_dir_path: str, app_config: AppConfig
-    ):
-        self.__src_xlsx_file_path = src_xlsx_file_path
-        self.__sink_dml_dir_path = sink_dml_dir_path
-        self.__app_config = app_config
+    def __init__(self, a_request: DMLFilesCreationRequest):
+        self.__a_request = a_request
 
     def __enter__(self):
         return self
@@ -27,35 +29,46 @@ class DMLFilesCreator:
         """
 
     def execute(self):
-        src_excel_file_path = self.__src_xlsx_file_path
-        sink_dml_dir_path = self.__sink_dml_dir_path
-        app_config = self.__app_config
-
-        if FileExistenceChecker.not_exists(file_path=self.__src_xlsx_file_path):
-            raise RuntimeError(f"source file '{src_excel_file_path}' not found.")
-
-        try:
-            DirectoryCreator.execute(path_str=sink_dml_dir_path)
-        except Exception:
-            stacktrace_str = traceback.format_exc()
-            raise RuntimeError(
-                f"cannot create dml output directory '{sink_dml_dir_path}'. detail: {stacktrace_str}"
-            )
+        src_excel_file_path = self.__a_request.source_data_xlsx_file_path
+        app_config = self.__a_request.app_config
 
         a_workbook = load_workbook(
-            filename=src_excel_file_path, data_only=True, read_only=True
+            filename=src_excel_file_path.value, data_only=True, read_only=True
         )
 
-        sheet_name = "track"
+        sheet_name = "media_type"
         a_worksheet = a_workbook[sheet_name]
 
+        table_name = ""
         if app_config.table_name_definition_type == TableNameDefinitionType.SHEET:
             table_name = TableName(value=sheet_name)
 
-        with DMLCreator(
-            table_name=table_name, a_worksheet=a_worksheet, app_config=app_config
-        ) as a_dml_creator:
-            dmls = a_dml_creator.execute()
+        header_range = [
+            [str(cell) for cell in row]
+            for row in a_worksheet.iter_rows(
+                min_row=1,
+                max_row=app_config.header_max_row,
+                min_col=app_config.data_start_cell_position.column,
+                values_only=True,
+            )
+        ]
+        print(header_range)
+
+        data_range = [
+            [str(cell) for cell in row]
+            for row in a_worksheet.iter_rows(
+                min_row=app_config.data_start_cell_position.row,
+                max_row=a_worksheet.max_row,
+                min_col=app_config.data_start_cell_position.column,
+                values_only=True,
+            )
+        ]
+        print(data_range)
+
+        # with DMLCreator(
+        #     table_name=table_name, a_worksheet=a_worksheet, app_config=app_config
+        # ) as a_dml_creator:
+        #     dmls = a_dml_creator.execute()
 
         # for sheet_name in a_workbook.sheetnames:
         #     a_worksheet = a_workbook[sheet_name]

@@ -3,6 +3,8 @@ from dataclasses import dataclass
 
 @dataclass(frozen=True)
 class RowNumber:
+    UNDEFINED = -1
+
     value: int
 
     def __post_init__(self):

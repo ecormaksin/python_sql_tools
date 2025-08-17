@@ -1,4 +1,5 @@
 import os
+from enum import Enum
 from typing import Any, Optional
 
 from shared_code.application.app_config.validation.cell_position_validator import (
@@ -20,8 +21,12 @@ from shared_code.domain.row_number import RowNumber
 from shared_code.domain.table_name_definition_type import TableNameDefinitionType
 
 
-class AppConfigFactory:
+class IsRequiredProperty(Enum):
+    YES = 1
+    NO = 2
 
+
+class AppConfigFactory:
     def __init__(self, config_data: dict[str, Any]):
         self.__config_data = config_data
         self.__error_messages: list[str] = []
@@ -35,36 +40,64 @@ class AppConfigFactory:
         """
 
     def execute(self) -> AppConfig:
-        table_name_definition_type: TableNameDefinitionType = self.__get_table_name_definition_type()
+        table_name_definition_type: TableNameDefinitionType = (
+            self.__get_table_name_definition_type()
+        )
 
-        table_name_cell_position = None
-        if table_name_definition_type == TableNameDefinitionType.CELL:
-            table_name_cell_position = self.__get_cell_position(property_name="table_name_cell")
+        table_name_cell_position = (
+            self.__get_cell_position(property_name="table_name_cell")
+            if table_name_definition_type == TableNameDefinitionType.CELL
+            else None
+        )
 
-        db_column_name_row_number = self.__get_row_number(property_name="column_name_row")
-        data_type_row_number = self.__get_row_number(property_name="data_type_row")
-        data_start_cell_position = self.__get_cell_position(property_name="data_start_cell")
+        db_column_name_row_number = self.__get_required_row_number(
+            property_name="column_name_row"
+        )
+        data_type_row_number = self.__get_required_row_number(
+            property_name="data_type_row"
+        )
+        key_position_row_number = self.__get_optional_row_number(
+            property_name="key_position_row"
+        )
+        no_quotation_row_number = self.__get_optional_row_number(
+            property_name="no_quotation_row"
+        )
+        data_start_cell_position = self.__get_cell_position(
+            property_name="data_start_cell"
+        )
         number_of_lines_per_file = self.__get_number_of_lines_per_file()
 
         if len(self.__error_messages):
             raise RuntimeError(os.linesep.join(self.__error_messages))
 
-        return AppConfig(table_name_definition_type=table_name_definition_type,
-                table_name_cell_position=table_name_cell_position,
-                db_column_name_row_number=db_column_name_row_number,
-                data_type_row_number=data_type_row_number,
-                data_start_cell_position=data_start_cell_position,
-                number_of_lines_per_file=number_of_lines_per_file)
+        return AppConfig(
+            table_name_definition_type=table_name_definition_type,
+            table_name_cell_position=table_name_cell_position,
+            db_column_name_row_number=db_column_name_row_number,
+            data_type_row_number=data_type_row_number,
+            key_position_row_number=key_position_row_number,
+            no_quotation_row_number=no_quotation_row_number,
+            data_start_cell_position=data_start_cell_position,
+            number_of_lines_per_file=number_of_lines_per_file,
+        )
 
     def __validate_required_property(self, property_name: str) -> ValidationResultFlag:
-        a_request = ValidationRequest(config_data=self.__config_data, property_name=property_name, error_messages=self.__error_messages)
+        a_request = ValidationRequest(
+            config_data=self.__config_data,
+            property_name=property_name,
+            error_messages=self.__error_messages,
+        )
         a_result = RequiredPropertyValidator.execute(a_request=a_request)
 
         self.__error_messages = a_result.error_messages
         return a_result.flag
 
     def __validate_cell_position(self, property_name: str) -> ValidationResultFlag:
-        a_request = ValidationRequest(config_data=self.__config_data[property_name], property_name=property_name, error_messages=self.__error_messages)
+        a_request = ValidationRequest(
+            config_data=self.__config_data[property_name],
+            property_name=property_name,
+            error_messages=self.__error_messages,
+        )
         a_result = CellPositionValidator.execute(a_request=a_request)
 
         self.__error_messages = a_result.error_messages
@@ -79,10 +112,14 @@ class AppConfigFactory:
             return None
 
         try:
-            table_name_definition_type = TableNameDefinitionType.of(config_data[property_name])
+            table_name_definition_type = TableNameDefinitionType.of(
+                config_data[property_name]
+            )
             return table_name_definition_type
         except KeyError:
-            self.__error_messages.append(f"The property '{property_name}' must be specified with one of the following values: sheet, cell.")
+            self.__error_messages.append(
+                f"The property '{property_name}' must be specified with one of the following values: sheet, cell."
+            )
             return None
 
     def __get_cell_position(self, property_name: str) -> Optional[CellPosition]:
@@ -97,15 +134,35 @@ class AppConfigFactory:
         table_name_cell = self.__config_data[property_name]
 
         try:
-            return CellPosition(row=int(table_name_cell["row"]), column=int(table_name_cell["column"]))
+            return CellPosition(
+                row=int(table_name_cell["row"]), column=int(table_name_cell["column"])
+            )
         except ValueError as exp:
             self.__error_messages.append(str(exp))
             return None
 
-    def __get_row_number(self, property_name: str) -> Optional[RowNumber]:
-        result_flag = self.__validate_required_property(property_name=property_name)
-        if result_flag == ValidationResultFlag.NG:
-            return None
+    def __get_required_row_number(self, property_name: str) -> Optional[RowNumber]:
+        return self.__get_row_number(
+            property_name=property_name, is_required=IsRequiredProperty.YES
+        )
+
+    def __get_optional_row_number(self, property_name: str) -> Optional[RowNumber]:
+        return self.__get_row_number(
+            property_name=property_name, is_required=IsRequiredProperty.NO
+        )
+
+    def __get_row_number(
+        self,
+        property_name: str,
+        is_required: IsRequiredProperty,
+    ) -> Optional[RowNumber]:
+        if is_required == IsRequiredProperty.YES:
+            result_flag = self.__validate_required_property(property_name=property_name)
+            if result_flag == ValidationResultFlag.NG:
+                return None
+        else:
+            if property_name not in self.__config_data:
+                return None
 
         try:
             return RowNumber(value=int(self.__config_data[property_name]))
@@ -114,7 +171,9 @@ class AppConfigFactory:
             return None
 
     def __get_number_of_lines_per_file(self) -> Optional[NumberOfLinesPerFile]:
-        number_of_lines_per_file = self.__config_data.get("number_of_lines_per_file", str(NumberOfLinesPerFile.UNLIMITED))
+        number_of_lines_per_file = self.__config_data.get(
+            "number_of_lines_per_file", str(NumberOfLinesPerFile.UNLIMITED)
+        )
 
         try:
             return NumberOfLinesPerFile(value=int(number_of_lines_per_file))
