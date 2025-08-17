@@ -4,7 +4,7 @@ from typing import Optional, Type
 
 import pytest
 
-from shared_code.application.app_config.factory import AppConfigFactory
+from shared_code.application.app_config.builder import AppConfigBuilder
 
 
 @dataclass(frozen=True)
@@ -265,10 +265,10 @@ class TestClass:
         expected_exception = test_value.expected_exception
         config_data = json.loads(test_value.config_data_str)
 
-        with AppConfigFactory(config_data=config_data) as app_config_factory:
+        with AppConfigBuilder(config_data=config_data) as app_config_builder:
             if expected_exception:
                 with pytest.raises(expected_exception):
-                    app_config_factory.execute()
+                    app_config_builder.execute()
             else:
-                app_config = app_config_factory.execute()
+                app_config = app_config_builder.execute()
                 assert app_config

@@ -26,7 +26,7 @@ class IsRequiredProperty(Enum):
     NO = 2
 
 
-class AppConfigFactory:
+class AppConfigBuilder:
     def __init__(self, config_data: dict[str, Any]):
         self.__config_data = config_data
         self.__error_messages: list[str] = []

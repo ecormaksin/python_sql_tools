@@ -2,7 +2,7 @@ from pathlib import Path
 
 import json5
 
-from shared_code.application.app_config.factory import AppConfigFactory
+from shared_code.application.app_config.builder import AppConfigBuilder
 from shared_code.domain.app_config import AppConfig
 from shared_code.infra.file_system.file_existence_checker import FileExistenceChecker
 
@@ -12,7 +12,9 @@ class AppConfigJsoncFileReader:
         if "file_path" in kwargs:
             self.__file_path = kwargs["file_path"]
         else:
-            self.__file_path = Path(__file__).parent.parent.parent.parent.joinpath("app_config.json")
+            self.__file_path = Path(__file__).parent.parent.parent.parent.joinpath(
+                "app_config.json"
+            )
 
     def __enter__(self):
         return self
@@ -31,7 +33,7 @@ class AppConfigJsoncFileReader:
         with open(file_path, encoding="utf-8") as file_obj:
             config_data = json5.load(file_obj)
 
-        with AppConfigFactory(config_data=config_data) as config_factory:
-            app_config = config_factory.execute()
+        with AppConfigBuilder(config_data=config_data) as config_builder:
+            app_config = config_builder.execute()
 
         return app_config

@@ -32,9 +32,7 @@ class DMLFilesCreator:
         src_excel_file_path = self.__a_request.source_data_xlsx_file_path
         app_config = self.__a_request.app_config
 
-        a_workbook = load_workbook(
-            filename=src_excel_file_path.value, data_only=True, read_only=True
-        )
+        a_workbook = load_workbook(filename=src_excel_file_path.value, data_only=True)
 
         sheet_name = "media_type"
         a_worksheet = a_workbook[sheet_name]
@@ -44,8 +42,8 @@ class DMLFilesCreator:
             table_name = TableName(value=sheet_name)
 
         header_range = [
-            [str(cell) for cell in row]
-            for row in a_worksheet.iter_rows(
+            [str(cell) for cell in col]
+            for col in a_worksheet.iter_cols(
                 min_row=1,
                 max_row=app_config.header_max_row,
                 min_col=app_config.data_start_cell_position.column,
