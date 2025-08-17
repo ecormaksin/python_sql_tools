@@ -8,6 +8,7 @@ openpyxl = "*"
 defusedxml = "*"
 pillow = "*"
 json5 = "*"
+python-ulid = "*"
 
 [dev-packages]
 mypy = "*"

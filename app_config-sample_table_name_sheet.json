@@ -1,0 +1,12 @@
+{
+  // specify the one of the following: sheet, cell
+  "table_name": "sheet",
+  "column_name_row": 1,
+  "data_type_row": 3,
+  "data_start_cell": {
+    "row": 6,
+    "column": 2
+  },
+  // specify the number of lines per dml file. If you specify -1, one table's dml is output as one file.
+  "number_of_lines_per_file": 1000
+}

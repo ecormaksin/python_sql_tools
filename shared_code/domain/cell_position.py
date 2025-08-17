@@ -7,11 +7,15 @@ class CellPosition:
     column: int
 
     def __post_init__(self):
-        if type(self.row) is not int or \
-                type(self.column) is not int or \
-                self.row < 1 or \
-                self.column < 1:
-            raise ValueError("The row and column in CellPosition must be greater than equals 1.")
+        if (
+            type(self.row) is not int
+            or type(self.column) is not int
+            or self.row < 1
+            or self.column < 1
+        ):
+            raise ValueError(
+                "The row and column in CellPosition must be positive integer."
+            )
 
     def __eq__(self, other):
         if not isinstance(other, CellPosition):

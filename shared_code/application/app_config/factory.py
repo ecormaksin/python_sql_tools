@@ -43,8 +43,8 @@ class AppConfigFactory:
 
         db_column_name_row_number = self.__get_row_number(property_name="column_name_row")
         data_type_row_number = self.__get_row_number(property_name="data_type_row")
-
         data_start_cell_position = self.__get_cell_position(property_name="data_start_cell")
+        number_of_lines_per_file = self.__get_number_of_lines_per_file()
 
         if len(self.__error_messages):
             raise RuntimeError(os.linesep.join(self.__error_messages))
@@ -53,7 +53,8 @@ class AppConfigFactory:
                 table_name_cell_position=table_name_cell_position,
                 db_column_name_row_number=db_column_name_row_number,
                 data_type_row_number=data_type_row_number,
-                data_start_cell_position=data_start_cell_position)
+                data_start_cell_position=data_start_cell_position,
+                number_of_lines_per_file=number_of_lines_per_file)
 
     def __validate_required_property(self, property_name: str) -> ValidationResultFlag:
         a_request = ValidationRequest(config_data=self.__config_data, property_name=property_name, error_messages=self.__error_messages)

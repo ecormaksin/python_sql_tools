@@ -6,17 +6,19 @@ import pytest
 
 from shared_code.application.app_config.factory import AppConfigFactory
 
-test_params = list(enumerate(["no properties", "'table_name' missing", "'table_name_cell' missing", "'table_name's value not defined", "'column_name_row' invalid"]))
 
 @dataclass(frozen=True)
 class Item:
     config_data_str: str
     expected_exception: Optional[Type[Exception]]
 
-test_values = [
-    Item(config_data_str="{}", expected_exception=RuntimeError),
-    Item(
-        config_data_str="""
+
+test_params = [
+    ("no properties", Item(config_data_str="{}", expected_exception=RuntimeError)),
+    (
+        "'table_name' missing",
+        Item(
+            config_data_str="""
 {
   "column_name_row": 1,
   "data_type_row": 3,
@@ -26,10 +28,13 @@ test_values = [
   }
 }
 """,
-        expected_exception=RuntimeError,
+            expected_exception=RuntimeError,
+        ),
     ),
-    Item(
-        config_data_str="""
+    (
+        "'table_name_cell' missing",
+        Item(
+            config_data_str="""
 {
   "table_name": "cell",
   "column_name_row": 1,
@@ -40,10 +45,55 @@ test_values = [
   }
 }
 """,
-        expected_exception=RuntimeError,
+            expected_exception=RuntimeError,
+        ),
     ),
-    Item(
-        config_data_str="""
+    (
+        "'table_name_cell's row invalid",
+        Item(
+            config_data_str="""
+    {
+      "table_name": "cell",
+      "table_name_cell": {
+        "row": 0,
+        "column": 1
+      },
+      "column_name_row": 1,
+      "data_type_row": 3,
+      "data_start_cell": {
+        "row": 6,
+        "column": 2
+      }
+    }
+    """,
+            expected_exception=RuntimeError,
+        ),
+    ),
+    (
+        "'table_name_cell's column invalid",
+        Item(
+            config_data_str="""
+    {
+      "table_name": "cell",
+      "table_name_cell": {
+        "row": 1,
+        "column": 0
+      },
+      "column_name_row": 1,
+      "data_type_row": 3,
+      "data_start_cell": {
+        "row": 6,
+        "column": 2
+      }
+    }
+    """,
+            expected_exception=RuntimeError,
+        ),
+    ),
+    (
+        "'table_name's value not defined",
+        Item(
+            config_data_str="""
 {
   "table_name": "row",
   "column_name_row": 1,
@@ -54,10 +104,13 @@ test_values = [
   }
 }
 """,
-        expected_exception=RuntimeError,
+            expected_exception=RuntimeError,
+        ),
     ),
-    Item(
-        config_data_str="""
+    (
+        "'column_name_row' invalid",
+        Item(
+            config_data_str="""
 {
   "table_name": "sheet",
   "column_name_row": 0,
@@ -68,14 +121,106 @@ test_values = [
   }
 }
 """,
-        expected_exception=RuntimeError,
+            expected_exception=RuntimeError,
+        ),
+    ),
+    (
+        "'data_type_row' invalid",
+        Item(
+            config_data_str="""
+{
+  "table_name": "sheet",
+  "column_name_row": 1,
+  "data_type_row": 0,
+  "data_start_cell": {
+    "row": 6,
+    "column": 2
+  }
+}
+""",
+            expected_exception=RuntimeError,
+        ),
+    ),
+    (
+        "'data_start_cell's row invalid",
+        Item(
+            config_data_str="""
+{
+  "table_name": "sheet",
+  "column_name_row": 1,
+  "data_type_row": 3,
+  "data_start_cell": {
+    "row": 0,
+    "column": 2
+  }
+}
+""",
+            expected_exception=RuntimeError,
+        ),
+    ),
+    (
+        "'data_start_cell's column invalid",
+        Item(
+            config_data_str="""
+{
+  "table_name": "sheet",
+  "column_name_row": 1,
+  "data_type_row": 3,
+  "data_start_cell": {
+    "row": 6,
+    "column": 0
+  }
+}
+""",
+            expected_exception=RuntimeError,
+        ),
+    ),
+    (
+        "'number_of_lines_per_file' invalid",
+        Item(
+            config_data_str="""
+{
+  "table_name": "sheet",
+  "column_name_row": 1,
+  "data_type_row": 3,
+  "data_start_cell": {
+    "row": 6,
+    "column": 2
+  },
+  "number_of_lines_per_file": -2
+}
+""",
+            expected_exception=RuntimeError,
+        ),
+    ),
+    (
+        "'number_of_lines_per_file' valid",
+        Item(
+            config_data_str="""
+{
+  "table_name": "sheet",
+  "column_name_row": 1,
+  "data_type_row": 3,
+  "data_start_cell": {
+    "row": 6,
+    "column": 2
+  },
+  "number_of_lines_per_file": 10
+}
+""",
+            expected_exception=None,
+        ),
     ),
 ]
 
+
 class TestClass:
-    @pytest.mark.parametrize("no, description", [(index+1, description) for index, (description) in test_params])
+    @pytest.mark.parametrize(
+        "no, description",
+        [(index + 1, test_param[0]) for index, test_param in enumerate(test_params)],
+    )
     def test_pattern(self, no: int, description: str):
-        test_value = test_values[no - 1]
+        test_value = test_params[no - 1][1]
 
         expected_exception = test_value.expected_exception
         config_data = json.loads(test_value.config_data_str)

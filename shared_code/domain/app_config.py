@@ -13,6 +13,8 @@ class AppConfig:
     table_name_cell_position: Optional[CellPosition]
     db_column_name_row_number: RowNumber
     data_type_row_number: RowNumber
+    key_position_row_number: Optional[RowNumber]
+    key_position_row_number: Optional[RowNumber]
     data_start_cell_position: CellPosition
     number_of_lines_per_file: NumberOfLinesPerFile = NumberOfLinesPerFile.UNLIMITED
 

@@ -2,15 +2,15 @@ from dataclasses import dataclass
 
 
 @dataclass(frozen=True)
-class RowNumber:
-    value: int
+class TableName:
+    value: str
 
     def __post_init__(self):
-        if type(self.value) is not int or self.value < 1:
-            raise ValueError("RowNumber must be positive integer.")
+        if type(self.value) is not str or not self.value:
+            raise ValueError("TableName must be specified.")
 
     def __eq__(self, other):
-        if not isinstance(other, RowNumber):
+        if not isinstance(other, TableName):
             return NotImplemented
         return self.value == other.value
 
@@ -18,4 +18,4 @@ class RowNumber:
         return hash(self.value)
 
     def __repr__(self):
-        return f"RowNumber(value={str(self.value)})"
+        return f"TableName(value={self.value})"

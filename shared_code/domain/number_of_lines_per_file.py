@@ -8,8 +8,14 @@ class NumberOfLinesPerFile:
     value: int
 
     def __post_init__(self):
-        if type(self.value) is not int or self.value < NumberOfLinesPerFile.UNLIMITED:
-            raise ValueError(f"NumberOfLinesPerFile must be greater than equals {str(NumberOfLinesPerFile.UNLIMITED)}.")
+        if (
+            type(self.value) is not int
+            or self.value < NumberOfLinesPerFile.UNLIMITED
+            or self.value == 0
+        ):
+            raise ValueError(
+                f"NumberOfLinesPerFile must be {str(NumberOfLinesPerFile.UNLIMITED)} or positive integer."
+            )
 
     def __eq__(self, other):
         if not isinstance(other, NumberOfLinesPerFile):
