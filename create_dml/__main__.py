@@ -5,7 +5,7 @@ from pathlib import Path
 
 from ulid import ULID
 
-from shared_code.application.dml_files_creator import (
+from shared_code.application.dml.dml_files_creator import (
     DMLFilesCreator,
     DMLFilesCreationRequest,
 )

@@ -3,12 +3,13 @@ from shared_code.application.db_column.entity_builder import (
     DBColumnBuilder,
     DBColumnBuildRequest,
 )
+from tests.shared_code.application.db_column.entity_test_data import DBColumnTestData
 from tests.shared_code.domain.app_config_for_test import AppConfigForTest
 
 
 class TestClass:
     def test_entity_with_key_position(self):
-        source_data = ["media_type_id", "media_type_id", "INT", "1", "None"]
+        source_data = DBColumnTestData.MEDIA_TYPE_ID
 
         config_data = AppConfigForTest.get_config_data(
             data_str=AppConfigForTest.TABLE_NAME_SHEET_VALID_SAMPLE_DATA_STR

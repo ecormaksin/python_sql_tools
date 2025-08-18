@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from shared_code.application.insert_dml_first_part_creator import (
+from shared_code.application.dml.insert_dml_first_part_creator import (
     InsertDMLFirstPartCreator,
     InsertDMLFirstPartCreationRequest,
 )
