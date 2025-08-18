@@ -1,16 +1,23 @@
-from openpyxl.worksheet.worksheet import Worksheet
+from dataclasses import dataclass
 
-from shared_code.domain.app_config import AppConfig
+from shared_code.application.insert_dml_first_part_creator import (
+    InsertDMLFirstPartCreator,
+    InsertDMLFirstPartCreationRequest,
+)
+from shared_code.domain.db_column.list import DBColumns
 from shared_code.domain.table_name import TableName
 
 
+@dataclass(frozen=True)
+class DMLCreationRequest:
+    table_name: TableName
+    db_columns: DBColumns
+    data_range: list[list[str]]
+
+
 class DMLCreator:
-    def __init__(
-        self, table_name: TableName, a_worksheet: Worksheet, app_config: AppConfig
-    ):
-        self.__table_name = table_name
-        self.__a_worksheet = a_worksheet
-        self.__app_config = app_config
+    def __init__(self, a_request: DMLCreationRequest):
+        self.__a_request = a_request
 
     def __enter__(self):
         return self
@@ -21,7 +28,14 @@ class DMLCreator:
         """
 
     def execute(self) -> list[str]:
-        table_name = self.__table_name
-        a_worksheet = self.__a_worksheet
-        app_config = self.__app_config
+        a_request = self.__a_request
+        table_name = a_request.table_name
+        db_columns = a_request.db_columns
+
+        insert_dml_first_part = InsertDMLFirstPartCreator.execute(
+            a_request=InsertDMLFirstPartCreationRequest(
+                table_name=table_name, db_columns=db_columns
+            )
+        )
+
         return []

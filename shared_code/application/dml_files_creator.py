@@ -41,7 +41,7 @@ class DMLFilesCreator:
         if app_config.table_name_definition_type == TableNameDefinitionType.SHEET:
             table_name = TableName(value=sheet_name)
 
-        header_range = [
+        db_columns_range = [
             [str(cell) for cell in col]
             for col in a_worksheet.iter_cols(
                 min_row=1,
@@ -50,7 +50,7 @@ class DMLFilesCreator:
                 values_only=True,
             )
         ]
-        print(header_range)
+        print(db_columns_range)
 
         data_range = [
             [str(cell) for cell in row]
