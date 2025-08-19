@@ -2,6 +2,11 @@ from dataclasses import dataclass
 
 from openpyxl import load_workbook
 
+from shared_code.application.db_column.list_builder import (
+    DBColumnsBuildRequest,
+    DBColumnsBuilder,
+)
+from shared_code.application.dml.dml_creator import DMLCreator, DMLCreationRequest
 from shared_code.domain.app_config import AppConfig
 from shared_code.domain.sink_dml_dir_path import SinkDMLDirectoryPath
 from shared_code.domain.source_data_xlsx_file_path import SourceDataXlsxFilePath
@@ -51,6 +56,10 @@ class DMLFilesCreator:
             )
         ]
         print(db_columns_range)
+        db_columns_build_request = DBColumnsBuildRequest(
+            source_data=db_columns_range, app_config=app_config
+        )
+        db_columns = DBColumnsBuilder.execute(a_request=db_columns_build_request)
 
         data_range = [
             [str(cell) for cell in row]
@@ -63,10 +72,11 @@ class DMLFilesCreator:
         ]
         print(data_range)
 
-        # with DMLCreator(
-        #     table_name=table_name, a_worksheet=a_worksheet, app_config=app_config
-        # ) as a_dml_creator:
-        #     dmls = a_dml_creator.execute()
+        dml_creation_request = DMLCreationRequest(
+            table_name=table_name, db_columns=db_columns, data_range=data_range
+        )
+        with DMLCreator(a_request=dml_creation_request) as a_dml_creator:
+            dmls = a_dml_creator.execute()
 
         # for sheet_name in a_workbook.sheetnames:
         #     a_worksheet = a_workbook[sheet_name]

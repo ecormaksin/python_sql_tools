@@ -39,11 +39,28 @@ class DMLCreator:
         )
 
         dmls = []
-        for index, source_data in enumerate(a_request.data_range):
+        for row_data in a_request.data_range:
             dml = insert_dml_first_part
-            db_column = db_columns.unmodifiable_elements[index]
 
-            if index > 0:
-                dml += ", "
+            for index, col_data in enumerate(row_data):
+                db_column = db_columns.unmodifiable_elements[index]
+                data_type = db_column.data_type
+                no_quotation = db_column.no_quotation
+                do_add_quotation = data_type.do_add_quotation() and not no_quotation
 
-        return []
+                dml += ", " if index > 0 else ""
+                dml += (
+                    "N"
+                    if data_type.do_add_unicode_prefix() and not no_quotation
+                    else ""
+                )
+
+                dml += "'" if do_add_quotation else ""
+                dml += col_data
+                dml += "'" if do_add_quotation else ""
+
+            dml += ");"
+            dmls.append(dml)
+
+        print(dmls)
+        return dmls
