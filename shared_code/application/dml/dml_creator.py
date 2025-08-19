@@ -38,4 +38,12 @@ class DMLCreator:
             )
         )
 
+        dmls = []
+        for index, source_data in enumerate(a_request.data_range):
+            dml = insert_dml_first_part
+            db_column = db_columns.unmodifiable_elements[index]
+
+            if index > 0:
+                dml += ", "
+
         return []

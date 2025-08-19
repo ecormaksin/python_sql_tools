@@ -17,10 +17,11 @@ class InsertDMLFirstPartCreator:
         db_columns = a_request.db_columns
 
         dml = f"INSERT INTO {table_name.value} ("
-        for index, db_column in enumerate(db_columns.unmodifiable_elements):
-            if index > 0:
-                dml += ", "
-            dml += db_column.column_name.value
+        column_part = [
+            db_column.column_name.value
+            for db_column in db_columns.unmodifiable_elements
+        ]
+        dml += ", ".join(column_part)
         dml += ") VALUES ("
 
         return dml

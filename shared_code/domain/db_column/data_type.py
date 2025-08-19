@@ -3,6 +3,8 @@ from dataclasses import dataclass
 
 @dataclass(frozen=True)
 class DataType:
+    QUOTATION_TARGET = {"VARCHAR", "CHAR", "DATE", "DATETIME"}
+
     value: str
 
     def __post_init__(self):
@@ -19,3 +21,8 @@ class DataType:
 
     def __repr__(self):
         return f"DataType(value='{self.value}')"
+
+    def do_add_quotation(self) -> bool:
+        a_value = self.value
+        index = a_value.find("(")
+        data_type_part = a_value if index == -1 else a_value[:index]
