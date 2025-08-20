@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 
 from openpyxl import load_workbook
+from openpyxl.worksheet.worksheet import Worksheet
 
 from shared_code.application.db_column.list_builder import (
     DBColumnsBuildRequest,
@@ -8,6 +9,8 @@ from shared_code.application.db_column.list_builder import (
 )
 from shared_code.application.dml.dmls_builder import DMLsBuilder, DMLsBuildRequest
 from shared_code.domain.app_config import AppConfig
+from shared_code.domain.dmls.entity import DMLs
+from shared_code.domain.dmls.set import DMLsSet
 from shared_code.domain.sink_dml_dir_path import SinkDMLDirectoryPath
 from shared_code.domain.source_data_xlsx_file_path import SourceDataXlsxFilePath
 from shared_code.domain.table_name import TableName
@@ -34,19 +37,51 @@ class DMLFilesCreator:
         """
 
     def execute(self):
+        dmls_set = self.__get_dmls_set()
+
+    def __get_dmls_set(self) -> DMLsSet:
         src_excel_file_path = self.__a_request.source_data_xlsx_file_path
         app_config = self.__a_request.app_config
 
         a_workbook = load_workbook(filename=src_excel_file_path.value, data_only=True)
 
-        sheet_name = "media_type"
-        a_worksheet = a_workbook[sheet_name]
+        dmls_set = DMLsSet.empty()
+        for sheet_name in a_workbook.sheetnames:
+            a_worksheet = a_workbook[sheet_name]
 
-        table_name = ""
-        if app_config.table_name_definition_type == TableNameDefinitionType.SHEET:
-            table_name = TableName(value=sheet_name)
+            table_name = ""
+            if app_config.table_name_definition_type == TableNameDefinitionType.SHEET:
+                table_name = TableName(value=sheet_name)
 
-        db_columns_range = [
+            db_columns_range = DMLFilesCreator.__get_db_columns_range(
+                a_worksheet=a_worksheet, app_config=app_config
+            )
+            # print(db_columns_range)
+            db_columns_build_request = DBColumnsBuildRequest(
+                source_data=db_columns_range, app_config=app_config
+            )
+            db_columns = DBColumnsBuilder.execute(a_request=db_columns_build_request)
+
+            data_range = DMLFilesCreator.__get_data_range(
+                a_worksheet=a_worksheet, app_config=app_config
+            )
+            # print(data_range)
+
+            dmls_build_request = DMLsBuildRequest(
+                table_name=table_name, db_columns=db_columns, data_range=data_range
+            )
+            with DMLsBuilder(a_request=dmls_build_request) as a_dmls_builder:
+                dmls = DMLs(value=a_dmls_builder.execute())
+
+            dmls_set = dmls_set.append(key=table_name, element=dmls)
+
+        return dmls_set
+
+    @staticmethod
+    def __get_db_columns_range(
+        a_worksheet: Worksheet, app_config: AppConfig
+    ) -> list[list[str]]:
+        return [
             [str(cell) for cell in col]
             for col in a_worksheet.iter_cols(
                 min_row=1,
@@ -55,13 +90,12 @@ class DMLFilesCreator:
                 values_only=True,
             )
         ]
-        print(db_columns_range)
-        db_columns_build_request = DBColumnsBuildRequest(
-            source_data=db_columns_range, app_config=app_config
-        )
-        db_columns = DBColumnsBuilder.execute(a_request=db_columns_build_request)
 
-        data_range = [
+    @staticmethod
+    def __get_data_range(
+        a_worksheet: Worksheet, app_config: AppConfig
+    ) -> list[list[str]]:
+        return [
             [str(cell) for cell in row]
             for row in a_worksheet.iter_rows(
                 min_row=app_config.data_start_cell_position.row,
@@ -70,24 +104,3 @@ class DMLFilesCreator:
                 values_only=True,
             )
         ]
-        print(data_range)
-
-        dml_creation_request = DMLsBuildRequest(
-            table_name=table_name, db_columns=db_columns, data_range=data_range
-        )
-        with DMLsBuilder(a_request=dml_creation_request) as a_dml_creator:
-            dmls = a_dml_creator.execute()
-
-        # for sheet_name in a_workbook.sheetnames:
-        #     a_worksheet = a_workbook[sheet_name]
-        #
-        #     if app_config.table_name_definition_type == TableNameDefinitionType.SHEET:
-        #         table_name = TableName(value=sheet_name)
-        #
-        #     print("")
-        #     print("---")
-        #     print(sheet_name)
-        #     print("min_row: " + str(a_worksheet.min_row))
-        #     print("max_row: " + str(a_worksheet.max_row))
-        #     print("min_column: " + str(a_worksheet.min_column))
-        #     print("max_column: " + str(a_worksheet.max_column))
