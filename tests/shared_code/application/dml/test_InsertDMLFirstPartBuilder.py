@@ -1,6 +1,6 @@
-from shared_code.application.dml.insert_dml_first_part_creator import (
-    InsertDMLFirstPartCreator,
-    InsertDMLFirstPartCreationRequest,
+from shared_code.application.dml.insert_dml_first_part_builder import (
+    InsertDMLFirstPartBuilder,
+    InsertDMLFirstPartBuildRequest,
 )
 from shared_code.domain.table_name import TableName
 from tests.shared_code.application.db_column.list_test_builder import (
@@ -11,8 +11,8 @@ from tests.shared_code.application.db_column.list_test_builder import (
 class TestClass:
     def test_media_type(self):
         db_columns = DBColumnsTestBuilder.media_type()
-        insert_dml_first_part = InsertDMLFirstPartCreator.execute(
-            a_request=InsertDMLFirstPartCreationRequest(
+        insert_dml_first_part = InsertDMLFirstPartBuilder.execute(
+            a_request=InsertDMLFirstPartBuildRequest(
                 table_name=TableName(value="media_type"), db_columns=db_columns
             )
         )

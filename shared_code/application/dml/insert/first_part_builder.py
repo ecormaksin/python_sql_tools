@@ -5,14 +5,14 @@ from shared_code.domain.table_name import TableName
 
 
 @dataclass(frozen=True)
-class InsertDMLFirstPartCreationRequest:
+class InsertDMLFirstPartBuildRequest:
     table_name: TableName
     db_columns: DBColumns
 
 
-class InsertDMLFirstPartCreator:
+class InsertDMLFirstPartBuilder:
     @classmethod
-    def execute(cls, a_request: InsertDMLFirstPartCreationRequest) -> str:
+    def execute(cls, a_request: InsertDMLFirstPartBuildRequest) -> str:
         table_name = a_request.table_name
         db_columns = a_request.db_columns
 

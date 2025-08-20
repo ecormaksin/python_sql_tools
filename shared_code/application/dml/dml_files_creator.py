@@ -6,7 +6,7 @@ from shared_code.application.db_column.list_builder import (
     DBColumnsBuildRequest,
     DBColumnsBuilder,
 )
-from shared_code.application.dml.dml_creator import DMLCreator, DMLCreationRequest
+from shared_code.application.dml.dmls_builder import DMLsBuilder, DMLsBuildRequest
 from shared_code.domain.app_config import AppConfig
 from shared_code.domain.sink_dml_dir_path import SinkDMLDirectoryPath
 from shared_code.domain.source_data_xlsx_file_path import SourceDataXlsxFilePath
@@ -72,10 +72,10 @@ class DMLFilesCreator:
         ]
         print(data_range)
 
-        dml_creation_request = DMLCreationRequest(
+        dml_creation_request = DMLsBuildRequest(
             table_name=table_name, db_columns=db_columns, data_range=data_range
         )
-        with DMLCreator(a_request=dml_creation_request) as a_dml_creator:
+        with DMLsBuilder(a_request=dml_creation_request) as a_dml_creator:
             dmls = a_dml_creator.execute()
 
         # for sheet_name in a_workbook.sheetnames:

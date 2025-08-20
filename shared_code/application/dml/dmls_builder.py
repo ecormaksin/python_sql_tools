@@ -1,22 +1,22 @@
 from dataclasses import dataclass
 
-from shared_code.application.dml.insert_dml_first_part_creator import (
-    InsertDMLFirstPartCreator,
-    InsertDMLFirstPartCreationRequest,
+from shared_code.application.dml.insert_dml_first_part_builder import (
+    InsertDMLFirstPartBuilder,
+    InsertDMLFirstPartBuildRequest,
 )
 from shared_code.domain.db_column.list import DBColumns
 from shared_code.domain.table_name import TableName
 
 
 @dataclass(frozen=True)
-class DMLCreationRequest:
+class DMLsBuildRequest:
     table_name: TableName
     db_columns: DBColumns
     data_range: list[list[str]]
 
 
-class DMLCreator:
-    def __init__(self, a_request: DMLCreationRequest):
+class DMLsBuilder:
+    def __init__(self, a_request: DMLsBuildRequest):
         self.__a_request = a_request
 
     def __enter__(self):
@@ -32,8 +32,8 @@ class DMLCreator:
         table_name = a_request.table_name
         db_columns = a_request.db_columns
 
-        insert_dml_first_part = InsertDMLFirstPartCreator.execute(
-            a_request=InsertDMLFirstPartCreationRequest(
+        insert_dml_first_part = InsertDMLFirstPartBuilder.execute(
+            a_request=InsertDMLFirstPartBuildRequest(
                 table_name=table_name, db_columns=db_columns
             )
         )
@@ -62,5 +62,4 @@ class DMLCreator:
             dml += ");"
             dmls.append(dml)
 
-        print(dmls)
         return dmls
