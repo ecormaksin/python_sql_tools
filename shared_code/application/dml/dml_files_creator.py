@@ -5,6 +5,10 @@ from shared_code.application.dml.dmls_set_builder import (
     DMLsSetBuildRequest,
     DMLsSetBuilder,
 )
+from shared_code.application.dml.dmls_set_writer import (
+    DMLsSetWriteRequest,
+    DMLsSetWriter,
+)
 from shared_code.domain.app_config import AppConfig
 from shared_code.domain.sink_dml_dir_path import SinkDMLDirectoryPath
 from shared_code.domain.source_data_xlsx_file_path import SourceDataXlsxFilePath
@@ -31,6 +35,8 @@ class DMLFilesCreator:
 
     def execute(self):
         a_request = self.__a_request
+        app_config = a_request.app_config
+        number_of_lines_per_file = app_config.number_of_lines_per_file
 
         dmls_set_build_request = DMLsSetBuildRequest(
             source_data_xlsx_file_path=a_request.source_data_xlsx_file_path,
@@ -39,3 +45,12 @@ class DMLFilesCreator:
 
         with DMLsSetBuilder(a_request=dmls_set_build_request) as a_dmls_set_builder:
             dmls_set = a_dmls_set_builder.execute()
+
+        dmls_set_write_request = DMLsSetWriteRequest(
+            sink_dml_dir_path=a_request.sink_dml_dir_path,
+            dmls_set=dmls_set,
+            number_of_lines_per_file=number_of_lines_per_file,
+        )
+
+        with DMLsSetWriter(a_request=dmls_set_write_request) as a_dmls_set_writer:
+            a_dmls_set_writer.execute()

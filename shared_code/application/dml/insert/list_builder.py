@@ -1,4 +1,4 @@
-from shared_code.application.dml.dmls_builder import DMLsBuildRequest
+from shared_code.application.dml.dmls_build_request import DMLsBuildRequest
 from shared_code.application.dml.insert.first_part_builder import (
     InsertDMLFirstPartBuilder as FirstPartBuilder,
     InsertDMLFirstPartBuildRequest as FirstPartBuildRequest,
@@ -7,6 +7,7 @@ from shared_code.application.dml.value_quotation_getter import ValueQuotationGet
 from shared_code.application.dml.value_unicode_prefix_getter import (
     ValueUnicodePrefixGetter,
 )
+import re
 
 
 class InsertDMLsBuilder:
@@ -48,10 +49,13 @@ class InsertDMLsBuilder:
                 )
 
                 dml += ", " if index > 0 else ""
-                dml += unicode_prefix
-                dml += value_quotation
-                dml += col_data
-                dml += value_quotation
+                if col_data:
+                    dml += unicode_prefix
+                    dml += value_quotation
+                    dml += re.sub(r"'", "''", col_data)
+                    dml += value_quotation
+                else:
+                    dml += "null"
 
             dml += ");"
             dmls.append(dml)

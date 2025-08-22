@@ -1,16 +1,5 @@
-from dataclasses import dataclass
-
-
+from shared_code.application.dml.dmls_build_request import DMLsBuildRequest
 from shared_code.application.dml.insert.list_builder import InsertDMLsBuilder
-from shared_code.domain.db_column.list import DBColumns
-from shared_code.domain.table_name import TableName
-
-
-@dataclass(frozen=True)
-class DMLsBuildRequest:
-    table_name: TableName
-    db_columns: DBColumns
-    data_range: list[list[str]]
 
 
 class DMLsBuilder:

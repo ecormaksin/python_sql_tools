@@ -27,3 +27,6 @@ class NumberOfLinesPerFile:
 
     def __repr__(self):
         return f"NumberOfLinesPerFile(value={str(self.value)})"
+
+    def file_split_needed(self) -> bool:
+        return self.value != NumberOfLinesPerFile.UNLIMITED

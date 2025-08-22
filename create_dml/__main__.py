@@ -59,6 +59,8 @@ def create_dml():
     ) as a_dml_creator:
         a_dml_creator.execute()
 
+    print(f"DML files are created at '{sink_dml_dir_path_str}'.")
+
 
 if __name__ == "__main__":
     create_dml()
