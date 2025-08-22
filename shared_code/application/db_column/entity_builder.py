@@ -20,16 +20,22 @@ class DBColumnBuildRequest:
 
 class DBColumnBuilder:
     @classmethod
-    def execute(cls, a_request: DBColumnBuildRequest) -> DBColumn:
+    def execute(cls, a_request: DBColumnBuildRequest) -> Optional[DBColumn]:
         source_data = a_request.source_data
         app_config = a_request.app_config
 
         column_name_str = cls.__get_value(
             source_data=source_data, row_number=app_config.db_column_name_row_number
         )
+        if not column_name_str:
+            return None
+
         data_type_str = cls.__get_value(
             source_data=source_data, row_number=app_config.data_type_row_number
         )
+        if not data_type_str:
+            return None
+
         key_position_str = cls.__get_value(
             source_data=source_data, row_number=app_config.key_position_row_number
         )

@@ -27,6 +27,8 @@ class DBColumnsBuilder:
                 source_data=element_data, app_config=app_config
             )
             db_column = DBColumnBuilder.execute(a_request=element_request)
+            if not db_column:
+                continue
 
             db_columns = db_columns.append(element=db_column)
 
