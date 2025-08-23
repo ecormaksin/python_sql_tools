@@ -1,4 +1,4 @@
-from shared_code.application.app_config.builder import AppConfigBuilder
+from shared_code.application.app_config.entity import AppConfigBuilder
 from shared_code.application.db_column.list_builder import (
     DBColumnsBuildRequest,
     DBColumnsBuilder,

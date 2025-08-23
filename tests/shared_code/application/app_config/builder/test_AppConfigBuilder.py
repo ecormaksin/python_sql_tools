@@ -4,7 +4,7 @@ from typing import Optional, Type
 
 import pytest
 
-from shared_code.application.app_config.builder import AppConfigBuilder
+from shared_code.application.app_config.entity import AppConfigBuilder
 
 
 @dataclass(frozen=True)

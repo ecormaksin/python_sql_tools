@@ -2,7 +2,7 @@ from pathlib import Path
 
 import json5
 
-from shared_code.application.app_config.builder import AppConfigBuilder
+from shared_code.application.app_config.builder.entity import AppConfigBuilder
 from shared_code.domain.app_config import AppConfig
 from shared_code.infra.file_system.file_existence_checker import FileExistenceChecker
 

@@ -1,4 +1,8 @@
 {
+  // Specify the target sheet names separated by commas.
+  "target_sheet_names": "",
+  // Specify the sheet names separated by commas which you want to exclude.
+  "exclude_sheet_names": "",
   // specify the one of the following: sheet, cell
   "table_name": "cell",
   "table_name_cell": {
@@ -14,5 +18,5 @@
     "column": 4
   },
   // specify the number of lines per dml file. If you specify -1, one table's dml is output as one file.
-  "number_of_lines_per_file": 1000
+  "number_of_lines_per_file": -1
 }

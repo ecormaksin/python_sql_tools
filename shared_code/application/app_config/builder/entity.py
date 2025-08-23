@@ -1,7 +1,13 @@
 import os
-from enum import Enum
 from typing import Any, Optional
 
+from shared_code.application.app_config.builder.base.request import BaseBuildRequest
+from shared_code.application.app_config.builder.required_property_flag import (
+    RequiredPropertyFlag,
+)
+from shared_code.application.app_config.builder.table_name_definition_type import (
+    TableNameDefinitionTypeBuilder,
+)
 from shared_code.application.app_config.validation.cell_position_validator import (
     CellPositionValidator,
 )
@@ -21,11 +27,6 @@ from shared_code.domain.row_number import RowNumber
 from shared_code.domain.table_name_definition_type import TableNameDefinitionType
 
 
-class IsRequiredProperty(Enum):
-    YES = 1
-    NO = 2
-
-
 class AppConfigBuilder:
     def __init__(self, config_data: dict[str, Any]):
         self.__config_data = config_data
@@ -40,9 +41,7 @@ class AppConfigBuilder:
         """
 
     def execute(self) -> AppConfig:
-        table_name_definition_type: TableNameDefinitionType = (
-            self.__get_table_name_definition_type()
-        )
+        table_name_definition_type = self.__get_table_name_definition_type()
 
         table_name_cell_position = (
             self.__get_cell_position(property_name="table_name_cell")
@@ -104,23 +103,14 @@ class AppConfigBuilder:
         return a_result.flag
 
     def __get_table_name_definition_type(self) -> Optional[TableNameDefinitionType]:
-        config_data = self.__config_data
-        property_name = "table_name"
+        base_request = BaseBuildRequest(
+            config_data=self.__config_data, error_messages=self.__error_messages
+        )
+        with TableNameDefinitionTypeBuilder(a_request=base_request) as a_builder:
+            a_result = a_builder.execute()
 
-        result_flag = self.__validate_required_property(property_name=property_name)
-        if result_flag == ValidationResultFlag.NG:
-            return None
-
-        try:
-            table_name_definition_type = TableNameDefinitionType.of(
-                config_data[property_name]
-            )
-            return table_name_definition_type
-        except KeyError:
-            self.__error_messages.append(
-                f"The property '{property_name}' must be specified with one of the following values: sheet, cell."
-            )
-            return None
+        self.__error_messages = a_result.error_messages
+        return a_result.table_name_definition_type
 
     def __get_cell_position(self, property_name: str) -> Optional[CellPosition]:
         result_flag = self.__validate_required_property(property_name=property_name)
@@ -143,20 +133,20 @@ class AppConfigBuilder:
 
     def __get_required_row_number(self, property_name: str) -> Optional[RowNumber]:
         return self.__get_row_number(
-            property_name=property_name, is_required=IsRequiredProperty.YES
+            property_name=property_name, is_required=RequiredPropertyFlag.YES
         )
 
     def __get_optional_row_number(self, property_name: str) -> Optional[RowNumber]:
         return self.__get_row_number(
-            property_name=property_name, is_required=IsRequiredProperty.NO
+            property_name=property_name, is_required=RequiredPropertyFlag.NO
         )
 
     def __get_row_number(
         self,
         property_name: str,
-        is_required: IsRequiredProperty,
+        is_required: RequiredPropertyFlag,
     ) -> Optional[RowNumber]:
-        if is_required == IsRequiredProperty.YES:
+        if is_required == RequiredPropertyFlag.YES:
             result_flag = self.__validate_required_property(property_name=property_name)
             if result_flag == ValidationResultFlag.NG:
                 return None

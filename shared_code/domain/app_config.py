@@ -9,6 +9,8 @@ from shared_code.domain.table_name_definition_type import TableNameDefinitionTyp
 
 @dataclass(frozen=True)
 class AppConfig:
+    # target_sheet_names: TargetSheetNames
+    # exclude_sheet_names: ExcludeSheetNames
     table_name_definition_type: TableNameDefinitionType
     table_name_cell_position: Optional[CellPosition]
     db_column_name_row_number: RowNumber
