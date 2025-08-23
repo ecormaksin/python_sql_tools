@@ -25,8 +25,8 @@ Domain=genre_name=@VARCHAR(255)
 DomainInfo="genre_name","@VARCHAR(255)","",""
 Domain=media_type_id=@INT
 DomainInfo="media_type_id","@INT","",""
-Domain=media_type_name=@VARCHAR(10)
-DomainInfo="media_type_name","@VARCHAR(10)","",""
+Domain=media_type_name=@VARCHAR(30)
+DomainInfo="media_type_name","@VARCHAR(30)","",""
 Domain=track_id=BIGINT
 DomainInfo="track_id","BIGINT","",""
 Domain=track_name=@VARCHAR(255)
@@ -85,12 +85,16 @@ FooterRight=
 ShowPageoutRelation=1
 RDBMSType=6
 RDBMSTypeName=MySQL
+GenerateDropTableStatement=1
+DropTableIfExists=1
+BackupRestoreTempTable=0
 DefaultPkName=%0:s_PKC
 DefaultPkIndexName=%0:s_PKI
 DefaultIndexName=%0:s_IX%1:d
 DefaultFkName=%0:s_FK%1:d
 SqlSeparator=0
 UpperCaseKeyword=0
+CreateOrder=Dependent
 ShowTag=1
 ShowCommonAttributes=0
 BugFixEntityWidth=1
@@ -114,8 +118,8 @@ Position="MAIN",100,200
 ZOrder=1
 
 [Entity]
-PName=albumm
-LName=albumm
+PName=album
+LName=album
 Comment=
 TableInnerOption=
 TableOption=
@@ -129,13 +133,13 @@ Index==0,artist_id
 EffectMode=None
 Color=$000000
 BkColor=$FFFFFF
-ModifiedDateTime=20250815111628
+ModifiedDateTime=20250823133345
 Position="MAIN",1000,200
 ZOrder=2
 
 [Relation]
 Entity1=artist
-Entity2=albumm
+Entity2=album
 RelationType1=2
 RelationType2=3
 Fields1=artist_id
@@ -187,7 +191,7 @@ Field="name","name","*media_type_name","NOT NULL",,"","",$FFFFFFFF,""
 EffectMode=None
 Color=$000000
 BkColor=$FFFFFF
-ModifiedDateTime=20250814212229
+ModifiedDateTime=20250823141721
 Position="MAIN",100,850
 ZOrder=5
 
@@ -222,7 +226,7 @@ Position="MAIN",1800,550
 ZOrder=6
 
 [Relation]
-Entity1=albumm
+Entity1=album
 Entity2=track
 RelationType1=1
 RelationType2=3

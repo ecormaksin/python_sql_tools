@@ -1,4 +1,4 @@
-from shared_code.application.dml.insert_dml_first_part_builder import (
+from shared_code.application.dml.insert.first_part_builder import (
     InsertDMLFirstPartBuilder,
     InsertDMLFirstPartBuildRequest,
 )

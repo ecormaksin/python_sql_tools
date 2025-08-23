@@ -79,5 +79,5 @@ class DataType:
     @staticmethod
     def __cut_value(a_value: str, target_character: str) -> str:
         index = a_value.find(target_character)
-        data_type_part = a_value if index == -1 else a_value[:index]
-        return data_type_part
+        value_part = a_value if index == -1 else a_value[:index]
+        return value_part

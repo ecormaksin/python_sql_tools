@@ -14,6 +14,7 @@ python-ulid = "*"
 mypy = "*"
 pytest = "*"
 ruff = "*"
+coverage = "*"
 
 [requires]
 python_version = "3.13"

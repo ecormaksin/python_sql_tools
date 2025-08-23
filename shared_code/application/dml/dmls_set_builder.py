@@ -45,9 +45,7 @@ class DMLsSetBuilder:
         for sheet_name in a_workbook.sheetnames:
             a_worksheet = a_workbook[sheet_name]
 
-            table_name = ""
-            if app_config.table_name_definition_type == TableNameDefinitionType.SHEET:
-                table_name = TableName(value=sheet_name)
+            table_name = self.__get_table_name(a_worksheet=a_worksheet)
 
             db_columns_range = DMLsSetBuilder.__get_db_columns_range(
                 a_worksheet=a_worksheet, app_config=app_config
@@ -72,6 +70,22 @@ class DMLsSetBuilder:
             dmls_set = dmls_set.append(key=table_name, element=dmls)
 
         return dmls_set
+
+    def __get_table_name(self, a_worksheet: Worksheet) -> TableName:
+        a_request = self.__a_request
+        app_config = a_request.app_config
+
+        if app_config.table_name_definition_type == TableNameDefinitionType.SHEET:
+            table_name = TableName(value=a_worksheet.title)
+        else:
+            table_name_cell_position = app_config.table_name_cell_position
+            a_cell = a_worksheet.cell(
+                row=table_name_cell_position.row,
+                column=table_name_cell_position.column,
+            )
+            table_name = TableName(value=str(a_cell.value))
+
+        return table_name
 
     @staticmethod
     def __get_db_columns_range(

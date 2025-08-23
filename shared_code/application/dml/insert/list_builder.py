@@ -49,13 +49,13 @@ class InsertDMLsBuilder:
                 )
 
                 dml += ", " if index > 0 else ""
-                if col_data:
+                if not col_data or col_data == "None":
+                    dml += "null"
+                else:
                     dml += unicode_prefix
                     dml += value_quotation
                     dml += re.sub(r"'", "''", col_data)
                     dml += value_quotation
-                else:
-                    dml += "null"
 
             dml += ");"
             dmls.append(dml)
