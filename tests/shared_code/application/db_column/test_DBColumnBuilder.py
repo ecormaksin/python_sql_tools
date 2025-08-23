@@ -1,4 +1,4 @@
-from shared_code.application.app_config.entity import AppConfigBuilder
+from shared_code.application.app_config.builder.entity import AppConfigBuilder
 from shared_code.application.db_column.entity_builder import (
     DBColumnBuilder,
     DBColumnBuildRequest,

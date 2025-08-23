@@ -38,11 +38,19 @@ class DMLsSetBuilder:
         a_request = self.__a_request
         src_excel_file_path = a_request.source_data_xlsx_file_path
         app_config = a_request.app_config
+        target_sheet_names = app_config.target_sheet_names
+        exclude_sheet_names = app_config.exclude_sheet_names
 
         a_workbook = load_workbook(filename=src_excel_file_path.value, data_only=True)
 
         dmls_set = DMLsSet.empty()
         for sheet_name in a_workbook.sheetnames:
+            if target_sheet_names.not_contains(sheet_name=sheet_name):
+                continue
+
+            if exclude_sheet_names.contains(sheet_name=sheet_name):
+                continue
+
             a_worksheet = a_workbook[sheet_name]
 
             table_name = self.__get_table_name(a_worksheet=a_worksheet)
@@ -75,7 +83,7 @@ class DMLsSetBuilder:
         a_request = self.__a_request
         app_config = a_request.app_config
 
-        if app_config.table_name_definition_type == TableNameDefinitionType.SHEET:
+        if app_config.table_name_definition_type is TableNameDefinitionType.SHEET:
             table_name = TableName(value=a_worksheet.title)
         else:
             table_name_cell_position = app_config.table_name_cell_position

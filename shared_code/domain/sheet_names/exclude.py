@@ -8,3 +8,6 @@ class ExcludeSheetNames(SheetNames):
             return False
 
         return super().contains(sheet_name=sheet_name)
+
+    def __repr__(self):
+        return f"ExcludeSheetNames('{self.value}')"

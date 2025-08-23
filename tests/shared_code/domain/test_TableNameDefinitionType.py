@@ -3,4 +3,4 @@ from shared_code.domain.table_name_definition_type import TableNameDefinitionTyp
 
 class TestClass:
     def test(self):
-        assert TableNameDefinitionType.SHEET == TableNameDefinitionType.of("sheet")
+        assert TableNameDefinitionType.SHEET is TableNameDefinitionType.of("sheet")

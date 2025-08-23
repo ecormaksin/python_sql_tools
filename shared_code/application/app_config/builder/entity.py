@@ -2,8 +2,16 @@ import os
 from typing import Any, Optional
 
 from shared_code.application.app_config.builder.base.request import BaseBuildRequest
+from shared_code.application.app_config.builder.cell_position import (
+    CellPositionBuildRequest,
+    CellPositionBuilder,
+)
 from shared_code.application.app_config.builder.required_property_flag import (
     RequiredPropertyFlag,
+)
+from shared_code.application.app_config.builder.row_number import (
+    RowNumberBuildRequest,
+    RowNumberBuilder,
 )
 from shared_code.application.app_config.builder.table_name_definition_type import (
     TableNameDefinitionTypeBuilder,
@@ -24,6 +32,8 @@ from shared_code.domain.app_config import AppConfig
 from shared_code.domain.cell_position import CellPosition
 from shared_code.domain.number_of_lines_per_file import NumberOfLinesPerFile
 from shared_code.domain.row_number import RowNumber
+from shared_code.domain.sheet_names.exclude import ExcludeSheetNames
+from shared_code.domain.sheet_names.target import TargetSheetNames
 from shared_code.domain.table_name_definition_type import TableNameDefinitionType
 
 
@@ -41,11 +51,14 @@ class AppConfigBuilder:
         """
 
     def execute(self) -> AppConfig:
+        config_data = self.__config_data
+
         table_name_definition_type = self.__get_table_name_definition_type()
 
         table_name_cell_position = (
             self.__get_cell_position(property_name="table_name_cell")
-            if table_name_definition_type == TableNameDefinitionType.CELL
+            if table_name_definition_type
+            and table_name_definition_type is TableNameDefinitionType.CELL
             else None
         )
 
@@ -65,11 +78,17 @@ class AppConfigBuilder:
             property_name="data_start_cell"
         )
         number_of_lines_per_file = self.__get_number_of_lines_per_file()
+        target_sheet_names = TargetSheetNames(config_data.get("target_sheet_names", ""))
+        exclude_sheet_names = ExcludeSheetNames(
+            config_data.get("exclude_sheet_names", "")
+        )
 
         if len(self.__error_messages):
             raise RuntimeError(os.linesep.join(self.__error_messages))
 
         return AppConfig(
+            target_sheet_names=target_sheet_names,
+            exclude_sheet_names=exclude_sheet_names,
             table_name_definition_type=table_name_definition_type,
             table_name_cell_position=table_name_cell_position,
             db_column_name_row_number=db_column_name_row_number,
@@ -113,23 +132,16 @@ class AppConfigBuilder:
         return a_result.table_name_definition_type
 
     def __get_cell_position(self, property_name: str) -> Optional[CellPosition]:
-        result_flag = self.__validate_required_property(property_name=property_name)
-        if result_flag == ValidationResultFlag.NG:
-            return None
+        a_request = CellPositionBuildRequest(
+            config_data=self.__config_data,
+            error_messages=self.__error_messages,
+            property_name=property_name,
+        )
+        with CellPositionBuilder(a_request=a_request) as a_builder:
+            a_result = a_builder.execute()
 
-        result_flag = self.__validate_cell_position(property_name=property_name)
-        if result_flag == ValidationResultFlag.NG:
-            return None
-
-        table_name_cell = self.__config_data[property_name]
-
-        try:
-            return CellPosition(
-                row=int(table_name_cell["row"]), column=int(table_name_cell["column"])
-            )
-        except ValueError as exp:
-            self.__error_messages.append(str(exp))
-            return None
+        self.__error_messages = a_result.error_messages
+        return a_result.cell_position
 
     def __get_required_row_number(self, property_name: str) -> Optional[RowNumber]:
         return self.__get_row_number(
@@ -146,19 +158,17 @@ class AppConfigBuilder:
         property_name: str,
         is_required: RequiredPropertyFlag,
     ) -> Optional[RowNumber]:
-        if is_required == RequiredPropertyFlag.YES:
-            result_flag = self.__validate_required_property(property_name=property_name)
-            if result_flag == ValidationResultFlag.NG:
-                return None
-        else:
-            if property_name not in self.__config_data:
-                return None
+        a_request = RowNumberBuildRequest(
+            config_data=self.__config_data,
+            error_messages=self.__error_messages,
+            property_name=property_name,
+            is_required=is_required,
+        )
+        with RowNumberBuilder(a_request=a_request) as a_builder:
+            a_result = a_builder.execute()
 
-        try:
-            return RowNumber(value=int(self.__config_data[property_name]))
-        except ValueError as exp:
-            self.__error_messages.append(str(exp))
-            return None
+        self.__error_messages = a_result.error_messages
+        return a_result.row_number
 
     def __get_number_of_lines_per_file(self) -> Optional[NumberOfLinesPerFile]:
         number_of_lines_per_file = self.__config_data.get(

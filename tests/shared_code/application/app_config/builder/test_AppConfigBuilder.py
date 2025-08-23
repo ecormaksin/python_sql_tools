@@ -4,7 +4,7 @@ from typing import Optional, Type
 
 import pytest
 
-from shared_code.application.app_config.entity import AppConfigBuilder
+from shared_code.application.app_config.builder.entity import AppConfigBuilder
 
 
 @dataclass(frozen=True)
@@ -249,6 +249,69 @@ test_params = [
 }
 """,
             expected_exception=RuntimeError,
+        ),
+    ),
+    (
+        "both 'target_sheet_names' and 'exclude_sheet_names' specified",
+        Item(
+            config_data_str="""
+{
+  "target_sheet_names": "sheet_A,",
+  "exclude_sheet_names": "sheet_B,",
+  "table_name": "sheet",
+  "column_name_row": 1,
+  "data_type_row": 3,
+  "no_quotation_row": 4,
+  "data_start_cell": {
+    "row": 6,
+    "column": 2
+  },
+  "number_of_lines_per_file": 10
+}
+""",
+            expected_exception=None,
+        ),
+    ),
+    (
+        "'target_sheet_names' specified",
+        Item(
+            config_data_str="""
+{
+  "target_sheet_names": "sheet_A,",
+  "exclude_sheet_names": "",
+  "table_name": "sheet",
+  "column_name_row": 1,
+  "data_type_row": 3,
+  "no_quotation_row": 4,
+  "data_start_cell": {
+    "row": 6,
+    "column": 2
+  },
+  "number_of_lines_per_file": 10
+}
+""",
+            expected_exception=None,
+        ),
+    ),
+    (
+        "'exclude_sheet_names' specified",
+        Item(
+            config_data_str="""
+{
+  "target_sheet_names": "",
+  "exclude_sheet_names": "sheet_B,",
+  "table_name": "sheet",
+  "column_name_row": 1,
+  "data_type_row": 3,
+  "no_quotation_row": 4,
+  "data_start_cell": {
+    "row": 6,
+    "column": 2
+  },
+  "number_of_lines_per_file": 10
+}
+""",
+            expected_exception=None,
         ),
     ),
 ]
