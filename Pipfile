@@ -7,7 +7,6 @@ name = "pypi"
 openpyxl = "*"
 defusedxml = "*"
 json5 = "*"
-python-ulid = "*"
 argparse = "*"
 rich-argparse = "*"
 
