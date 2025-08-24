@@ -1,5 +1,3 @@
-from pathlib import Path
-
 import json5
 
 from shared_code.application.app_config.builder.entity import AppConfigBuilder
@@ -8,13 +6,8 @@ from shared_code.infra.file_system.file_existence_checker import FileExistenceCh
 
 
 class AppConfigJsoncFileReader:
-    def __init__(self, **kwargs):
-        if "file_path" in kwargs:
-            self.__file_path = kwargs["file_path"]
-        else:
-            self.__file_path = Path(__file__).parent.parent.parent.parent.joinpath(
-                "app_config.json"
-            )
+    def __init__(self, file_path: str):
+        self.__file_path = file_path
 
     def __enter__(self):
         return self

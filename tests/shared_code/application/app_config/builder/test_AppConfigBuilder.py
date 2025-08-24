@@ -314,6 +314,27 @@ test_params = [
             expected_exception=None,
         ),
     ),
+    (
+        "same sheets specified in 'target_sheet_names' and 'exclude_sheet_names'",
+        Item(
+            config_data_str="""
+{
+  "target_sheet_names": "sheet_A,sheet_C,",
+  "exclude_sheet_names": "sheet_B,sheet_A,",
+  "table_name": "sheet",
+  "column_name_row": 1,
+  "data_type_row": 3,
+  "no_quotation_row": 4,
+  "data_start_cell": {
+    "row": 6,
+    "column": 2
+  },
+  "number_of_lines_per_file": 10
+}
+""",
+            expected_exception=RuntimeError,
+        ),
+    ),
 ]
 
 

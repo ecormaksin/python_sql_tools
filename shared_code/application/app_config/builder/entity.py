@@ -82,6 +82,10 @@ class AppConfigBuilder:
         exclude_sheet_names = ExcludeSheetNames(
             config_data.get("exclude_sheet_names", "")
         )
+        if target_sheet_names.overlapped(exclude_sheet_names):
+            self.__error_messages.append(
+                "The same sheet names are specified in 'target_sheet_names' and 'exclude_sheet_names'."
+            )
 
         if len(self.__error_messages):
             raise RuntimeError(os.linesep.join(self.__error_messages))

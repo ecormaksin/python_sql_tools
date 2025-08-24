@@ -6,9 +6,10 @@ name = "pypi"
 [packages]
 openpyxl = "*"
 defusedxml = "*"
-pillow = "*"
 json5 = "*"
 python-ulid = "*"
+argparse = "*"
+rich-argparse = "*"
 
 [dev-packages]
 mypy = "*"

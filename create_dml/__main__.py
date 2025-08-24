@@ -2,8 +2,10 @@ import sys
 import tempfile
 import traceback
 from pathlib import Path
+import argparse
+from rich_argparse import RichHelpFormatter
+import datetime
 
-from ulid import ULID
 
 from shared_code.application.dml.dml_files_creator import (
     DMLFilesCreator,
@@ -19,18 +21,39 @@ from shared_code.infra.file_system.file_existence_checker import FileExistenceCh
 
 
 def create_dml():
-    args_len = len(sys.argv)
-    if args_len < 2:
-        print(
-            "Usage: <source_data_xlsx_file_path> (<dml_output_directory_path> if not specified, temp directory is used.)"
-        )
-        sys.exit(1)
+    arg_parser = argparse.ArgumentParser(
+        description="This script creates dml files from .xlsx file.",
+        formatter_class=RichHelpFormatter,
+    )
+    arg_parser.add_argument(
+        "-s", "--source", help="Specify source .xlsx file path.", required=True
+    )
+    arg_parser.add_argument(
+        "-d",
+        "--destination",
+        help="Specify dml's directory path. If not specified, temp directory is used.",
+    )
+    arg_parser.add_argument(
+        "-c",
+        "--config",
+        help="Specify a configuration json file path. If not specified, project root's 'app_config.json' is used.",
+    )
 
-    src_xlsx_file_path_str = sys.argv[1]
-    if args_len >= 3:
-        sink_dml_dir_path_str = sys.argv[2]
+    args = arg_parser.parse_args()
+
+    src_xlsx_file_path_str = args.source
+    if args.destination:
+        sink_dml_dir_path_str = args.destination
     else:
-        sink_dml_dir_path_str = str(Path(tempfile.gettempdir()).joinpath(str(ULID())))
+        now = datetime.datetime.now()
+        sink_dml_dir_path_str = str(
+            Path(tempfile.gettempdir()).joinpath(now.strftime("%Y%m%d-%H%M%S"))
+        )
+
+    if args.config:
+        config_file_path = args.config
+    else:
+        config_file_path = Path(__file__).parent.parent.joinpath("app_config.json")
 
     if FileExistenceChecker.not_exists(file_path=src_xlsx_file_path_str):
         print(f"Source file '{src_xlsx_file_path_str}' not found.")
@@ -45,7 +68,7 @@ def create_dml():
         )
         sys.exit(1)
 
-    with AppConfigJsoncFileReader() as config_reader:
+    with AppConfigJsoncFileReader(file_path=config_file_path) as config_reader:
         app_config = config_reader.execute()
 
     a_request = DMLFilesCreationRequest(
