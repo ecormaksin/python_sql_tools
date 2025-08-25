@@ -27,7 +27,7 @@ class DBColumnBuilder:
         column_name_str = cls.__get_value(
             source_data=source_data, row_number=app_config.db_column_name_row_number
         )
-        if not column_name_str:
+        if not column_name_str or column_name_str == "None":
             return None
 
         data_type_str = cls.__get_value(

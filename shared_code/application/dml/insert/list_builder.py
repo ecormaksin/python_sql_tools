@@ -33,11 +33,15 @@ class InsertDMLsBuilder:
             )
         )
 
+        db_columns_size = len(db_columns.unmodifiable_elements)
+
         dmls = []
         for row_data in a_request.data_range:
             dml = first_part
 
             for index, col_data in enumerate(row_data):
+                if index >= db_columns_size:
+                    continue
                 db_column = db_columns.unmodifiable_elements[index]
                 data_type = db_column.data_type
                 no_quotation = db_column.no_quotation
@@ -54,7 +58,10 @@ class InsertDMLsBuilder:
                 else:
                     dml += unicode_prefix
                     dml += value_quotation
-                    dml += re.sub(r"'", "''", col_data)
+                    if no_quotation:
+                        dml += col_data
+                    else:
+                        dml += re.sub(r"'", "''", col_data)
                     dml += value_quotation
 
             dml += ");"
