@@ -18,7 +18,7 @@ class Item:
 if os.name == "nt":
     test_values = [
         Item(dir_path_str="C:\\temp", expected_exception=None),
-        Item(dir_path_str="ZZ:\\temp", expected_exception=RuntimeError),
+        Item(dir_path_str="ZZ:\\temp", expected_exception=OSError),
     ]
 else:
     test_values = [
