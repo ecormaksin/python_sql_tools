@@ -1,5 +1,3 @@
-@set table_name = ''
-
 select
 	sq_a.table_name,
 	sq_a.column_name,
@@ -20,7 +18,6 @@ from
 		and sq_b.column_name = sq_a.column_name
 where
 	sq_a.TABLE_SCHEMA = 'dbeaver_sample'
-	and ('' = :table_name or sq_a.table_name = :table_name)
 order by
 	sq_a.table_name,
 	sq_a.ORDINAL_POSITION
