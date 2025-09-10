@@ -3,9 +3,12 @@ from typing import Any
 
 
 class AppConfigForTest:
-    TABLE_NAME_SHEET_VALID_SAMPLE_DATA_STR: str = """
+    VALID_SAMPLE_DATA_STR: str = """
 {
-  "table_name": "sheet",
+  "table_name_cell": {
+    "row": 1,
+    "column": 1
+  },
   "column_name_row": 1,
   "data_type_row": 3,
   "key_position_row": 4,

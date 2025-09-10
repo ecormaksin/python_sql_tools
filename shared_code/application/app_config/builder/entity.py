@@ -1,7 +1,6 @@
 import os
 from typing import Any, Optional
 
-from shared_code.application.app_config.builder.base.request import BaseBuildRequest
 from shared_code.application.app_config.builder.cell_position import (
     CellPositionBuildRequest,
     CellPositionBuilder,
@@ -12,9 +11,6 @@ from shared_code.application.app_config.builder.required_property_flag import (
 from shared_code.application.app_config.builder.row_number import (
     RowNumberBuildRequest,
     RowNumberBuilder,
-)
-from shared_code.application.app_config.builder.table_name_definition_type import (
-    TableNameDefinitionTypeBuilder,
 )
 from shared_code.application.app_config.validation.cell_position_validator import (
     CellPositionValidator,
@@ -34,7 +30,6 @@ from shared_code.domain.number_of_lines_per_file import NumberOfLinesPerFile
 from shared_code.domain.row_number import RowNumber
 from shared_code.domain.sheet_names.exclude import ExcludeSheetNames
 from shared_code.domain.sheet_names.target import TargetSheetNames
-from shared_code.domain.table_name_definition_type import TableNameDefinitionType
 
 
 class AppConfigBuilder:
@@ -53,15 +48,7 @@ class AppConfigBuilder:
     def execute(self) -> AppConfig:
         config_data = self.__config_data
 
-        table_name_definition_type = self.__get_table_name_definition_type()
-
-        table_name_cell_position = (
-            self.__get_cell_position(property_name="table_name_cell")
-            if table_name_definition_type
-            and table_name_definition_type is TableNameDefinitionType.CELL
-            else None
-        )
-
+        table_name_cell_position = self.__get_cell_position(property_name="table_name_cell")
         db_column_name_row_number = self.__get_required_row_number(
             property_name="column_name_row"
         )
@@ -93,7 +80,6 @@ class AppConfigBuilder:
         return AppConfig(
             target_sheet_names=target_sheet_names,
             exclude_sheet_names=exclude_sheet_names,
-            table_name_definition_type=table_name_definition_type,
             table_name_cell_position=table_name_cell_position,
             db_column_name_row_number=db_column_name_row_number,
             data_type_row_number=data_type_row_number,
@@ -124,16 +110,6 @@ class AppConfigBuilder:
 
         self.__error_messages = a_result.error_messages
         return a_result.flag
-
-    def __get_table_name_definition_type(self) -> Optional[TableNameDefinitionType]:
-        base_request = BaseBuildRequest(
-            config_data=self.__config_data, error_messages=self.__error_messages
-        )
-        with TableNameDefinitionTypeBuilder(a_request=base_request) as a_builder:
-            a_result = a_builder.execute()
-
-        self.__error_messages = a_result.error_messages
-        return a_result.table_name_definition_type
 
     def __get_cell_position(self, property_name: str) -> Optional[CellPosition]:
         a_request = CellPositionBuildRequest(

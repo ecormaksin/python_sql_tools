@@ -6,14 +6,12 @@ from shared_code.domain.number_of_lines_per_file import NumberOfLinesPerFile
 from shared_code.domain.row_number import RowNumber
 from shared_code.domain.sheet_names.exclude import ExcludeSheetNames
 from shared_code.domain.sheet_names.target import TargetSheetNames
-from shared_code.domain.table_name_definition_type import TableNameDefinitionType
 
 
 @dataclass(frozen=True)
 class AppConfig:
     target_sheet_names: TargetSheetNames
     exclude_sheet_names: ExcludeSheetNames
-    table_name_definition_type: TableNameDefinitionType
     table_name_cell_position: Optional[CellPosition]
     db_column_name_row_number: RowNumber
     data_type_row_number: RowNumber
@@ -33,7 +31,6 @@ class AppConfig:
     def __repr__(self):
         target_sheet_names = repr(self.target_sheet_names)
         exclude_sheet_names = repr(self.exclude_sheet_names)
-        table_name_definition_type = repr(self.table_name_definition_type)
         table_name_cell_position = (
             repr(self.table_name_cell_position)
             if self.table_name_cell_position
@@ -48,7 +45,6 @@ class AppConfig:
             "AppConfig("
             f"target_sheet_names={target_sheet_names}, "
             f"exclude_sheet_names={exclude_sheet_names}, "
-            f"table_name_definition_type={table_name_definition_type}, "
             f"table_name_cell_position={table_name_cell_position}, "
             f"db_column_name_row_number={column_name_row}, "
             f"data_type_row_number={data_type_row}, "

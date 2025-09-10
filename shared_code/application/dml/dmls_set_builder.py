@@ -13,7 +13,6 @@ from shared_code.domain.dmls.entity import DMLs
 from shared_code.domain.dmls.set import DMLsSet
 from shared_code.domain.source_data_xlsx_file_path import SourceDataXlsxFilePath
 from shared_code.domain.table_name import TableName
-from shared_code.domain.table_name_definition_type import TableNameDefinitionType
 
 
 @dataclass(frozen=True)
@@ -83,15 +82,12 @@ class DMLsSetBuilder:
         a_request = self.__a_request
         app_config = a_request.app_config
 
-        if app_config.table_name_definition_type is TableNameDefinitionType.SHEET:
-            table_name = TableName(value=a_worksheet.title)
-        else:
-            table_name_cell_position = app_config.table_name_cell_position
-            a_cell = a_worksheet.cell(
-                row=table_name_cell_position.row,
-                column=table_name_cell_position.column,
-            )
-            table_name = TableName(value=str(a_cell.value))
+        table_name_cell_position = app_config.table_name_cell_position
+        a_cell = a_worksheet.cell(
+            row=table_name_cell_position.row,
+            column=table_name_cell_position.column,
+        )
+        table_name = TableName(value=str(a_cell.value))
 
         return table_name
 

@@ -16,27 +16,10 @@ class Item:
 test_params = [
     ("no properties", Item(config_data_str="{}", expected_exception=RuntimeError)),
     (
-        "'table_name' missing",
-        Item(
-            config_data_str="""
-{
-  "column_name_row": 1,
-  "data_type_row": 3,
-  "data_start_cell": {
-    "row": 6,
-    "column": 2
-  }
-}
-""",
-            expected_exception=RuntimeError,
-        ),
-    ),
-    (
         "'table_name_cell' missing",
         Item(
             config_data_str="""
 {
-  "table_name": "cell",
   "column_name_row": 1,
   "data_type_row": 3,
   "data_start_cell": {
@@ -53,7 +36,6 @@ test_params = [
         Item(
             config_data_str="""
     {
-      "table_name": "cell",
       "table_name_cell": {
         "row": 0,
         "column": 1
@@ -74,7 +56,6 @@ test_params = [
         Item(
             config_data_str="""
     {
-      "table_name": "cell",
       "table_name_cell": {
         "row": 1,
         "column": 0
@@ -91,28 +72,14 @@ test_params = [
         ),
     ),
     (
-        "'table_name's value not defined",
-        Item(
-            config_data_str="""
-{
-  "table_name": "row",
-  "column_name_row": 1,
-  "data_type_row": 3,
-  "data_start_cell": {
-    "row": 6,
-    "column": 2
-  }
-}
-""",
-            expected_exception=RuntimeError,
-        ),
-    ),
-    (
         "'column_name_row' invalid",
         Item(
             config_data_str="""
 {
-  "table_name": "sheet",
+  "table_name_cell": {
+    "row": 1,
+    "column": 1
+  },
   "column_name_row": 0,
   "data_type_row": 3,
   "data_start_cell": {
@@ -129,7 +96,10 @@ test_params = [
         Item(
             config_data_str="""
 {
-  "table_name": "sheet",
+  "table_name_cell": {
+    "row": 1,
+    "column": 1
+  },
   "column_name_row": 1,
   "data_type_row": 0,
   "data_start_cell": {
@@ -146,7 +116,10 @@ test_params = [
         Item(
             config_data_str="""
 {
-  "table_name": "sheet",
+  "table_name_cell": {
+    "row": 1,
+    "column": 1
+  },
   "column_name_row": 1,
   "data_type_row": 3,
   "data_start_cell": {
@@ -163,7 +136,10 @@ test_params = [
         Item(
             config_data_str="""
 {
-  "table_name": "sheet",
+  "table_name_cell": {
+    "row": 1,
+    "column": 1
+  },
   "column_name_row": 1,
   "data_type_row": 3,
   "data_start_cell": {
@@ -180,7 +156,10 @@ test_params = [
         Item(
             config_data_str="""
 {
-  "table_name": "sheet",
+  "table_name_cell": {
+    "row": 1,
+    "column": 1
+  },
   "column_name_row": 1,
   "data_type_row": 3,
   "data_start_cell": {
@@ -198,7 +177,10 @@ test_params = [
         Item(
             config_data_str="""
 {
-  "table_name": "sheet",
+  "table_name_cell": {
+    "row": 1,
+    "column": 1
+  },
   "column_name_row": 1,
   "data_type_row": 3,
   "key_position_row": 4,
@@ -218,7 +200,10 @@ test_params = [
         Item(
             config_data_str="""
 {
-  "table_name": "sheet",
+  "table_name_cell": {
+    "row": 1,
+    "column": 1
+  },
   "column_name_row": 1,
   "data_type_row": 3,
   "key_position_row": 0,
@@ -237,7 +222,10 @@ test_params = [
         Item(
             config_data_str="""
 {
-  "table_name": "sheet",
+  "table_name_cell": {
+    "row": 1,
+    "column": 1
+  },
   "column_name_row": 1,
   "data_type_row": 3,
   "no_quotation_row": 0,
@@ -258,7 +246,10 @@ test_params = [
 {
   "target_sheet_names": "sheet_A,",
   "exclude_sheet_names": "sheet_B,",
-  "table_name": "sheet",
+  "table_name_cell": {
+    "row": 1,
+    "column": 1
+  },
   "column_name_row": 1,
   "data_type_row": 3,
   "no_quotation_row": 4,
@@ -279,7 +270,10 @@ test_params = [
 {
   "target_sheet_names": "sheet_A,",
   "exclude_sheet_names": "",
-  "table_name": "sheet",
+  "table_name_cell": {
+    "row": 1,
+    "column": 1
+  },
   "column_name_row": 1,
   "data_type_row": 3,
   "no_quotation_row": 4,
@@ -300,7 +294,10 @@ test_params = [
 {
   "target_sheet_names": "",
   "exclude_sheet_names": "sheet_B,",
-  "table_name": "sheet",
+  "table_name_cell": {
+    "row": 1,
+    "column": 1
+  },
   "column_name_row": 1,
   "data_type_row": 3,
   "no_quotation_row": 4,
@@ -321,7 +318,10 @@ test_params = [
 {
   "target_sheet_names": "sheet_A,sheet_C,",
   "exclude_sheet_names": "sheet_B,sheet_A,",
-  "table_name": "sheet",
+  "table_name_cell": {
+    "row": 1,
+    "column": 1
+  },
   "column_name_row": 1,
   "data_type_row": 3,
   "no_quotation_row": 4,

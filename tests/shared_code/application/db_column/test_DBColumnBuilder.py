@@ -12,7 +12,7 @@ class TestClass:
         source_data = DBColumnTestData.MEDIA_TYPE_ID
 
         config_data = AppConfigForTest.get_config_data(
-            data_str=AppConfigForTest.TABLE_NAME_SHEET_VALID_SAMPLE_DATA_STR
+            data_str=AppConfigForTest.VALID_SAMPLE_DATA_STR
         )
         with AppConfigBuilder(config_data=config_data) as app_config_builder:
             app_config = app_config_builder.execute()
