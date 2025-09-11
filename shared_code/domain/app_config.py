@@ -4,6 +4,7 @@ from typing import Optional
 from shared_code.domain.cell_position import CellPosition
 from shared_code.domain.number_of_lines_per_file import NumberOfLinesPerFile
 from shared_code.domain.row_number import RowNumber
+from shared_code.domain.set_empty_str_instead_of_null import SetEmptyStrInsteadOfNull
 from shared_code.domain.sheet_names.exclude import ExcludeSheetNames
 from shared_code.domain.sheet_names.target import TargetSheetNames
 
@@ -18,6 +19,7 @@ class AppConfig:
     key_position_row_number: Optional[RowNumber]
     no_quotation_row_number: Optional[RowNumber]
     data_start_cell_position: CellPosition
+    set_empty_str_instead_of_null: SetEmptyStrInsteadOfNull
     number_of_lines_per_file: NumberOfLinesPerFile = NumberOfLinesPerFile.UNLIMITED
 
     def __eq__(self, other):

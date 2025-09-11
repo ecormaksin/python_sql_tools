@@ -67,7 +67,7 @@ class DataType:
 
     @staticmethod
     def __convert_for_comparison(a_value: str) -> str:
-        data_type_part = a_value
+        data_type_part = a_value.lstrip('@') # A5:SQLの型ドメイン対応
 
         for target_character in ["(", " "]:
             data_type_part = DataType.__cut_value(

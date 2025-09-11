@@ -335,6 +335,52 @@ test_params = [
             expected_exception=RuntimeError,
         ),
     ),
+(
+        "'set_empty_string_instead_of_null' is not bool",
+        Item(
+            config_data_str="""
+{
+  "table_name_cell": {
+    "row": 1,
+    "column": 1
+  },
+  "column_name_row": 1,
+  "data_type_row": 3,
+  "no_quotation_row": 4,
+  "data_start_cell": {
+    "row": 6,
+    "column": 2
+  },
+  "set_empty_string_instead_of_null": "a",
+  "number_of_lines_per_file": 10
+}
+""",
+            expected_exception=ValueError,
+        ),
+    ),
+(
+        "'set_empty_string_instead_of_null' is valid",
+        Item(
+            config_data_str="""
+{
+  "table_name_cell": {
+    "row": 1,
+    "column": 1
+  },
+  "column_name_row": 1,
+  "data_type_row": 3,
+  "no_quotation_row": 4,
+  "data_start_cell": {
+    "row": 6,
+    "column": 2
+  },
+  "set_empty_string_instead_of_null": true,
+  "number_of_lines_per_file": 10
+}
+""",
+            expected_exception=None,
+        ),
+    ),
 ]
 
 

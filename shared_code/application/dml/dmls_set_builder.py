@@ -69,7 +69,8 @@ class DMLsSetBuilder:
             # print(data_range)
 
             dmls_build_request = DMLsBuildRequest(
-                table_name=table_name, db_columns=db_columns, data_range=data_range
+                table_name=table_name, db_columns=db_columns, data_range=data_range,
+                set_empty_str_instead_of_null=app_config.set_empty_str_instead_of_null
             )
             with DMLsBuilder(a_request=dmls_build_request) as a_dmls_builder:
                 dmls = DMLs(value=a_dmls_builder.execute())
@@ -93,7 +94,7 @@ class DMLsSetBuilder:
 
     @staticmethod
     def __get_db_columns_range(
-        a_worksheet: Worksheet, app_config: AppConfig
+            a_worksheet: Worksheet, app_config: AppConfig
     ) -> list[list[str]]:
         return [
             [str(cell) for cell in col]
@@ -107,7 +108,7 @@ class DMLsSetBuilder:
 
     @staticmethod
     def __get_data_range(
-        a_worksheet: Worksheet, app_config: AppConfig
+            a_worksheet: Worksheet, app_config: AppConfig
     ) -> list[list[str]]:
         return [
             [str(cell) for cell in row]

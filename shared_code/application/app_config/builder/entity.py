@@ -28,6 +28,7 @@ from shared_code.domain.app_config import AppConfig
 from shared_code.domain.cell_position import CellPosition
 from shared_code.domain.number_of_lines_per_file import NumberOfLinesPerFile
 from shared_code.domain.row_number import RowNumber
+from shared_code.domain.set_empty_str_instead_of_null import SetEmptyStrInsteadOfNull
 from shared_code.domain.sheet_names.exclude import ExcludeSheetNames
 from shared_code.domain.sheet_names.target import TargetSheetNames
 
@@ -64,6 +65,7 @@ class AppConfigBuilder:
         data_start_cell_position = self.__get_cell_position(
             property_name="data_start_cell"
         )
+        set_empty_str_instead_of_null = SetEmptyStrInsteadOfNull(config_data.get("set_empty_string_instead_of_null", False))
         number_of_lines_per_file = self.__get_number_of_lines_per_file()
         target_sheet_names = TargetSheetNames(config_data.get("target_sheet_names", ""))
         exclude_sheet_names = ExcludeSheetNames(
@@ -86,6 +88,7 @@ class AppConfigBuilder:
             key_position_row_number=key_position_row_number,
             no_quotation_row_number=no_quotation_row_number,
             data_start_cell_position=data_start_cell_position,
+            set_empty_str_instead_of_null=set_empty_str_instead_of_null,
             number_of_lines_per_file=number_of_lines_per_file,
         )
 

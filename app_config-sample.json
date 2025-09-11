@@ -11,6 +11,7 @@
     "row": 8,
     "column": 4
   },
+  "set_empty_string_instead_of_null": false,
   // Specify the target sheet names separated by commas.
   "target_sheet_names": "",
   // Specify the sheet names separated by commas which you want to exclude.

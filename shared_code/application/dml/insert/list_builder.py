@@ -1,3 +1,5 @@
+import re
+
 from shared_code.application.dml.dmls_build_request import DMLsBuildRequest
 from shared_code.application.dml.insert.first_part_builder import (
     InsertDMLFirstPartBuilder as FirstPartBuilder,
@@ -7,7 +9,6 @@ from shared_code.application.dml.value_quotation_getter import ValueQuotationGet
 from shared_code.application.dml.value_unicode_prefix_getter import (
     ValueUnicodePrefixGetter,
 )
-import re
 
 
 class InsertDMLsBuilder:
@@ -26,6 +27,7 @@ class InsertDMLsBuilder:
         a_request = self.__a_request
         table_name = a_request.table_name
         db_columns = a_request.db_columns
+        set_empty_str_instead_of_null = a_request.set_empty_str_instead_of_null
 
         first_part = FirstPartBuilder.execute(
             a_request=FirstPartBuildRequest(
@@ -54,7 +56,10 @@ class InsertDMLsBuilder:
 
                 dml += ", " if index > 0 else ""
                 if not col_data or col_data == "None":
-                    dml += "null"
+                    if data_type.do_add_quotation() and set_empty_str_instead_of_null.is_true():
+                        dml += "''"
+                    else:
+                        dml += "null"
                 else:
                     dml += unicode_prefix
                     dml += value_quotation

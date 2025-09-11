@@ -2,6 +2,7 @@ select
 	cols.table_name,
 	cols.column_name,
 	pd.description as column_comment,
+	cols.column_default,
 	cols.is_nullable,
 	case 
 		when cols.data_type = 'numeric' then
