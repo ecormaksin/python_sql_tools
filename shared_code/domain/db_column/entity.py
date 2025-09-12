@@ -1,15 +1,19 @@
 from dataclasses import dataclass
 from typing import Optional
 
+from shared_code.domain.db_column.column_default import ColumnDefault
 from shared_code.domain.db_column.column_name import ColumnName
 from shared_code.domain.db_column.data_type import DataType
 from shared_code.domain.db_column.key_position import KeyPosition
 from shared_code.domain.db_column.no_quotation import NoQuotation
+from shared_code.domain.db_column.nullable_column_flag import NullableColumnFlag
 
 
 @dataclass(frozen=True)
 class DBColumn:
     column_name: ColumnName
+    column_default: Optional[ColumnDefault]
+    nullable_column_flag: NullableColumnFlag
     data_type: DataType
     key_position: Optional[KeyPosition]
     no_quotation: Optional[NoQuotation]
@@ -24,12 +28,16 @@ class DBColumn:
 
     def __repr__(self):
         column_name = repr(self.column_name)
+        column_default = repr(self.column_default) if self.column_default else "None"
+        nullable_column_flag = repr(self.nullable_column_flag)
         data_type = repr(self.data_type)
         key_position = repr(self.key_position) if self.key_position else "None"
         no_quotation = repr(self.no_quotation) if self.no_quotation else "None"
         return (
             "DBColumn("
             f"column_name={column_name}, "
+            f"column_default={column_default}, "
+            f"nullable_column_flag={nullable_column_flag}, "
             f"data_type={data_type}, "
             f"key_position={key_position}, "
             f"no_quotation={no_quotation}"

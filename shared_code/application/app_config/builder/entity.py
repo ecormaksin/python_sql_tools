@@ -53,19 +53,26 @@ class AppConfigBuilder:
         db_column_name_row_number = self.__get_required_row_number(
             property_name="column_name_row"
         )
+        column_default_row_number = self.__get_required_row_number(
+            property_name="column_default_row"
+        )
+        nullable_column_flag_row_number = self.__get_required_row_number(
+            property_name="nullable_column_flag_row"
+        )
         data_type_row_number = self.__get_required_row_number(
             property_name="data_type_row"
         )
-        key_position_row_number = self.__get_optional_row_number(
+        key_position_row_number = self.__get_required_row_number(
             property_name="key_position_row"
         )
-        no_quotation_row_number = self.__get_optional_row_number(
+        no_quotation_row_number = self.__get_required_row_number(
             property_name="no_quotation_row"
         )
         data_start_cell_position = self.__get_cell_position(
             property_name="data_start_cell"
         )
-        set_empty_str_instead_of_null = SetEmptyStrInsteadOfNull(config_data.get("set_empty_string_instead_of_null", False))
+        set_empty_str_instead_of_null = SetEmptyStrInsteadOfNull(
+            config_data.get("set_empty_string_instead_of_null", False))
         number_of_lines_per_file = self.__get_number_of_lines_per_file()
         target_sheet_names = TargetSheetNames(config_data.get("target_sheet_names", ""))
         exclude_sheet_names = ExcludeSheetNames(
@@ -84,6 +91,8 @@ class AppConfigBuilder:
             exclude_sheet_names=exclude_sheet_names,
             table_name_cell_position=table_name_cell_position,
             db_column_name_row_number=db_column_name_row_number,
+            column_default_row_number=column_default_row_number,
+            nullable_column_flag_row_number=nullable_column_flag_row_number,
             data_type_row_number=data_type_row_number,
             key_position_row_number=key_position_row_number,
             no_quotation_row_number=no_quotation_row_number,
@@ -137,9 +146,9 @@ class AppConfigBuilder:
         )
 
     def __get_row_number(
-        self,
-        property_name: str,
-        is_required: RequiredPropertyFlag,
+            self,
+            property_name: str,
+            is_required: RequiredPropertyFlag,
     ) -> Optional[RowNumber]:
         a_request = RowNumberBuildRequest(
             config_data=self.__config_data,

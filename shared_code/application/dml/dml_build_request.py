@@ -1,0 +1,13 @@
+from dataclasses import dataclass
+
+from shared_code.domain.db_column.list import DBColumns
+from shared_code.domain.set_empty_str_instead_of_null import SetEmptyStrInsteadOfNull
+from shared_code.domain.table_name import TableName
+
+
+@dataclass(frozen=True)
+class DMLBuildRequest:
+    table_name: TableName
+    db_columns: DBColumns
+    row_data: list[str]
+    set_empty_str_instead_of_null: SetEmptyStrInsteadOfNull

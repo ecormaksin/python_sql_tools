@@ -60,6 +60,9 @@ class DataType:
         data_type_part = DataType.__convert_for_comparison(a_value=a_value)
         return data_type_part in self.QUOTATION_TARGET
 
+    def do_not_add_quotation(self) -> bool:
+        return not self.do_add_quotation()
+
     def do_add_unicode_prefix(self) -> bool:
         a_value = self.value
         data_type_part = DataType.__convert_for_comparison(a_value=a_value)
@@ -67,7 +70,7 @@ class DataType:
 
     @staticmethod
     def __convert_for_comparison(a_value: str) -> str:
-        data_type_part = a_value.lstrip('@') # A5:SQLの型ドメイン対応
+        data_type_part = a_value.lstrip("@")  # A5:SQLの型ドメイン対応
 
         for target_character in ["(", " "]:
             data_type_part = DataType.__cut_value(

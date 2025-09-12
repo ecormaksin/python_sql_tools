@@ -22,3 +22,6 @@ class SetEmptyStrInsteadOfNull:
 
     def is_true(self) -> bool:
         return self.value
+
+    def is_false(self) -> bool:
+        return not self.is_true()

@@ -1,9 +1,15 @@
 {
+  // Specify the target sheet names separated by commas.
+  "target_sheet_names": "",
+  // Specify the sheet names separated by commas which you want to exclude.
+  "exclude_sheet_names": "",
   "table_name_cell": {
     "row": 1,
     "column": 1
   },
   "column_name_row": 1,
+  "column_default_row": 3,
+  "nullable_column_flag_row": 4,
   "data_type_row": 5,
   "key_position_row": 6,
   "no_quotation_row": 7,
@@ -12,10 +18,6 @@
     "column": 4
   },
   "set_empty_string_instead_of_null": false,
-  // Specify the target sheet names separated by commas.
-  "target_sheet_names": "",
-  // Specify the sheet names separated by commas which you want to exclude.
-  "exclude_sheet_names": "",
   // specify the number of lines per dml file. If you specify -1, one table's dml is output as one file.
   "number_of_lines_per_file": -1
 }

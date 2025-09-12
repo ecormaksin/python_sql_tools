@@ -1,13 +1,13 @@
-import re
-
+from shared_code.application.dml.dml_build_request import DMLBuildRequest
 from shared_code.application.dml.dmls_build_request import DMLsBuildRequest
 from shared_code.application.dml.insert.first_part_builder import (
     InsertDMLFirstPartBuilder as FirstPartBuilder,
+)
+from shared_code.application.dml.insert.first_part_builder import (
     InsertDMLFirstPartBuildRequest as FirstPartBuildRequest,
 )
-from shared_code.application.dml.value_quotation_getter import ValueQuotationGetter
-from shared_code.application.dml.value_unicode_prefix_getter import (
-    ValueUnicodePrefixGetter,
+from shared_code.application.dml.insert.values_clause_builder import (
+    InsertValueClauseBuilder,
 )
 
 
@@ -35,39 +35,20 @@ class InsertDMLsBuilder:
             )
         )
 
-        db_columns_size = len(db_columns.unmodifiable_elements)
-
         dmls = []
         for row_data in a_request.data_range:
             dml = first_part
 
-            for index, col_data in enumerate(row_data):
-                if index >= db_columns_size:
-                    continue
-                db_column = db_columns.unmodifiable_elements[index]
-                data_type = db_column.data_type
-                no_quotation = db_column.no_quotation
-                unicode_prefix = ValueUnicodePrefixGetter.execute(
-                    data_type=data_type, no_quotation=no_quotation
-                )
-                value_quotation = ValueQuotationGetter.execute(
-                    data_type=data_type, no_quotation=no_quotation
-                )
-
-                dml += ", " if index > 0 else ""
-                if not col_data or col_data == "None":
-                    if data_type.do_add_quotation() and set_empty_str_instead_of_null.is_true():
-                        dml += "''"
-                    else:
-                        dml += "null"
-                else:
-                    dml += unicode_prefix
-                    dml += value_quotation
-                    if no_quotation:
-                        dml += col_data
-                    else:
-                        dml += re.sub(r"'", "''", col_data)
-                    dml += value_quotation
+            dml_build_request = DMLBuildRequest(
+                table_name=table_name,
+                db_columns=db_columns,
+                row_data=row_data,
+                set_empty_str_instead_of_null=set_empty_str_instead_of_null,
+            )
+            with InsertValueClauseBuilder(
+                a_request=dml_build_request
+            ) as insert_value_clause_builder:
+                dml += insert_value_clause_builder.execute()
 
             dml += ");"
             dmls.append(dml)
