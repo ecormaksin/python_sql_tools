@@ -2,6 +2,12 @@ import re
 from typing import Optional
 
 from shared_code.application.dml.dml_build_request import DMLBuildRequest
+from shared_code.application.dml.insert.first_part_builder import (
+    InsertDMLFirstPartBuilder as FirstPartBuilder,
+)
+from shared_code.application.dml.insert.first_part_builder import (
+    InsertDMLFirstPartBuildRequest as FirstPartBuildRequest,
+)
 from shared_code.application.dml.value_quotation_getter import ValueQuotationGetter
 from shared_code.application.dml.value_unicode_prefix_getter import (
     ValueUnicodePrefixGetter,
@@ -10,7 +16,7 @@ from shared_code.domain.db_column.entity import DBColumn
 from shared_code.domain.db_column.nullable_column_flag import NullableColumnFlag
 
 
-class InsertValueClauseBuilder:
+class InsertDMLBuilder:
     def __init__(self, a_request: DMLBuildRequest):
         self.__a_request = a_request
 
@@ -24,12 +30,19 @@ class InsertValueClauseBuilder:
 
     def execute(self) -> str:
         a_request = self.__a_request
+        table_name = a_request.table_name
         db_columns = a_request.db_columns
         row_data = a_request.row_data
 
+        first_part = FirstPartBuilder.execute(
+            a_request=FirstPartBuildRequest(
+                table_name=table_name, db_columns=db_columns
+            )
+        )
+
         db_columns_size = len(db_columns.unmodifiable_elements)
 
-        value_clause = ""
+        dml = first_part
 
         for index, col_data in enumerate(row_data):
             if index >= db_columns_size:
@@ -37,13 +50,13 @@ class InsertValueClauseBuilder:
 
             db_column = db_columns.unmodifiable_elements[index]
 
-            value_clause += ", " if index > 0 else ""
+            dml += ", " if index > 0 else ""
 
-            value_clause += self.__return_value_part(
-                db_column=db_column, col_data=col_data
-            )
+            dml += self.__return_value_part(db_column=db_column, col_data=col_data)
 
-        return value_clause
+        dml += ");"
+
+        return dml
 
     def __return_value_part(self, db_column: DBColumn, col_data: Optional[str]) -> str:
         a_request = self.__a_request

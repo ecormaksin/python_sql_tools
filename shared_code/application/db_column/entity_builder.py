@@ -58,11 +58,9 @@ class DBColumnBuilder:
             column_default=ColumnDefault(value=column_default_str)
             if column_default_str
             else None,
-            nullable_column_flag=NullableColumnFlag.from_str_value(
-                nullable_column_flag_str
-            ),
+            nullable_column_flag=NullableColumnFlag.from_str(nullable_column_flag_str),
             data_type=DataType(value=data_type_str),
-            key_position=KeyPosition(value=key_position_str)
+            key_position=KeyPosition.from_str(str_value=key_position_str)
             if key_position_str
             else None,
             no_quotation=NoQuotation(value=no_quotation_str)

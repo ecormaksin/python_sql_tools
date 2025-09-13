@@ -25,5 +25,5 @@ class TestClass:
         assert db_column.column_default is None
         assert db_column.nullable_column_flag.value == "no"
         assert db_column.data_type.value == "INT"
-        assert db_column.key_position.value == "1"
+        assert db_column.key_position.value == 1
         assert db_column.no_quotation is None

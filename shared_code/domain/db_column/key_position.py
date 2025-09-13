@@ -3,10 +3,14 @@ from dataclasses import dataclass
 
 @dataclass(frozen=True)
 class KeyPosition:
-    value: str
+    value: int
+
+    @classmethod
+    def from_str(cls, str_value: str) -> "KeyPosition":
+        return cls(value=int(str_value))
 
     def __post_init__(self):
-        if type(self.value) is not str or not self.value:
+        if type(self.value) is not int or not self.value:
             raise ValueError("KeyPosition must be specified.")
 
     def __eq__(self, other):

@@ -6,7 +6,7 @@ class NullableColumnFlag(StrEnum):
     NO = auto()
 
     @classmethod
-    def from_str_value(cls, key: str):
+    def from_str(cls, key: str):
         for member in cls:
             if member.value.lower() == key.lower():
                 return member

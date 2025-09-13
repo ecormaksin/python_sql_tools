@@ -33,7 +33,7 @@ class TestClass:
 
         if expected_exception:
             with pytest.raises(expected_exception):
-                NullableColumnFlag.from_str_value(flag_value)
+                NullableColumnFlag.from_str(flag_value)
         else:
-            nullable_column_flag = NullableColumnFlag.from_str_value(flag_value)
+            nullable_column_flag = NullableColumnFlag.from_str(flag_value)
             assert nullable_column_flag

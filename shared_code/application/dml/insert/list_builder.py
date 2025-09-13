@@ -1,13 +1,7 @@
 from shared_code.application.dml.dml_build_request import DMLBuildRequest
 from shared_code.application.dml.dmls_build_request import DMLsBuildRequest
-from shared_code.application.dml.insert.first_part_builder import (
-    InsertDMLFirstPartBuilder as FirstPartBuilder,
-)
-from shared_code.application.dml.insert.first_part_builder import (
-    InsertDMLFirstPartBuildRequest as FirstPartBuildRequest,
-)
-from shared_code.application.dml.insert.values_clause_builder import (
-    InsertValueClauseBuilder,
+from shared_code.application.dml.insert.entity_builder import (
+    InsertDMLBuilder,
 )
 
 
@@ -29,15 +23,8 @@ class InsertDMLsBuilder:
         db_columns = a_request.db_columns
         set_empty_str_instead_of_null = a_request.set_empty_str_instead_of_null
 
-        first_part = FirstPartBuilder.execute(
-            a_request=FirstPartBuildRequest(
-                table_name=table_name, db_columns=db_columns
-            )
-        )
-
         dmls = []
         for row_data in a_request.data_range:
-            dml = first_part
 
             dml_build_request = DMLBuildRequest(
                 table_name=table_name,
@@ -45,12 +32,11 @@ class InsertDMLsBuilder:
                 row_data=row_data,
                 set_empty_str_instead_of_null=set_empty_str_instead_of_null,
             )
-            with InsertValueClauseBuilder(
+            with InsertDMLBuilder(
                 a_request=dml_build_request
             ) as insert_value_clause_builder:
-                dml += insert_value_clause_builder.execute()
+                dml = insert_value_clause_builder.execute()
 
-            dml += ");"
             dmls.append(dml)
 
         return dmls
