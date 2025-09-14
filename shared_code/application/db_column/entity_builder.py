@@ -27,7 +27,7 @@ class DBColumnBuilder:
         column_name_str = cls.__get_value(
             source_data=source_data, row_number=app_config.db_column_name_row_number
         )
-        if not column_name_str or column_name_str == "None":
+        if not column_name_str:
             return None
 
         nullable_column_flag_str = cls.__get_value(
@@ -69,9 +69,6 @@ class DBColumnBuilder:
         )
 
     @staticmethod
-    def __get_value(source_data: list[str], row_number: Optional[RowNumber]) -> str:
-        if not row_number:
-            return ""
-
+    def __get_value(source_data: list[str], row_number: RowNumber) -> Optional[str]:
         value_str = source_data[row_number.value - 1]
-        return "" if value_str == "None" else value_str
+        return None if (not value_str or value_str == "None") else value_str

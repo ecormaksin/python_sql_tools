@@ -1,0 +1,4 @@
+column_name	column_default	nullable_column_flag	data_type	key_position	no_quotation
+ID	None	NO	@INT	1	None
+required_varchar_column	None	NO	@VARCHAR(50)	None	○
+optional_varchar_column	test_default_value	YES	@VARCHAR(50)	None	○

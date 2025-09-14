@@ -25,12 +25,16 @@ test_params = [
     (
         "key int column without default value",
         Item(
-            db_column_source_str="""ID
-    None
-    NO
-    @INT
-    1
-    None""",
+            db_column_source_str="""
+            {
+                "column_name": "ID",
+                "column_default": "None",
+                "nullable_column_flag": "NO",
+                "data_type": "@INT",
+                "key_position": 1,
+                "no_quotation": "None"
+            }
+            """,
             expected_db_column=DBColumn(
                 column_name=ColumnName("ID"),
                 column_default=None,
@@ -42,16 +46,20 @@ test_params = [
         ),
     ),
     (
-        "mandatory varchar column without default value",
+        "required varchar column without default value",
         Item(
-            db_column_source_str="""mandatory_varchar_column
-    None
-    NO
-    @VARCHAR(50)
-    None
-    ○""",
+            db_column_source_str="""
+            {
+                "column_name": "required_varchar_column",
+                "column_default": "None",
+                "nullable_column_flag": "NO",
+                "data_type": "@VARCHAR(50)",
+                "key_position": "None",
+                "no_quotation": "○"
+            }
+            """,
             expected_db_column=DBColumn(
-                column_name=ColumnName("mandatory_varchar_column"),
+                column_name=ColumnName("required_varchar_column"),
                 column_default=None,
                 nullable_column_flag=NullableColumnFlag.NO,
                 data_type=DataType("@VARCHAR(50)"),
@@ -63,12 +71,16 @@ test_params = [
     (
         "optional varchar column with default value",
         Item(
-            db_column_source_str="""optional_varchar_column
-    test_default_value
-    YES
-    @VARCHAR(50)
-    None
-    ○""",
+            db_column_source_str="""
+            {
+                "column_name": "optional_varchar_column",
+                "column_default": "test_default_value",
+                "nullable_column_flag": "YES",
+                "data_type": "@VARCHAR(50)",
+                "key_position": "None",
+                "no_quotation": "○"
+            }
+            """,
             expected_db_column=DBColumn(
                 column_name=ColumnName("optional_varchar_column"),
                 column_default=ColumnDefault("test_default_value"),
@@ -90,7 +102,7 @@ class TestClass:
     def test_pattern(self, no: int, description: str):
         test_value = test_params[no - 1][1]
 
-        actual = DBColumnTestBuilder.execute(test_value.db_column_source_str)
+        actual = DBColumnTestBuilder.from_json_str(test_value.db_column_source_str)
 
         expected = test_value.expected_db_column
 

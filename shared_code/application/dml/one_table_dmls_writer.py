@@ -1,23 +1,22 @@
 from dataclasses import dataclass
-from typing import Any, Generator
 from pathlib import Path
+from typing import Any, Generator
 
-from shared_code.domain.dmls.entity import DMLs
+from shared_code.domain.dmls.entity import OneTableDmls
 from shared_code.domain.number_of_lines_per_file import NumberOfLinesPerFile
 from shared_code.domain.sink_dml_dir_path import SinkDMLDirectoryPath
-from shared_code.domain.table_name import TableName
 
 
 @dataclass(frozen=True)
-class DMLsWriteRequest:
+class OneTableDMLsWriteRequest:
     sink_dml_dir_path: SinkDMLDirectoryPath
-    table_name: TableName
-    dmls: DMLs
+    file_name_prefix: str
+    one_table_dmls: OneTableDmls
     number_of_lines_per_file: NumberOfLinesPerFile
 
 
-class DMLsWriter:
-    def __init__(self, a_request: DMLsWriteRequest):
+class OneTableDMLsWriter:
+    def __init__(self, a_request: OneTableDMLsWriteRequest):
         self.__a_request = a_request
 
     def __enter__(self):
@@ -31,19 +30,19 @@ class DMLsWriter:
     def execute(self):
         a_request = self.__a_request
         sink_dml_dir_path = a_request.sink_dml_dir_path
-        dmls = a_request.dmls
+        one_table_dmls = a_request.one_table_dmls
         number_of_lines_per_file = a_request.number_of_lines_per_file
 
         file_count = 0
         if number_of_lines_per_file.file_split_needed():
             chunked_dmls_values = self.__split_dmls()
             file_count, remainder = divmod(
-                dmls.number_of_lines, number_of_lines_per_file.value
+                one_table_dmls.number_of_lines, number_of_lines_per_file.value
             )
             if remainder:
                 file_count += 1
         else:
-            chunked_dmls_values = [dmls.value]
+            chunked_dmls_values = [one_table_dmls.dmls]
             file_count = 1
 
         for index, chunked_dmls_value in enumerate(chunked_dmls_values):
@@ -58,7 +57,7 @@ class DMLsWriter:
 
     def __split_dmls(self) -> Generator[list[str], Any, None]:
         a_request = self.__a_request
-        dmls_elements = a_request.dmls.value
+        dmls_elements = a_request.one_table_dmls.dmls
         number_of_lines_per_file = a_request.number_of_lines_per_file
         split_number = number_of_lines_per_file.value
 
@@ -67,10 +66,10 @@ class DMLsWriter:
 
     def __get_file_name(self, index: int, file_count: int) -> str:
         a_request = self.__a_request
-        table_name = a_request.table_name
-        number_of_lines_per_file = a_request.number_of_lines_per_file
+        file_name_prefix = a_request.file_name_prefix
+        table_name = a_request.one_table_dmls.table_name
 
-        file_name = table_name.value
+        file_name = file_name_prefix + "_" + table_name.value
         if file_count > 1:
             file_name += "_" + str(index + 1).zfill(len(str(file_count)))
         file_name += ".sql"

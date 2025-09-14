@@ -2,3 +2,5 @@
 /sample/mysql/.~lock.dbeaver_sample_db_mysql_data.xlsx#
 /app_config.json
 /.coverage
+/tests/shared_code/application/dml/test_data/DMLValueBuilder/a.txt
+/tests/shared_code/application/dml/test_data/DMLValueBuilder/a.xlsx

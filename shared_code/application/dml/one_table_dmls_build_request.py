@@ -6,7 +6,7 @@ from shared_code.domain.table_name import TableName
 
 
 @dataclass(frozen=True)
-class DMLsBuildRequest:
+class OneTableDMLsBuildRequest:
     table_name: TableName
     db_columns: DBColumns
     data_range: list[list[str]]

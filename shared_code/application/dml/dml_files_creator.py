@@ -1,13 +1,12 @@
 from dataclasses import dataclass
 
-
-from shared_code.application.dml.dmls_set_builder import (
-    DMLsSetBuildRequest,
-    DMLsSetBuilder,
+from shared_code.application.dml.all_tables_dmls_builder import (
+    AllTablesDMLsBuilder,
+    AllTablesDMLsBuildRequest,
 )
-from shared_code.application.dml.dmls_set_writer import (
-    DMLsSetWriteRequest,
-    DMLsSetWriter,
+from shared_code.application.dml.all_tables_dmls_writer import (
+    AllTablesDMLsWriter,
+    AllTablesDMLsWriteRequest,
 )
 from shared_code.domain.app_config import AppConfig
 from shared_code.domain.sink_dml_dir_path import SinkDMLDirectoryPath
@@ -38,19 +37,22 @@ class DMLFilesCreator:
         app_config = a_request.app_config
         number_of_lines_per_file = app_config.number_of_lines_per_file
 
-        dmls_set_build_request = DMLsSetBuildRequest(
+        all_tables_dmls_build_request = AllTablesDMLsBuildRequest(
             source_data_xlsx_file_path=a_request.source_data_xlsx_file_path,
             app_config=a_request.app_config,
         )
 
-        with DMLsSetBuilder(a_request=dmls_set_build_request) as a_dmls_set_builder:
-            dmls_set = a_dmls_set_builder.execute()
+        all_tables_dmls = AllTablesDMLsBuilder.execute(
+            a_request=all_tables_dmls_build_request
+        )
 
-        dmls_set_write_request = DMLsSetWriteRequest(
+        all_tables_dmls_write_request = AllTablesDMLsWriteRequest(
             sink_dml_dir_path=a_request.sink_dml_dir_path,
-            dmls_set=dmls_set,
+            all_tables_dmls=all_tables_dmls,
             number_of_lines_per_file=number_of_lines_per_file,
         )
 
-        with DMLsSetWriter(a_request=dmls_set_write_request) as a_dmls_set_writer:
-            a_dmls_set_writer.execute()
+        with AllTablesDMLsWriter(
+            a_request=all_tables_dmls_write_request
+        ) as all_tables_dmls_writer:
+            all_tables_dmls_writer.execute()

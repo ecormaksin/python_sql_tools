@@ -1,0 +1,26 @@
+[
+  {
+    "column_name": "ID",
+    "column_default": "None",
+    "nullable_column_flag": "NO",
+    "data_type": "@INT",
+    "key_position": 1,
+    "no_quotation": "None"
+  },
+  {
+    "column_name": "required_varchar_column",
+    "column_default": "None",
+    "nullable_column_flag": "NO",
+    "data_type": "@VARCHAR(50)",
+    "key_position": "None",
+    "no_quotation": "○"
+  },
+  {
+    "column_name": "optional_varchar_column",
+    "column_default": "test_default_value",
+    "nullable_column_flag": "YES",
+    "data_type": "@VARCHAR(50)",
+    "key_position": "None",
+    "no_quotation": "○"
+  }
+]
