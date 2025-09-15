@@ -32,73 +32,21 @@ default_valid_app_config_str = """
     "column": 4
   },
   "set_empty_string_instead_of_null": true,
+  "file_name_prefix": "",
   "number_of_lines_per_file": -1
 }
 """
 
 default_valid_app_config = json.loads(default_valid_app_config_str)
 
+test_pattern_1 = [
+    ("no properties", Item(config_data_str="{}", expected_exception=RuntimeError))
+]
+
 table_name_cell_missing = dict(default_valid_app_config)
 del table_name_cell_missing["table_name_cell"]
 
-table_name_cell_row_invalid = dict(default_valid_app_config)
-table_name_cell_row_invalid |= {"table_name_cell": {"row": 0}}
-
-table_name_cell_col_invalid = dict(default_valid_app_config)
-table_name_cell_col_invalid |= {"table_name_cell": {"col": 0}}
-
-column_name_row_invalid = dict(default_valid_app_config)
-column_name_row_invalid |= {"column_name_row": 0}
-
-data_type_row_invalid = dict(default_valid_app_config)
-data_type_row_invalid |= {"data_type_row": 0}
-
-data_start_cell_row_invalid = dict(default_valid_app_config)
-data_start_cell_row_invalid |= {"data_start_cell": {"row": 0}}
-
-data_start_cell_col_invalid = dict(default_valid_app_config)
-data_start_cell_col_invalid |= {"data_start_cell": {"col": 0}}
-
-number_of_lines_per_file_invalid = dict(default_valid_app_config)
-number_of_lines_per_file_invalid |= {"number_of_lines_per_file": -2}
-
-number_of_lines_per_file_valid = dict(default_valid_app_config)
-number_of_lines_per_file_valid |= {"number_of_lines_per_file": 10}
-
-key_position_row_invalid = dict(default_valid_app_config)
-key_position_row_invalid |= {"key_position_row": 0}
-
-no_quotation_row_invalid = dict(default_valid_app_config)
-no_quotation_row_invalid |= {"no_quotation_row": 0}
-
-target_sheet_names_exclude_sheet_names_specified = dict(default_valid_app_config)
-target_sheet_names_exclude_sheet_names_specified |= {
-    "target_sheet_names": "sheet_A,",
-    "exclude_sheet_names": "sheet_B,",
-}
-
-target_sheet_names_specified = dict(default_valid_app_config)
-target_sheet_names_specified |= {"target_sheet_names": "sheet_A,"}
-
-exclude_sheet_names_specified = dict(default_valid_app_config)
-exclude_sheet_names_specified |= {"exclude_sheet_names": "sheet_B,"}
-
-same_sheets_specified_in_target_exclude = dict(default_valid_app_config)
-same_sheets_specified_in_target_exclude |= {
-    "target_sheet_names": "sheet_A,sheet_C,",
-    "exclude_sheet_names": "sheet_B,sheet_A,",
-}
-
-set_empty_string_instead_of_null_is_not_bool = dict(default_valid_app_config)
-set_empty_string_instead_of_null_is_not_bool |= {
-    "set_empty_string_instead_of_null": "a"
-}
-
-set_empty_string_instead_of_null_is_valid = dict(default_valid_app_config)
-set_empty_string_instead_of_null_is_valid |= {"set_empty_string_instead_of_null": True}
-
-test_params = [
-    ("no properties", Item(config_data_str="{}", expected_exception=RuntimeError)),
+test_pattern_2 = [
     (
         "'table_name_cell' missing",
         Item(
@@ -106,6 +54,12 @@ test_params = [
             expected_exception=RuntimeError,
         ),
     ),
+]
+
+table_name_cell_row_invalid = dict(default_valid_app_config)
+table_name_cell_row_invalid |= {"table_name_cell": {"row": 0}}
+
+test_pattern_3 = [
     (
         "'table_name_cell's row invalid",
         Item(
@@ -113,6 +67,12 @@ test_params = [
             expected_exception=RuntimeError,
         ),
     ),
+]
+
+table_name_cell_col_invalid = dict(default_valid_app_config)
+table_name_cell_col_invalid |= {"table_name_cell": {"col": 0}}
+
+test_pattern_4 = [
     (
         "'table_name_cell's column invalid",
         Item(
@@ -120,6 +80,12 @@ test_params = [
             expected_exception=RuntimeError,
         ),
     ),
+]
+
+column_name_row_invalid = dict(default_valid_app_config)
+column_name_row_invalid |= {"column_name_row": 0}
+
+test_pattern_5 = [
     (
         "'column_name_row' invalid",
         Item(
@@ -127,6 +93,12 @@ test_params = [
             expected_exception=RuntimeError,
         ),
     ),
+]
+
+data_type_row_invalid = dict(default_valid_app_config)
+data_type_row_invalid |= {"data_type_row": 0}
+
+test_pattern_6 = [
     (
         "'data_type_row' invalid",
         Item(
@@ -134,6 +106,12 @@ test_params = [
             expected_exception=RuntimeError,
         ),
     ),
+]
+
+data_start_cell_row_invalid = dict(default_valid_app_config)
+data_start_cell_row_invalid |= {"data_start_cell": {"row": 0}}
+
+test_pattern_7 = [
     (
         "'data_start_cell's row invalid",
         Item(
@@ -141,6 +119,12 @@ test_params = [
             expected_exception=RuntimeError,
         ),
     ),
+]
+
+data_start_cell_col_invalid = dict(default_valid_app_config)
+data_start_cell_col_invalid |= {"data_start_cell": {"col": 0}}
+
+test_pattern_8 = [
     (
         "'data_start_cell's column invalid",
         Item(
@@ -148,6 +132,12 @@ test_params = [
             expected_exception=RuntimeError,
         ),
     ),
+]
+
+number_of_lines_per_file_invalid = dict(default_valid_app_config)
+number_of_lines_per_file_invalid |= {"number_of_lines_per_file": -2}
+
+test_pattern_9 = [
     (
         "'number_of_lines_per_file' invalid",
         Item(
@@ -155,6 +145,12 @@ test_params = [
             expected_exception=RuntimeError,
         ),
     ),
+]
+
+number_of_lines_per_file_valid = dict(default_valid_app_config)
+number_of_lines_per_file_valid |= {"number_of_lines_per_file": 10}
+
+test_pattern_10 = [
     (
         "'number_of_lines_per_file' valid",
         Item(
@@ -162,6 +158,12 @@ test_params = [
             expected_exception=None,
         ),
     ),
+]
+
+key_position_row_invalid = dict(default_valid_app_config)
+key_position_row_invalid |= {"key_position_row": 0}
+
+test_pattern_11 = [
     (
         "'key_position_row' invalid",
         Item(
@@ -169,6 +171,12 @@ test_params = [
             expected_exception=RuntimeError,
         ),
     ),
+]
+
+no_quotation_row_invalid = dict(default_valid_app_config)
+no_quotation_row_invalid |= {"no_quotation_row": 0}
+
+test_pattern_12 = [
     (
         "'no_quotation_row' invalid",
         Item(
@@ -176,6 +184,15 @@ test_params = [
             expected_exception=RuntimeError,
         ),
     ),
+]
+
+target_sheet_names_exclude_sheet_names_specified = dict(default_valid_app_config)
+target_sheet_names_exclude_sheet_names_specified |= {
+    "target_sheet_names": "sheet_A,",
+    "exclude_sheet_names": "sheet_B,",
+}
+
+test_pattern_13 = [
     (
         "both 'target_sheet_names' and 'exclude_sheet_names' specified",
         Item(
@@ -185,6 +202,12 @@ test_params = [
             expected_exception=None,
         ),
     ),
+]
+
+target_sheet_names_specified = dict(default_valid_app_config)
+target_sheet_names_specified |= {"target_sheet_names": "sheet_A,"}
+
+test_pattern_14 = [
     (
         "'target_sheet_names' specified",
         Item(
@@ -192,6 +215,12 @@ test_params = [
             expected_exception=None,
         ),
     ),
+]
+
+exclude_sheet_names_specified = dict(default_valid_app_config)
+exclude_sheet_names_specified |= {"exclude_sheet_names": "sheet_B,"}
+
+test_pattern_15 = [
     (
         "'exclude_sheet_names' specified",
         Item(
@@ -199,6 +228,15 @@ test_params = [
             expected_exception=None,
         ),
     ),
+]
+
+same_sheets_specified_in_target_exclude = dict(default_valid_app_config)
+same_sheets_specified_in_target_exclude |= {
+    "target_sheet_names": "sheet_A,sheet_C,",
+    "exclude_sheet_names": "sheet_B,sheet_A,",
+}
+
+test_pattern_16 = [
     (
         "same sheets specified in 'target_sheet_names' and 'exclude_sheet_names'",
         Item(
@@ -206,6 +244,14 @@ test_params = [
             expected_exception=RuntimeError,
         ),
     ),
+]
+
+set_empty_string_instead_of_null_is_not_bool = dict(default_valid_app_config)
+set_empty_string_instead_of_null_is_not_bool |= {
+    "set_empty_string_instead_of_null": "a"
+}
+
+test_pattern_17 = [
     (
         "'set_empty_string_instead_of_null' is not bool",
         Item(
@@ -213,6 +259,12 @@ test_params = [
             expected_exception=ValueError,
         ),
     ),
+]
+
+set_empty_string_instead_of_null_is_valid = dict(default_valid_app_config)
+set_empty_string_instead_of_null_is_valid |= {"set_empty_string_instead_of_null": True}
+
+test_pattern_18 = [
     (
         "'set_empty_string_instead_of_null' is valid",
         Item(
@@ -221,6 +273,41 @@ test_params = [
         ),
     ),
 ]
+
+file_name_prefix_specified = dict(default_valid_app_config)
+file_name_prefix_specified |= {"file_name_prefix": "02_"}
+
+test_pattern_19 = [
+    (
+        "'file_name_prefix' specified",
+        Item(
+            config_data_str=json.dumps(file_name_prefix_specified),
+            expected_exception=None,
+        ),
+    ),
+]
+
+test_params = (
+    test_pattern_1
+    + test_pattern_2
+    + test_pattern_3
+    + test_pattern_4
+    + test_pattern_5
+    + test_pattern_6
+    + test_pattern_7
+    + test_pattern_8
+    + test_pattern_9
+    + test_pattern_10
+    + test_pattern_11
+    + test_pattern_12
+    + test_pattern_13
+    + test_pattern_14
+    + test_pattern_15
+    + test_pattern_16
+    + test_pattern_17
+    + test_pattern_18
+    + test_pattern_19
+)
 
 
 class TestClass:

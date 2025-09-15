@@ -1,0 +1,11 @@
+DELETE FROM invoice_line;
+DELETE FROM playlist_track;
+DELETE FROM track;
+DELETE FROM album;
+DELETE FROM artist;
+DELETE FROM genre;
+DELETE FROM invoice;
+DELETE FROM media_type;
+DELETE FROM play_list;
+DELETE FROM customer;
+DELETE FROM employee;

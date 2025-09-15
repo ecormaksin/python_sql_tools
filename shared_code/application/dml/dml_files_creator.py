@@ -21,19 +21,8 @@ class DMLFilesCreationRequest:
 
 
 class DMLFilesCreator:
-    def __init__(self, a_request: DMLFilesCreationRequest):
-        self.__a_request = a_request
-
-    def __enter__(self):
-        return self
-
-    def __exit__(self, exc_type, exc_value, a_traceback):
-        """
-        do nothing
-        """
-
-    def execute(self):
-        a_request = self.__a_request
+    @classmethod
+    def execute(cls, a_request: DMLFilesCreationRequest):
         app_config = a_request.app_config
         number_of_lines_per_file = app_config.number_of_lines_per_file
 
@@ -50,9 +39,7 @@ class DMLFilesCreator:
             sink_dml_dir_path=a_request.sink_dml_dir_path,
             all_tables_dmls=all_tables_dmls,
             number_of_lines_per_file=number_of_lines_per_file,
+            file_name_prefix=app_config.file_name_prefix,
         )
 
-        with AllTablesDMLsWriter(
-            a_request=all_tables_dmls_write_request
-        ) as all_tables_dmls_writer:
-            all_tables_dmls_writer.execute()
+        AllTablesDMLsWriter.execute(a_request=all_tables_dmls_write_request)

@@ -1,15 +1,15 @@
+import argparse
+import datetime
 import sys
 import tempfile
 import traceback
 from pathlib import Path
-import argparse
-from rich_argparse import RichHelpFormatter
-import datetime
 
+from rich_argparse import RichHelpFormatter
 
 from shared_code.application.dml.dml_files_creator import (
-    DMLFilesCreator,
     DMLFilesCreationRequest,
+    DMLFilesCreator,
 )
 from shared_code.domain.sink_dml_dir_path import SinkDMLDirectoryPath
 from shared_code.domain.source_data_xlsx_file_path import SourceDataXlsxFilePath
@@ -47,7 +47,10 @@ def create_dml():
     else:
         now = datetime.datetime.now()
         sink_dml_dir_path_str = str(
-            Path(tempfile.gettempdir()).joinpath(now.strftime("%Y%m%d-%H%M%S"))
+            Path(tempfile.gettempdir())
+            .joinpath("python-sql-tools")
+            .joinpath("dml")
+            .joinpath(now.strftime("%Y%m%d-%H%M%S"))
         )
 
     if args.config:
@@ -68,8 +71,7 @@ def create_dml():
         )
         sys.exit(1)
 
-    with AppConfigJsoncFileReader(file_path=config_file_path) as config_reader:
-        app_config = config_reader.execute()
+    app_config = AppConfigJsoncFileReader.execute(file_path=config_file_path)
 
     a_request = DMLFilesCreationRequest(
         source_data_xlsx_file_path=SourceDataXlsxFilePath(value=src_xlsx_file_path_str),
@@ -77,10 +79,7 @@ def create_dml():
         app_config=app_config,
     )
 
-    with DMLFilesCreator(
-        a_request=a_request,
-    ) as a_dml_creator:
-        a_dml_creator.execute()
+    DMLFilesCreator.execute(a_request=a_request)
 
     print(f"DML files are created at '{sink_dml_dir_path_str}'.")
 

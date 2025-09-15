@@ -1,0 +1,11 @@
+TRUNCATE TABLE invoice_line ;
+TRUNCATE TABLE playlist_track;
+TRUNCATE TABLE track;
+TRUNCATE TABLE album;
+TRUNCATE TABLE artist;
+TRUNCATE TABLE genre;
+TRUNCATE TABLE invoice;
+TRUNCATE TABLE media_type;
+TRUNCATE TABLE play_list;
+TRUNCATE TABLE customer;
+TRUNCATE TABLE employee;

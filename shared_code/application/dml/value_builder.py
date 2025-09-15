@@ -21,6 +21,8 @@ class DMLValueBuilder:
 
         column_value = cell_value
 
+        no_quotation = db_column.no_quotation
+
         if not cell_value or cell_value == "None":
             if not column_default:
                 if data_type.do_not_add_quotation():
@@ -32,11 +34,10 @@ class DMLValueBuilder:
                 ):
                     return "null"
 
-                column_value = ""
+                column_value = "''" if no_quotation else ""
             else:
                 column_value = column_default.value
 
-        no_quotation = db_column.no_quotation
         unicode_prefix = ValueUnicodePrefixGetter.execute(
             data_type=data_type, no_quotation=no_quotation
         )

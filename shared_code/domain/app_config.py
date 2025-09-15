@@ -1,6 +1,8 @@
 from dataclasses import dataclass
+from typing import Optional
 
 from shared_code.domain.cell_position import CellPosition
+from shared_code.domain.file_name_prefix import FileNamePrefix
 from shared_code.domain.number_of_lines_per_file import NumberOfLinesPerFile
 from shared_code.domain.row_number import RowNumber
 from shared_code.domain.set_empty_str_instead_of_null import SetEmptyStrInsteadOfNull
@@ -21,6 +23,7 @@ class AppConfig:
     no_quotation_row_number: RowNumber
     data_start_cell_position: CellPosition
     set_empty_str_instead_of_null: SetEmptyStrInsteadOfNull
+    file_name_prefix: Optional[FileNamePrefix]
     number_of_lines_per_file: NumberOfLinesPerFile = NumberOfLinesPerFile.UNLIMITED
 
     def __eq__(self, other):
@@ -43,6 +46,9 @@ class AppConfig:
         no_quotation_row = repr(self.no_quotation_row_number)
         data_start_cell = repr(self.data_start_cell_position)
         set_empty_str_instead_of_null = repr(self.set_empty_str_instead_of_null)
+        file_name_prefix = (
+            repr(self.file_name_prefix) if self.file_name_prefix else "None"
+        )
         number_of_lines_per_file = repr(self.number_of_lines_per_file)
 
         return (
@@ -58,6 +64,7 @@ class AppConfig:
             f"no_quotation_row_number={no_quotation_row}, "
             f"data_start_cell_position={data_start_cell}, "
             f"set_empty_str_instead_of_null={set_empty_str_instead_of_null}, "
+            f"file_name_prefix={file_name_prefix}, "
             f"number_of_lines_per_file={number_of_lines_per_file}"
             ")"
         )

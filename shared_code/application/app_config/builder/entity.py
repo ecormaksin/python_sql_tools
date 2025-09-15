@@ -2,15 +2,15 @@ import os
 from typing import Any, Optional
 
 from shared_code.application.app_config.builder.cell_position import (
-    CellPositionBuildRequest,
     CellPositionBuilder,
+    CellPositionBuildRequest,
 )
 from shared_code.application.app_config.builder.required_property_flag import (
     RequiredPropertyFlag,
 )
 from shared_code.application.app_config.builder.row_number import (
-    RowNumberBuildRequest,
     RowNumberBuilder,
+    RowNumberBuildRequest,
 )
 from shared_code.application.app_config.validation.cell_position_validator import (
     CellPositionValidator,
@@ -26,6 +26,7 @@ from shared_code.application.app_config.validation.result_flag import (
 )
 from shared_code.domain.app_config import AppConfig
 from shared_code.domain.cell_position import CellPosition
+from shared_code.domain.file_name_prefix import FileNamePrefix
 from shared_code.domain.number_of_lines_per_file import NumberOfLinesPerFile
 from shared_code.domain.row_number import RowNumber
 from shared_code.domain.set_empty_str_instead_of_null import SetEmptyStrInsteadOfNull
@@ -49,7 +50,9 @@ class AppConfigBuilder:
     def execute(self) -> AppConfig:
         config_data = self.__config_data
 
-        table_name_cell_position = self.__get_cell_position(property_name="table_name_cell")
+        table_name_cell_position = self.__get_cell_position(
+            property_name="table_name_cell"
+        )
         db_column_name_row_number = self.__get_required_row_number(
             property_name="column_name_row"
         )
@@ -72,8 +75,16 @@ class AppConfigBuilder:
             property_name="data_start_cell"
         )
         set_empty_str_instead_of_null = SetEmptyStrInsteadOfNull(
-            config_data.get("set_empty_string_instead_of_null", False))
+            config_data.get("set_empty_string_instead_of_null", False)
+        )
+
+        file_name_prefix_value = config_data.get("file_name_prefix", "")
+        file_name_prefix = (
+            FileNamePrefix(file_name_prefix_value) if file_name_prefix_value else None
+        )
+
         number_of_lines_per_file = self.__get_number_of_lines_per_file()
+
         target_sheet_names = TargetSheetNames(config_data.get("target_sheet_names", ""))
         exclude_sheet_names = ExcludeSheetNames(
             config_data.get("exclude_sheet_names", "")
@@ -98,6 +109,7 @@ class AppConfigBuilder:
             no_quotation_row_number=no_quotation_row_number,
             data_start_cell_position=data_start_cell_position,
             set_empty_str_instead_of_null=set_empty_str_instead_of_null,
+            file_name_prefix=file_name_prefix,
             number_of_lines_per_file=number_of_lines_per_file,
         )
 
@@ -146,9 +158,9 @@ class AppConfigBuilder:
         )
 
     def __get_row_number(
-            self,
-            property_name: str,
-            is_required: RequiredPropertyFlag,
+        self,
+        property_name: str,
+        is_required: RequiredPropertyFlag,
     ) -> Optional[RowNumber]:
         a_request = RowNumberBuildRequest(
             config_data=self.__config_data,

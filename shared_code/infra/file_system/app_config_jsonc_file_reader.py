@@ -6,20 +6,8 @@ from shared_code.infra.file_system.file_existence_checker import FileExistenceCh
 
 
 class AppConfigJsoncFileReader:
-    def __init__(self, file_path: str):
-        self.__file_path = file_path
-
-    def __enter__(self):
-        return self
-
-    def __exit__(self, exc_type, exc_value, a_traceback):
-        """
-        do nothing
-        """
-
-    def execute(self) -> AppConfig:
-        file_path = self.__file_path
-
+    @classmethod
+    def execute(cls, file_path: str) -> AppConfig:
         if FileExistenceChecker.not_exists(file_path=file_path):
             raise RuntimeError(f"config file '{file_path}' not found.")
 

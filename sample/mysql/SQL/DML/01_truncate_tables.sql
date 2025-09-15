@@ -1,4 +1,4 @@
-TRUNCATE TABLE invoice_line;
+TRUNCATE TABLE invoice_line ;
 TRUNCATE TABLE playlist_track;
 TRUNCATE TABLE track;
 TRUNCATE TABLE album;

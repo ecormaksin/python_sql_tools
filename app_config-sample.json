@@ -18,6 +18,7 @@
     "column": 4
   },
   "set_empty_string_instead_of_null": false,
+  "file_name_prefix": "",
   // specify the number of lines per dml file. If you specify -1, one table's dml is output as one file.
   "number_of_lines_per_file": -1
 }

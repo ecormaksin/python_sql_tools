@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from enum import Enum
 from typing import Any, Optional
 
 import pytest
@@ -13,6 +14,7 @@ from tests.shared_code.application.db_column.entity_test_builder import (
 
 @dataclass(frozen=True)
 class Item:
+    test_case_no: str
     db_column_dict: dict[str, Any]
     cell_value: Optional[str]
     set_empty_str_instead_of_null_value: bool
@@ -21,220 +23,123 @@ class Item:
 
 column_base_dict = {"column_name": "test_column", "key_position": 1}
 
-unicode_column_data_type_dict = {"data_type": "NVARCHAR(100)"}
-non_unicode_column_data_type_dict = {"data_type": "VARCHAR(100)"}
-no_quote_column_data_type_dict = {"data_type": "INT"}
 
-column_default_no_value_dict = {"column_default": "None"}
-column_default_value_for_quotation_required_dict = {
-    "column_default": "test_default_value"
-}
-column_default_value_for_quotation_not_required_dict = {"column_default": "9999"}
+@dataclass(frozen=True)
+class DescriptionDictPair:
+    description: str
+    dict_obj: dict[str, Any]
 
-nullable_column_flag_no_dict = {"nullable_column_flag": "NO"}
-nullable_column_flag_yes_dict = {"nullable_column_flag": "YES"}
 
-column_value_quotation_not_required_dict = {"no_quotation": "○"}
-column_value_quotation_required_dict = {"no_quotation": "None"}
+@dataclass(frozen=True)
+class DescriptionBoolPair:
+    description: str
+    bool_value: bool
 
-test_case_1 = [
-    (
-        "data type unicode, with column default, nullable yes, add quotation to value, cell value 'None' string, set empty string instead of null",
-        Item(
-            db_column_dict=column_base_dict
-            | unicode_column_data_type_dict
-            | column_default_value_for_quotation_required_dict
-            | nullable_column_flag_yes_dict
-            | column_value_quotation_required_dict,
-            cell_value="None",
-            set_empty_str_instead_of_null_value=True,
-            expected="N'test_default_value'",
-        ),
-    ),
-]
 
-test_case_2 = [
-    (
-        "data type unicode, with column default, nullable no, add quotation to value, cell value None, set empty string instead of null",
-        Item(
-            db_column_dict=column_base_dict
-            | unicode_column_data_type_dict
-            | column_default_value_for_quotation_required_dict
-            | nullable_column_flag_no_dict
-            | column_value_quotation_required_dict,
-            cell_value=None,
-            set_empty_str_instead_of_null_value=True,
-            expected="N'test_default_value'",
-        ),
-    ),
-]
+class DescriptionEnumBase:
+    @classmethod
+    def from_description(cls, description: str):
+        for member in cls:
+            if member.value.description == description:
+                return member
+        raise KeyError(f"'{description}' is not found.")
 
-test_case_3 = [
-    (
-        "data type unicode, with column default, nullable no, no quotation to value, cell value empty string, do not set empty string instead of null",
-        Item(
-            db_column_dict=column_base_dict
-            | unicode_column_data_type_dict
-            | column_default_value_for_quotation_required_dict
-            | nullable_column_flag_no_dict
-            | column_value_quotation_not_required_dict,
-            cell_value="",
-            set_empty_str_instead_of_null_value=False,
-            expected="test_default_value",
-        ),
-    ),
-]
 
-test_case_4 = [
-    (
-        "data type unicode, without column default, nullable yes, add quotation to value, cell value exists, do not set empty string instead of null",
-        Item(
-            db_column_dict=column_base_dict
-            | unicode_column_data_type_dict
-            | column_default_no_value_dict
-            | nullable_column_flag_yes_dict
-            | column_value_quotation_required_dict,
-            cell_value="test_cell_value",
-            set_empty_str_instead_of_null_value=False,
-            expected="N'test_cell_value'",
-        ),
-    ),
-]
+class ParamColumnTypeQuote(DescriptionEnumBase, Enum):
+    UNICODE = DescriptionDictPair("必要_Unicode", {"data_type": "NVARCHAR(100)"})
+    NON_UNICODE = DescriptionDictPair("必要_非Unicode", {"data_type": "VARCHAR(100)"})
+    NO_QUOTE = DescriptionDictPair("不要", {"data_type": "INT"})
 
-test_case_5 = [
-    (
-        "data type non-unicode, with column default, nullable no, no quotation to value, cell value 'None' string, do not set empty string instead of null",
-        Item(
-            db_column_dict=column_base_dict
-            | non_unicode_column_data_type_dict
-            | column_default_value_for_quotation_required_dict
-            | nullable_column_flag_no_dict
-            | column_value_quotation_not_required_dict,
-            cell_value="None",
-            set_empty_str_instead_of_null_value=False,
-            expected="test_default_value",
-        ),
-    ),
-]
 
-test_case_6 = [
-    (
-        "data type non-unicode, without column default, nullable yes, no quotation to value, cell value None, do not set empty string instead of null",
-        Item(
-            db_column_dict=column_base_dict
-            | non_unicode_column_data_type_dict
-            | column_default_no_value_dict
-            | nullable_column_flag_yes_dict
-            | column_value_quotation_not_required_dict,
-            cell_value=None,
-            set_empty_str_instead_of_null_value=False,
-            expected="null",
-        ),
-    ),
-]
+class ParamColumnDefault(DescriptionEnumBase, Enum):
+    WITH_QUOTE = DescriptionDictPair(
+        "あり_引用符あり", {"column_default": "test_default_value"}
+    )
+    WITHOUT_QUOTE = DescriptionDictPair("あり_引用符なし", {"column_default": "9999"})
+    NO_VALUE = DescriptionDictPair("なし", {"column_default": "None"})
 
-test_case_7 = [
-    (
-        "data type non-unicode, without column default, nullable yes, add quotation to value, cell value exists, set empty string instead of null",
-        Item(
-            db_column_dict=column_base_dict
-            | non_unicode_column_data_type_dict
-            | column_default_no_value_dict
-            | nullable_column_flag_yes_dict
-            | column_value_quotation_required_dict,
-            cell_value="test_cell_value",
-            set_empty_str_instead_of_null_value=True,
-            expected="'test_cell_value'",
-        ),
-    ),
-]
 
-test_case_8 = [
-    (
-        "data type non-unicode, without column default, nullable yes, add quotation to value, cell value empty string, set empty string instead of null",
-        Item(
-            db_column_dict=column_base_dict
-            | non_unicode_column_data_type_dict
-            | column_default_no_value_dict
-            | nullable_column_flag_yes_dict
-            | column_value_quotation_required_dict,
-            cell_value="",
-            set_empty_str_instead_of_null_value=True,
-            expected="''",
-        ),
-    ),
-]
+class ParamNullableColumn(DescriptionEnumBase, Enum):
+    YES = DescriptionDictPair("任意", {"nullable_column_flag": "YES"})
+    NO = DescriptionDictPair("必須", {"nullable_column_flag": "NO"})
 
-test_case_9 = [
-    (
-        "data type no-quote, with column default, nullable yes, cell value None",
-        Item(
-            db_column_dict=column_base_dict
-            | no_quote_column_data_type_dict
-            | column_default_value_for_quotation_not_required_dict
-            | nullable_column_flag_yes_dict
-            | column_value_quotation_required_dict,
-            cell_value=None,
-            set_empty_str_instead_of_null_value=True,
-            expected="9999",
-        ),
-    ),
-]
 
-test_case_10 = [
-    (
-        "data type no-quote, with column default, nullable no, cell value exists",
-        Item(
-            db_column_dict=column_base_dict
-            | no_quote_column_data_type_dict
-            | column_default_value_for_quotation_not_required_dict
-            | nullable_column_flag_no_dict
-            | column_value_quotation_required_dict,
-            cell_value="1",
-            set_empty_str_instead_of_null_value=True,
-            expected="1",
-        ),
-    ),
-]
+class ParamAddQuoteToColumnValue(DescriptionEnumBase, Enum):
+    YES = DescriptionDictPair("あり", {"no_quotation": "None"})
+    NO = DescriptionDictPair("なし", {"no_quotation": "○"})
 
-test_case_11 = [
-    (
-        "data type no-quote, with column default, nullable no, cell value empty string",
-        Item(
-            db_column_dict=column_base_dict
-            | no_quote_column_data_type_dict
-            | column_default_value_for_quotation_not_required_dict
-            | nullable_column_flag_no_dict
-            | column_value_quotation_required_dict,
-            cell_value="",
-            set_empty_str_instead_of_null_value=True,
-            expected="9999",
-        ),
-    ),
-]
 
-test_params = (
-    test_case_1
-    + test_case_2
-    + test_case_3
-    + test_case_4
-    + test_case_5
-    + test_case_6
-    + test_case_7
-    + test_case_8
-    + test_case_9
-    + test_case_10
-    + test_case_11
-)
+class ParamSetEmptyStrInsteadOfNull(DescriptionEnumBase, Enum):
+    YES = DescriptionBoolPair("する", True)
+    NO = DescriptionBoolPair("しない", False)
+
+
+test_data_raw_str = """
+1	必要_Unicode	あり_引用符あり	任意	あり	None	する	None	N'test_default_value'
+2	必要_Unicode	あり_引用符あり	任意	あり	長さ0の文字列	する	''	N'test_default_value'
+3	必要_Unicode	あり_引用符あり	必須	なし	あり	しない	test_column_value	test_column_value
+4	必要_Unicode	あり_引用符あり	必須	あり	None文字列	しない	'None'	N'test_default_value'
+5	必要_Unicode	なし	任意	なし	あり	する	test_column_value	test_column_value
+6	必要_非Unicode	あり_引用符あり	任意	あり	あり	しない	test_column_value	'test_column_value'
+7	必要_非Unicode	あり_引用符あり	任意	なし	長さ0の文字列	しない	''	test_default_value
+8	必要_非Unicode	なし	必須	あり	None文字列	する	'None'	''
+9	必要_非Unicode	なし	必須	なし	None	しない	None	''
+10	不要	あり_引用符なし	任意	なし	None	しない	None	9999
+11	不要	あり_引用符なし	任意	なし	None文字列	しない	'None'	9999
+12	不要	あり_引用符なし	任意	なし	あり	しない	1	1
+13	不要	あり_引用符なし	必須	なし	長さ0の文字列	しない	''	9999
+14	不要	なし	必須	なし	長さ0の文字列	しない	''	null
+"""
+
+cell_value_map: dict[str, Any] = {"None": None, "'None'": "None", "''": ""}
+
+test_params = []
+
+test_data_rows = test_data_raw_str.splitlines()
+for test_data_row in test_data_rows:
+    if not test_data_row.strip():
+        continue
+
+    test_data_cells = test_data_row.split("\t")
+
+    column_type_quote = ParamColumnTypeQuote.from_description(test_data_cells[1])
+    column_default = ParamColumnDefault.from_description(test_data_cells[2])
+    nullable_column = ParamNullableColumn.from_description(test_data_cells[3])
+    add_quote_to_column_value = ParamAddQuoteToColumnValue.from_description(
+        test_data_cells[4]
+    )
+    param_set_empty_str_instead_of_null = (
+        ParamSetEmptyStrInsteadOfNull.from_description(test_data_cells[6])
+    )
+
+    cell_value = test_data_cells[7]
+    if cell_value in cell_value_map:
+        cell_value = cell_value_map[cell_value]
+
+    expected = test_data_cells[8]
+
+    test_param = Item(
+        test_case_no=test_data_cells[0],
+        db_column_dict=column_base_dict
+        | column_type_quote.value.dict_obj
+        | column_default.value.dict_obj
+        | nullable_column.value.dict_obj
+        | add_quote_to_column_value.value.dict_obj,
+        cell_value=cell_value,
+        set_empty_str_instead_of_null_value=param_set_empty_str_instead_of_null.value.bool_value,
+        expected=expected,
+    )
+
+    test_params.append(test_param)
 
 
 class TestClass:
     @pytest.mark.parametrize(
-        "no, description",
-        [(index + 1, test_param[0]) for index, test_param in enumerate(test_params)],
+        "no",
+        [(index + 1) for index, test_param in enumerate(test_params)],
     )
-    def test_pattern(self, no: int, description: str):
-        test_value = test_params[no - 1][1]
+    def test_pattern(self, no: int):
+        test_value = test_params[no - 1]
 
         a_request = DMLValueBuildRequest(
             db_column=DBColumnTestBuilder.from_dict(test_value.db_column_dict),
