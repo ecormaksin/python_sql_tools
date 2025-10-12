@@ -56,6 +56,9 @@ class AppConfigBuilder:
         db_column_name_row_number = self.__get_required_row_number(
             property_name="column_name_row"
         )
+        db_column_comment_row_number = self.__get_required_row_number(
+            property_name="column_comment_row"
+        )
         column_default_row_number = self.__get_required_row_number(
             property_name="column_default_row"
         )
@@ -102,6 +105,7 @@ class AppConfigBuilder:
             exclude_sheet_names=exclude_sheet_names,
             table_name_cell_position=table_name_cell_position,
             db_column_name_row_number=db_column_name_row_number,
+            db_column_comment_row_number=db_column_comment_row_number,
             column_default_row_number=column_default_row_number,
             nullable_column_flag_row_number=nullable_column_flag_row_number,
             data_type_row_number=data_type_row_number,

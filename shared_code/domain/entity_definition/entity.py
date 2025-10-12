@@ -1,13 +1,10 @@
 from dataclasses import dataclass
 
+from shared_code.domain.db_column.list import DBColumns
 from shared_code.domain.table_name.entity import TableName
 
 
 @dataclass(frozen=True)
-class OneTableDmls:
+class EntityDefinition:
     table_name: TableName
-    dmls: list[str]
-
-    @property
-    def number_of_lines(self) -> int:
-        return len(self.dmls)
+    db_columns: DBColumns

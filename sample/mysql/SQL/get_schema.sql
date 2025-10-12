@@ -1,10 +1,10 @@
 select
 	sq_a.table_name,
 	sq_a.column_name,
-	sq_a.COLUMN_COMMENT,
-	sq_a.COLUMN_DEFAULT,
-	sq_a.IS_NULLABLE,
-	sq_a.COLUMN_TYPE,
+  sq_a.column_comment,
+  sq_a.column_default,
+  sq_a.is_nullable,
+  sq_a.column_type,
 	case 
 		when sq_b.ORDINAL_POSITION is null then ''
 		else sq_b.ORDINAL_POSITION

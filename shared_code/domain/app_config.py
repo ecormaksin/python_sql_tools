@@ -16,6 +16,7 @@ class AppConfig:
     exclude_sheet_names: ExcludeSheetNames
     table_name_cell_position: CellPosition
     db_column_name_row_number: RowNumber
+    db_column_comment_row_number: RowNumber
     column_default_row_number: RowNumber
     nullable_column_flag_row_number: RowNumber
     data_type_row_number: RowNumber
@@ -39,6 +40,7 @@ class AppConfig:
         exclude_sheet_names = repr(self.exclude_sheet_names)
         table_name_cell_position = repr(self.table_name_cell_position)
         column_name_row = repr(self.db_column_name_row_number)
+        column_comment_row = repr(self.db_column_comment_row_number)
         column_default_row = repr(self.column_default_row_number)
         nullable_column_flag_row = repr(self.nullable_column_flag_row_number)
         data_type_row = repr(self.data_type_row_number)
@@ -57,6 +59,7 @@ class AppConfig:
             f"exclude_sheet_names={exclude_sheet_names}, "
             f"table_name_cell_position={table_name_cell_position}, "
             f"db_column_name_row_number={column_name_row}, "
+            f"db_column_comment_row_number={column_comment_row}, "
             f"column_default_row_number={column_default_row}, "
             f"nullable_column_flag_row_number={nullable_column_flag_row}, "
             f"data_type_row_number={data_type_row}, "

@@ -2,6 +2,7 @@ from dataclasses import dataclass
 from typing import Optional
 
 from shared_code.domain.app_config import AppConfig
+from shared_code.domain.db_column.column_comment import ColumnComment
 from shared_code.domain.db_column.column_default import ColumnDefault
 from shared_code.domain.db_column.column_name import ColumnName
 from shared_code.domain.db_column.data_type import DataType
@@ -43,6 +44,9 @@ class DBColumnBuilder:
         if not data_type_str:
             return None
 
+        column_comment_str = cls.__get_value(
+            source_data=source_data, row_number=app_config.db_column_comment_row_number
+        )
         column_default_str = cls.__get_value(
             source_data=source_data, row_number=app_config.column_default_row_number
         )
@@ -55,6 +59,9 @@ class DBColumnBuilder:
 
         return DBColumn(
             column_name=ColumnName(value=column_name_str),
+            column_comment=ColumnComment(value=column_comment_str)
+            if column_comment_str
+            else None,
             column_default=ColumnDefault(value=column_default_str)
             if column_default_str
             else None,

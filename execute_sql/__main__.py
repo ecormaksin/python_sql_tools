@@ -19,34 +19,10 @@ from shared_code.application.execute_sql.sql_files_executor import SQLFilesExecu
 #     help="RDBMS Type. Currently only 'mysql' is supported.",
 # )
 @click.option(
-    "-h",
-    "--host",
-    required=True,
-    help="Host on which database server is located.",
-)
-@click.option(
-    "-u",
-    "--user",
-    required=True,
-    help="User name to use when connecting to server.",
-)
-@click.option(
-    "-p",
-    "--password",
-    required=True,
-    help="Password to use when connecting to server.",
-)
-@click.option(
-    "-D",
-    "--database",
-    required=True,
-    help="The database to use.",
-)
-@click.option(
-    "-P",
-    "--port",
+    "-C",
+    "--db-config",
     required=False,
-    help="TCP/IP port number for connection.",
+    help="Database connection configuration json file path. If not specified, project root's 'db_config.json' is used.",
 )
 @click.option(
     "-d",
@@ -62,11 +38,7 @@ from shared_code.application.execute_sql.sql_files_executor import SQLFilesExecu
 )
 def execute_sql(
     source: str,
-    host: str,
-    user: str,
-    password: str,
-    port: Optional[int],
-    database: str,
+    db_config: Optional[str],
     delimiter: Optional[str],
     log: Optional[str],
 ):
@@ -74,14 +46,10 @@ def execute_sql(
     This script recursively executes SQL files stored in the specified directory.
     """
     log_dir_path_str = SQLFilesExecutor.execute(
-        source=source,
-        host=host,
-        user=user,
-        password=password,
-        port=port,
-        database=database,
+        source_sql_files_directory_path_str=source,
+        db_config_json_file_path_str=db_config,
         delimiter=delimiter,
-        log=log,
+        log_directory_path_str=log,
     )
 
     click.echo(f"Log files were created at '{log_dir_path_str}'.")

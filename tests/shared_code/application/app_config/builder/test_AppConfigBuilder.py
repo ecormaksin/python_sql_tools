@@ -22,6 +22,7 @@ default_valid_app_config_str = """
     "column": 1
   },
   "column_name_row": 1,
+  "column_comment_row": 2,
   "column_default_row": 3,
   "nullable_column_flag_row": 4,
   "data_type_row": 5,
@@ -287,6 +288,20 @@ test_pattern_19 = [
     ),
 ]
 
+column_comment_row_invalid = dict(default_valid_app_config)
+column_comment_row_invalid |= {"column_comment_row": 0}
+
+test_pattern_20 = [
+    (
+        "'column_comment_row' invalid",
+        Item(
+            config_data_str=json.dumps(column_comment_row_invalid),
+            expected_exception=RuntimeError,
+        ),
+    ),
+]
+
+
 test_params = (
     test_pattern_1
     + test_pattern_2
@@ -307,6 +322,7 @@ test_params = (
     + test_pattern_17
     + test_pattern_18
     + test_pattern_19
+    + test_pattern_20
 )
 
 

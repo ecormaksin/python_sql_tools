@@ -1,12 +1,8 @@
-import datetime
-import tempfile
-import traceback
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Optional
 
-from ulid import ULID
-
+from shared_code.application.app_directory_creator import AppDirectoryCreator
 from shared_code.application.dml.all_tables_dmls_builder import (
     AllTablesDMLsBuilder,
     AllTablesDMLsBuildRequest,
@@ -21,7 +17,6 @@ from shared_code.domain.source_data_xlsx_file_path import SourceDataXlsxFilePath
 from shared_code.infra.file_system.app_config_jsonc_file_reader import (
     AppConfigJsoncFileReader,
 )
-from shared_code.infra.file_system.directory_creator import DirectoryCreator
 from shared_code.infra.file_system.file_existence_checker import FileExistenceChecker
 
 
@@ -85,23 +80,11 @@ class DMLFilesCreator:
     def __get_sink_dml_dir_path(
         cls, dir_path_str: Optional[str]
     ) -> SinkDMLDirectoryPath:
-        sink_dml_dir_path_str = dir_path_str
-        if not sink_dml_dir_path_str:
-            now = datetime.datetime.now()
-            sink_dml_dir_path_str = str(
-                Path(tempfile.gettempdir())
-                .joinpath("python_sql_tools")
-                .joinpath("dml")
-                .joinpath(now.strftime("%Y%m%d-%H%M%S") + "-" + str(ULID()))
-            )
-
-        try:
-            DirectoryCreator.execute(path_str=sink_dml_dir_path_str)
-        except IOError | PermissionError:
-            stacktrace_str = traceback.format_exc()
-            raise RuntimeError(
-                f"Cannot create dml output directory '{sink_dml_dir_path_str}'. detail: {stacktrace_str}"
-            )
+        sink_dml_dir_path_str = AppDirectoryCreator.execute(
+            module_name="dml",
+            directory_type="dml output",
+            directory_path_str=dir_path_str,
+        )
 
         return SinkDMLDirectoryPath(value=sink_dml_dir_path_str)
 

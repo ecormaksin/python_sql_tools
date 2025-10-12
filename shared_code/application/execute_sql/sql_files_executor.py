@@ -1,14 +1,10 @@
-import datetime
-import tempfile
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Optional
+from typing import Any, Optional
 
-import mysql.connector
-from ulid import ULID
-
-from shared_code.infra.database.rdbms_type import RDBMSType
-from shared_code.infra.file_system.directory_creator import DirectoryCreator
+from shared_code.application.app_directory_creator import AppDirectoryCreator
+from shared_code.application.app_file_utils import AppFileUtils
+from shared_code.infra.database.mysql.connector import MySQLConnector
 from shared_code.infra.file_system.file_writer import FileWriter
 
 SQL_STATEMENT_DEFAULT_DELIMITER = ";"
@@ -16,74 +12,69 @@ SQL_STATEMENT_DEFAULT_DELIMITER = ";"
 
 @dataclass(frozen=True)
 class SQLFilesExecuteRequest:
-    source_sql_files_directory_path_str: str
-    rdbms_type_str: str
-    host: str
-    user: str
-    password: str
-    port: Optional[int]
-    database: str
     delimiter: Optional[str]
     log_directory_path_str: Optional[str]
+
+
+@dataclass(frozen=True)
+class DatabaseOperationObjects:
+    db_connection: Any
+    cursor: Any
 
 
 class SQLFilesExecutor:
     @classmethod
     def execute(
         cls,
-        source: str,
-        host: str,
-        user: str,
-        password: str,
-        port: Optional[int],
-        database: str,
+        source_sql_files_directory_path_str: str,
+        db_config_json_file_path_str: Optional[str],
         delimiter: Optional[str],
-        log: Optional[str],
+        log_directory_path_str: Optional[str],
     ):
-        rdbms_type = RDBMSType.MY_SQL
+        db_config_file_path_str = AppFileUtils.determine_and_check(
+            arg_file_path_str=db_config_json_file_path_str,
+            default_file_path=Path(__file__).parent.parent.parent.parent.joinpath(
+                "db_config.json"
+            ),
+        )
 
-        log_dir_path_str = cls.__get_log_dir_path_str(log_dir_path_str=log)
-        DirectoryCreator.execute(path_str=log_dir_path_str)
+        log_dir_path_str = AppDirectoryCreator.execute(
+            module_name="execute_sql",
+            directory_type="log",
+            directory_path_str=log_directory_path_str,
+        )
 
         a_request = SQLFilesExecuteRequest(
-            source_sql_files_directory_path_str=source,
-            rdbms_type_str=rdbms_type.key,
-            host=host,
-            user=user,
-            password=password,
-            port=port if port else rdbms_type.default_port,
-            database=database,
             delimiter=delimiter if delimiter else SQL_STATEMENT_DEFAULT_DELIMITER,
             log_directory_path_str=log_dir_path_str,
         )
 
-        src_dir_path = a_request.source_sql_files_directory_path_str
+        sql_file_paths = Path(source_sql_files_directory_path_str).rglob("*.sql")
 
-        sql_file_paths = Path(src_dir_path).rglob("*.sql")
+        with MySQLConnector(
+            config_json_file_path_str=db_config_file_path_str
+        ) as db_connector:
+            db_connection = db_connector.connect()
+            with db_connection.cursor() as cursor:
+                db_op_obj = DatabaseOperationObjects(
+                    db_connection=db_connection, cursor=cursor
+                )
 
-        for sql_file_path in sql_file_paths:
-            cls.__execute_sql_file(
-                a_request=a_request, sql_file_path_str=str(sql_file_path)
-            )
+                for sql_file_path in sql_file_paths:
+                    cls.__execute_sql_file(
+                        db_op_obj=db_op_obj,
+                        a_request=a_request,
+                        sql_file_path_str=str(sql_file_path),
+                    )
 
         return log_dir_path_str
 
     @classmethod
-    def __get_log_dir_path_str(cls, log_dir_path_str: Optional[str]) -> str:
-        dir_path_str = log_dir_path_str
-        if not dir_path_str:
-            now = datetime.datetime.now()
-            dir_path_str = str(
-                Path(tempfile.gettempdir())
-                .joinpath("python_sql_tools")
-                .joinpath("execute_sql")
-                .joinpath(now.strftime("%Y%m%d-%H%M%S") + "-" + str(ULID()))
-            )
-        return dir_path_str
-
-    @classmethod
     def __execute_sql_file(
-        cls, a_request: SQLFilesExecuteRequest, sql_file_path_str: str
+        cls,
+        db_op_obj: DatabaseOperationObjects,
+        a_request: SQLFilesExecuteRequest,
+        sql_file_path_str: str,
     ):
         sql_file_path = Path(sql_file_path_str)
         sql_file_name = sql_file_path.stem
@@ -107,7 +98,7 @@ class SQLFilesExecutor:
             statements = content.split(delimiter)
 
         cls.__execute_sql_statements(
-            a_request=a_request,
+            db_op_obj=db_op_obj,
             statements=statements,
             log_file_path_str=log_file_path_str,
         )
@@ -120,35 +111,25 @@ class SQLFilesExecutor:
     @classmethod
     def __execute_sql_statements(
         cls,
-        a_request: SQLFilesExecuteRequest,
+        db_op_obj: DatabaseOperationObjects,
         statements: list[str],
         log_file_path_str: str,
     ):
-        config = {
-            "host": a_request.host,
-            "user": a_request.user,
-            "password": a_request.password,
-            "port": a_request.port,
-            "database": a_request.database,
-        }
+        for statement in statements:
+            if not statement.strip():
+                continue
 
-        with mysql.connector.connect(**config) as cnx:
-            with cnx.cursor() as cur:
-                for statement in statements:
-                    if not statement.strip():
-                        continue
+            operation = statement
 
-                    operation = statement
+            FileWriter.tee_append(
+                file_path_str=log_file_path_str,
+                content="start: " + operation,
+            )
 
-                    FileWriter.tee_append(
-                        file_path_str=log_file_path_str,
-                        content="start: " + operation,
-                    )
+            db_op_obj.cursor.execute(operation)
+            db_op_obj.db_connection.commit()
 
-                    cur.execute(operation)
-                    cnx.commit()
-
-                    FileWriter.tee_append(
-                        file_path_str=log_file_path_str,
-                        content="finished: " + operation,
-                    )
+            FileWriter.tee_append(
+                file_path_str=log_file_path_str,
+                content="finished: " + operation,
+            )
