@@ -7,8 +7,9 @@ name = "pypi"
 openpyxl = "*"
 defusedxml = "*"
 json5 = "*"
-argparse = "*"
-rich-argparse = "*"
+mysql-connector-python = "*"
+python-ulid = "*"
+click = "*"
 
 [dev-packages]
 mypy = "*"

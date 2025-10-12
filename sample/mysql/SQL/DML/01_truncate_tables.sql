@@ -1,4 +1,5 @@
-TRUNCATE TABLE invoice_line ;
+SET FOREIGN_KEY_CHECKS = 0;
+TRUNCATE TABLE invoice_line;
 TRUNCATE TABLE playlist_track;
 TRUNCATE TABLE track;
 TRUNCATE TABLE album;
@@ -9,3 +10,4 @@ TRUNCATE TABLE media_type;
 TRUNCATE TABLE play_list;
 TRUNCATE TABLE customer;
 TRUNCATE TABLE employee;
+SET FOREIGN_KEY_CHECKS = 1;

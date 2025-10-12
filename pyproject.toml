@@ -1,0 +1,32 @@
+[project]
+name = "python-sql-tools"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "Makoto Oda",email = "truth_jp_4133@yahoo.co.jp"}
+]
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "mysql-connector-python (>=9.4.0,<10.0.0)",
+    "openpyxl (>=3.1.5,<4.0.0)",
+    "defusedxml (>=0.7.1,<0.8.0)",
+    "json5 (>=0.12.1,<0.13.0)",
+    "argparse (>=1.4.0,<2.0.0)",
+    "rich-argparse (>=1.7.1,<2.0.0)",
+    "python-ulid (>=3.1.0,<4.0.0)",
+    "click (>=8.3.0,<9.0.0)"
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[dependency-groups]
+dev = [
+    "mypy (>=1.18.2,<2.0.0)",
+    "ruff (>=0.14.0,<0.15.0)",
+    "pytest (>=8.4.2,<9.0.0)",
+    "coverage (>=7.10.7,<8.0.0)"
+]

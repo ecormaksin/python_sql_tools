@@ -5,6 +5,8 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Optional
 
+from ulid import ULID
+
 from shared_code.application.dml.all_tables_dmls_builder import (
     AllTablesDMLsBuilder,
     AllTablesDMLsBuildRequest,
@@ -88,9 +90,9 @@ class DMLFilesCreator:
             now = datetime.datetime.now()
             sink_dml_dir_path_str = str(
                 Path(tempfile.gettempdir())
-                .joinpath("python-sql-tools")
+                .joinpath("python_sql_tools")
                 .joinpath("dml")
-                .joinpath(now.strftime("%Y%m%d-%H%M%S"))
+                .joinpath(now.strftime("%Y%m%d-%H%M%S") + "-" + str(ULID()))
             )
 
         try:
