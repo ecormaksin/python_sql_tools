@@ -62,6 +62,11 @@ class EntityDefinitionsGetter:
                         and sq_b.TABLE_NAME = sq_a.TABLE_NAME 
                         and sq_b.CONSTRAINT_NAME = 'PRIMARY'
                         and sq_b.column_name = sq_a.column_name
+                    inner join information_schema.TABLES sq_c
+                        on
+                        sq_c.TABLE_SCHEMA = sq_a.TABLE_SCHEMA
+                        and sq_c.TABLE_NAME = sq_a.TABLE_NAME 
+                        and sq_c.TABLE_TYPE = 'BASE TABLE'
                 where
                     sq_a.TABLE_SCHEMA = %s {TARGET_TABLE_CLAUSE}
                 order by

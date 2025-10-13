@@ -22,7 +22,7 @@ class AppDirectoryCreator:
                 Path(tempfile.gettempdir())
                 .joinpath("python_sql_tools")
                 .joinpath(module_name)
-                .joinpath(now.strftime("%Y%m%d-%H%M%S") + "-" + str(ULID()))
+                .joinpath(now.strftime("%Y%m%d-%H%M%S-%f"))
             )
 
         try:
