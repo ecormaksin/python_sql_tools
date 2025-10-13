@@ -1,4 +1,3 @@
-from dataclasses import dataclass
 from pathlib import Path
 from typing import Optional
 
@@ -17,13 +16,6 @@ from shared_code.infra.database.mysql.entity_definitions_getter import (
 from shared_code.infra.file_system.app_config_jsonc_file_reader import (
     AppConfigJsoncFileReader,
 )
-
-
-@dataclass(frozen=True)
-class DMLSourceXlsxCreateRequest:
-    app_config_file_path_str: str
-    xlsx_directory_path_str: str
-    xlsx_file_name: str
 
 
 class DMLSourceXlsxCreator:
@@ -107,7 +99,6 @@ class DMLSourceXlsxCreator:
         )
 
         a_workbook = Workbook()
-
         a_worksheet = a_workbook.active
 
         is_not_first_sheet = False
@@ -117,6 +108,8 @@ class DMLSourceXlsxCreator:
 
             if is_not_first_sheet:
                 a_worksheet = a_workbook.create_sheet()
+
+            is_not_first_sheet = True
 
             if can_replace_sheet_name_with_table_name:
                 a_worksheet.title = table_name_value
@@ -216,7 +209,5 @@ class DMLSourceXlsxCreator:
 
                 current_column += 1
 
-
-            is_not_first_sheet = True
 
         a_workbook.save(xlsx_file_path_str)

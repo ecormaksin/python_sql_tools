@@ -68,6 +68,12 @@ class DataType:
         data_type_part = DataType.__convert_for_comparison(a_value=a_value)
         return data_type_part in self.ADD_UNICODE_PREFIX
 
+    def is_json(self) -> bool:
+        return True if self.value.lower() == "json" else False
+
+    def is_binary(self) -> bool:
+        return True if "binary" in self.value.lower() else False
+
     @staticmethod
     def __convert_for_comparison(a_value: str) -> str:
         data_type_part = a_value.lstrip("@")  # A5:SQLの型ドメイン対応

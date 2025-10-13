@@ -4,8 +4,6 @@ import traceback
 from pathlib import Path
 from typing import Optional
 
-from ulid import ULID
-
 from shared_code.infra.file_system.directory_creator import DirectoryCreator
 
 

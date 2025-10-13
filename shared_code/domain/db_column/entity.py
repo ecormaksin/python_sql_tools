@@ -47,3 +47,9 @@ class DBColumn:
             f"no_quotation={no_quotation}"
             ")"
         )
+
+    def is_json(self) -> bool:
+        return self.data_type.is_json()
+
+    def is_binary(self) -> bool:
+        return self.data_type.is_binary()

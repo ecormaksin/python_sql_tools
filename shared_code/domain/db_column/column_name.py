@@ -19,3 +19,9 @@ class ColumnName:
 
     def __repr__(self):
         return f"ColumnName(value='{self.value}')"
+
+    def lower(self) -> str:
+        return self.value.lower()
+
+    def upper(self) -> str:
+        return self.value.upper()

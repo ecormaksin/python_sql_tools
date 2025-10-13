@@ -3,7 +3,7 @@ name = "python-sql-tools"
 version = "0.1.0"
 description = ""
 authors = [
-    {name = "Makoto Oda",email = "truth_jp_4133@yahoo.co.jp"}
+    { name = "Makoto Oda", email = "truth_jp_4133@yahoo.co.jp" }
 ]
 readme = "README.md"
 requires-python = ">=3.13"
@@ -30,3 +30,6 @@ dev = [
     "pytest (>=8.4.2,<9.0.0)",
     "coverage (>=7.10.7,<8.0.0)"
 ]
+
+[tool.poetry]
+package-mode = false
