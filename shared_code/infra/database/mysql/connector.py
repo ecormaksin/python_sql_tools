@@ -6,7 +6,11 @@ import mysql.connector
 class MySQLConnector:
     def __init__(self, config_json_file_path_str: str):
         with open(config_json_file_path_str, "r", encoding="utf-8") as file_obj:
-            self.__config = json.load(file_obj)
+            file_dict = json.load(file_obj)
+            config_dict = {}
+            for key in ["host", "user", "password", "port", "database"]:
+                config_dict[key] = file_dict[key]
+            self.__config = config_dict
 
         self.__connection = None
 
@@ -17,6 +21,10 @@ class MySQLConnector:
         if self.__connection:
             self.__connection.close()
             self.__connection = None
+
+    def override_database(self, database: str):
+        self.__config["database"] = database
+        return self
 
     @property
     def database_name(self) -> str:

@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from typing import Optional
 
 from shared_code.domain.entity_definition.entity import EntityDefinition
-from shared_code.domain.table_name.entity import TableName
+from shared_code.domain.table.table_name.entity import TableName
 
 
 @dataclass(frozen=True)

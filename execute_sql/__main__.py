@@ -28,7 +28,7 @@ from shared_code.application.execute_sql.sql_files_executor import SQLFilesExecu
     "-d",
     "--delimiter",
     required=False,
-    help="The statement delimiter.(default ';')",
+    help="The statement delimiter.(default 'line')",
 )
 @click.option(
     "-l",

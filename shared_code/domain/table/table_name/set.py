@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import Optional
 
-from shared_code.domain.table_name.entity import TableName
+from shared_code.domain.table.table_name.entity import TableName
 
 
 @dataclass(frozen=True)
@@ -23,6 +23,21 @@ class TableNameSet:
                 continue
 
             set_obj.add(TableName(value=element.strip()))
+
+        return cls(elements=set_obj)
+
+    @classmethod
+    def from_str_list(cls, str_list: Optional[list[str]]) -> "TableNameSet":
+        if not str_list:
+            return cls.empty()
+
+        set_obj = set()
+        for a_str in str_list:
+            stripped_value = a_str.strip()
+            if not stripped_value:
+                continue
+
+            set_obj.add(TableName(value=stripped_value))
 
         return cls(elements=set_obj)
 

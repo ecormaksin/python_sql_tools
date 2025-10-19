@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
 from shared_code.domain.db_column.list import DBColumns
-from shared_code.domain.table_name.entity import TableName
+from shared_code.domain.table.table_name.entity import TableName
 
 
 @dataclass(frozen=True)
@@ -10,7 +10,6 @@ class EntityDefinition:
     db_columns: DBColumns
 
     def select_statement(self) -> str:
-
         query = "select "
 
         for index, db_column in enumerate(self.db_columns.unmodifiable_elements):

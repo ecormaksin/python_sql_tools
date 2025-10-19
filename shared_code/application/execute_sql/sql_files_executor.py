@@ -7,7 +7,7 @@ from shared_code.application.app_file_utils import AppFileUtils
 from shared_code.infra.database.mysql.connector import MySQLConnector
 from shared_code.infra.file_system.file_writer import FileWriter
 
-SQL_STATEMENT_DEFAULT_DELIMITER = ";"
+SQL_STATEMENT_DEFAULT_DELIMITER = "line"
 
 
 @dataclass(frozen=True)

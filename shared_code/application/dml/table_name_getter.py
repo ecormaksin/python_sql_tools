@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from openpyxl.worksheet.worksheet import Worksheet
 
 from shared_code.domain.cell_position import CellPosition
-from shared_code.domain.table_name.entity import TableName
+from shared_code.domain.table.table_name.entity import TableName
 
 
 @dataclass(frozen=True)

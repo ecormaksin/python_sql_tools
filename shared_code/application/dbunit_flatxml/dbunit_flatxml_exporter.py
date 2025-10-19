@@ -4,7 +4,7 @@ from typing import Optional
 
 from shared_code.application.app_directory_creator import AppDirectoryCreator
 from shared_code.application.app_file_utils import AppFileUtils
-from shared_code.domain.table_name.set import TableNameSet
+from shared_code.domain.table.table_name.set import TableNameSet
 from shared_code.infra.database.mysql.connector import MySQLConnector
 from shared_code.infra.database.mysql.entity_definitions_getter import (
     EntityDefinitionsGetRequest,
@@ -15,12 +15,12 @@ from shared_code.infra.database.mysql.entity_definitions_getter import (
 
 class DBUnitFlatXmlExporter:
     @classmethod
-    def execute(cls,
-                db_config_json_file_path_str: Optional[str],
-                target_tables: Optional[str],
-                xml_directory_path_str: Optional[str],
-                ) -> str:
-
+    def execute(
+        cls,
+        db_config_json_file_path_str: Optional[str],
+        target_tables: Optional[str],
+        xml_directory_path_str: Optional[str],
+    ) -> str:
         db_config_file_path_str = AppFileUtils.determine_and_check(
             arg_file_path_str=db_config_json_file_path_str,
             default_file_path=Path(__file__).parent.parent.parent.parent.joinpath(
@@ -47,28 +47,31 @@ class DBUnitFlatXmlExporter:
         cls.__export_xml(
             db_config_file_path_str=db_config_file_path_str,
             entity_definitions_get_response=entity_definitions_get_response,
-            xml_dir_path_str=xml_dir_path_str
+            xml_dir_path_str=xml_dir_path_str,
         )
 
         return xml_dir_path_str
 
     @classmethod
-    def __export_xml(cls,
-                     db_config_file_path_str: str,
-                     entity_definitions_get_response: EntityDefinitionsGetResponse,
-                     xml_dir_path_str: str):
-
+    def __export_xml(
+        cls,
+        db_config_file_path_str: str,
+        entity_definitions_get_response: EntityDefinitionsGetResponse,
+        xml_dir_path_str: str,
+    ):
         with MySQLConnector(
             config_json_file_path_str=db_config_file_path_str
         ) as db_connector:
             db_connection = db_connector.connect()
             with db_connection.cursor(buffered=True, dictionary=True) as cur:
-
                 for entity_definition in entity_definitions_get_response.entity_definitions.unmodifiable_elements.values():
                     table_name = entity_definition.table_name
                     table_name_value = table_name.value
 
-                    xml_lines: list[str] = ['<?xml version="1.0" encoding="UTF-8"?>', '<dataset>']
+                    xml_lines: list[str] = [
+                        '<?xml version="1.0" encoding="UTF-8"?>',
+                        "<dataset>",
+                    ]
 
                     query = entity_definition.select_statement()
 
@@ -78,7 +81,9 @@ class DBUnitFlatXmlExporter:
                     for row in rows:
                         xml_line = "<" + table_name_value
 
-                        for db_column in entity_definition.db_columns.unmodifiable_elements:
+                        for (
+                            db_column
+                        ) in entity_definition.db_columns.unmodifiable_elements:
                             column_value = row[db_column.column_name.lower()]
 
                             # TODO: DBeaverと同じようにオプションで変更可能にする
@@ -101,9 +106,11 @@ class DBUnitFlatXmlExporter:
                         xml_line += "/>"
                         xml_lines.append(xml_line)
 
-                    xml_lines.append('</dataset>')
+                    xml_lines.append("</dataset>")
 
-                    xml_file_path_str = str(Path(xml_dir_path_str).joinpath(table_name_value+".xml"))
+                    xml_file_path_str = str(
+                        Path(xml_dir_path_str).joinpath(table_name_value + ".xml")
+                    )
 
                     with open(xml_file_path_str, "w", encoding="utf-8") as file_obj:
                         file_obj.write("\n".join(xml_lines))

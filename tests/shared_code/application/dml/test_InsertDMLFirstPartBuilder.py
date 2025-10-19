@@ -2,7 +2,7 @@ from shared_code.application.dml.insert.first_part_builder import (
     InsertDMLFirstPartBuilder,
     InsertDMLFirstPartBuildRequest,
 )
-from shared_code.domain.table_name.entity import TableName
+from shared_code.domain.table.table_name.entity import TableName
 from tests.shared_code.application.db_column.list_test_builder import (
     DBColumnsTestBuilder,
 )

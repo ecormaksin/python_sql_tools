@@ -7,7 +7,7 @@ from openpyxl.comments import Comment
 from shared_code.application.app_directory_creator import AppDirectoryCreator
 from shared_code.application.app_file_utils import AppFileUtils
 from shared_code.domain.app_config import AppConfig
-from shared_code.domain.table_name.set import TableNameSet
+from shared_code.domain.table.table_name.set import TableNameSet
 from shared_code.infra.database.mysql.entity_definitions_getter import (
     EntityDefinitionsGetRequest,
     EntityDefinitionsGetResponse,

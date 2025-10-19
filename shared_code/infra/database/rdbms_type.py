@@ -5,7 +5,7 @@ class RDBMSType(Enum):
     MY_SQL = ("mysql", 3306)
 
     @classmethod
-    def from_description(cls, key: str):
+    def from_key(cls, key: str):
         for member in cls:
             if member._key == key:
                 return member

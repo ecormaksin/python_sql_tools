@@ -11,6 +11,8 @@ MaxEntityRowShow=1000
 ReadOnlyRecommend=0
 Page=Main
 PageInfo="Main",4,"A1Landscape",$FFFFFF
+Page=view
+PageInfo="view",4,"A3Landscape",$FFFFFF
 Domain=artist_id=BIGINT
 DomainInfo="artist_id","BIGINT","",""
 Domain=artist_name=@VARCHAR(120)
@@ -599,3 +601,31 @@ Bar3=69
 TermPos1=R
 TermPos2=R
 ZOrder=22
+
+[View]
+PName=album_view
+LName=album_view
+Comment=
+Query=select \n  tbl_1.artist_id,\n  tbl_1.name as artist_name,\n  tbl_2.album_id,\n  tbl_2.title as album_title\nfrom\n  artist tbl_1\n  inner join album tbl_2\n    on \n    tbl_2.artist_id = tbl_1.artist_id
+LNameByComment=1
+Color=$000000
+BkColor=$FFFFFF
+Position="VIEW",100,250
+ZOrder=23
+Page=VIEW
+Left=100
+Top=250
+
+[View]
+PName=track_view
+LName=track_view
+Comment=
+Query=select \n  tbl_1.artist_id,\n  tbl_1.artist_name,\n  tbl_1.album_id,\n  tbl_1.album_title,\n  tbl_2.track_id,\n  tbl_2.name as track_name,\n  tbl_2.media_type_id,\n  tbl_3.name as media_type_name,\n  tbl_2.genre_id,\n  tbl_4.name as genre_name,\n  tbl_2.composer,\n  tbl_2.milliseconds,\n  tbl_2.bytes,\n  tbl_2.unit_price\nfrom\n  album_view tbl_1\n  inner join track tbl_2\n    on \n    tbl_2.album_id = tbl_1.album_id\n  inner join media_type tbl_3\n    on \n    tbl_3.media_type_id = tbl_2.media_type_id\n  inner join genre tbl_4\n    on\n    tbl_4.genre_id = tbl_2.genre_id
+LNameByComment=1
+Color=$000000
+BkColor=$FFFFFF
+Position="VIEW",600,250
+ZOrder=24
+Page=VIEW
+Left=600
+Top=250

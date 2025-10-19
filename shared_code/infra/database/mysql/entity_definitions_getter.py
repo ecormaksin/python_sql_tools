@@ -10,8 +10,8 @@ from shared_code.domain.db_column.list import DBColumns
 from shared_code.domain.db_column.nullable_column_flag import NullableColumnFlag
 from shared_code.domain.entity_definition.entity import EntityDefinition
 from shared_code.domain.entity_definition.map import EntityDefinitions
-from shared_code.domain.table_name.entity import TableName
-from shared_code.domain.table_name.set import TableNameSet
+from shared_code.domain.table.table_name.entity import TableName
+from shared_code.domain.table.table_name.set import TableNameSet
 from shared_code.infra.database.mysql.connector import MySQLConnector
 
 
