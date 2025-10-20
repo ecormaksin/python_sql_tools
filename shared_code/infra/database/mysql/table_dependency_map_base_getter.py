@@ -39,7 +39,7 @@ class TableDependencyMapBaseGetter:
             )
 
             table_dependency_map = table_dependency_map.put(
-                table_name_with_schema, table_dependency
+                key=table_name_with_schema, value=table_dependency
             )
 
         return table_dependency_map

@@ -2,6 +2,7 @@ from dataclasses import dataclass
 from typing import Any
 
 from shared_code.domain.schema.entity import Schema
+from shared_code.domain.table.table_name.entity import TableName
 from shared_code.domain.table.table_name.set import TableNameSet
 
 
@@ -26,3 +27,18 @@ class DDLCreateTarget:
             include_table_name_set=include_table_name_set,
             exclude_table_name_set=exclude_table_name_set,
         )
+
+    def is_target(self, table_name: TableName) -> bool:
+        if self.include_table_name_set.is_empty():
+            return True
+
+        return self.include_table_name_set.contains(element=table_name)
+
+    def is_not_target(self, table_name: TableName) -> bool:
+        if not self.is_target(table_name=table_name):
+            return True
+
+        if self.exclude_table_name_set.is_empty():
+            return False
+
+        return self.exclude_table_name_set.contains(element=table_name)

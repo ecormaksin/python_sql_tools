@@ -1,6 +1,8 @@
 from dataclasses import dataclass
+from functools import total_ordering
 
 
+@total_ordering
 @dataclass(frozen=True)
 class TableName:
     value: str
@@ -16,6 +18,12 @@ class TableName:
 
     def __hash__(self):
         return hash(self.value)
+
+    def __lt__(self, other):
+        if not isinstance(other, TableName):
+            return NotImplemented
+
+        return self.value < other.value
 
     def __repr__(self):
         return f"TableName(value='{self.value}')"

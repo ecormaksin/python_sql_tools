@@ -1,15 +1,20 @@
 import json
-import pprint
 from pathlib import Path
 from typing import Optional
 
 from shared_code.application.app_directory_creator import AppDirectoryCreator
 from shared_code.application.app_file_utils import AppFileUtils
-from shared_code.domain.ddl.create_target.list import DDLCreateTargetList
+from shared_code.domain.ddl.create_target.map import DDLCreateTargetMap
 from shared_code.domain.table_dependency.map import TableDependencyMap
 from shared_code.infra.database.mysql.connector import MySQLConnector
 from shared_code.infra.database.mysql.table_dependency_map_base_getter import (
     TableDependencyMapBaseGetter,
+)
+from shared_code.infra.database.mysql.table_dependency_table_reference_getter import (
+    TableDependencyTableReferenceGetter,
+)
+from shared_code.infra.database.mysql.table_dependency_view_reference_getter import (
+    TableDependencyViewReferenceGetter,
 )
 
 
@@ -42,12 +47,12 @@ class DDLFileCreator:
         with open(db_config_file_path_str, "r", encoding="utf-8") as file_obj:
             dict_obj = json.load(file_obj)
             ddl_targets = dict_obj.get("ddl_target", [{"schema": dict_obj["database"]}])
-            ddl_create_target_list = DDLCreateTargetList.from_dict_list(
+            ddl_create_target_map = DDLCreateTargetMap.from_dict_list(
                 dict_list=ddl_targets
             )
 
         table_dependency_map = TableDependencyMap.empty()
-        for ddl_create_target in ddl_create_target_list.unmodifiable_elements:
+        for ddl_create_target in ddl_create_target_map.unmodifiable_elements.values():
             schema = ddl_create_target.schema
             schema_value = schema.value
 
@@ -61,7 +66,54 @@ class DDLFileCreator:
                         table_dependency_map=table_dependency_map,
                         schema=schema,
                     )
-                    pprint.pprint(table_dependency_map)
+
+                    table_dependency_map = TableDependencyTableReferenceGetter.execute(
+                        cursor=cursor,
+                        table_dependency_map=table_dependency_map,
+                        schema=schema,
+                    )
+
+                    table_dependency_map = TableDependencyViewReferenceGetter.execute(
+                        cursor=cursor,
+                        table_dependency_map=table_dependency_map,
+                        schema=schema,
+                    )
+
+        for (
+            table_name_with_schema,
+            table_dependency,
+        ) in table_dependency_map.unmodifiable_elements.items():
+            dependent_table_set = table_dependency.dependent_table_set
+
+            for dependent_table in dependent_table_set.unmodified_elements():
+                another_table_dependency = table_dependency_map.get(key=dependent_table)
+                dependent_table_set = dependent_table_set.union(
+                    other=another_table_dependency.dependent_table_set
+                )
+
+            new_table_dependency = table_dependency.update_dependent_table_set(
+                dependent_table_set=dependent_table_set
+            )
+
+            table_dependency_map = table_dependency_map.put(
+                key=table_name_with_schema,
+                value=new_table_dependency,
+            )
+
+        table_dependency_list = sorted(
+            list(table_dependency_map.unmodifiable_elements.values())
+        )
+
+        ddl_lines = []
+        for table_dependency in table_dependency_list:
+            table_name_with_schema = table_dependency.table_name_with_schema
+            schema = table_name_with_schema.schema
+            table_name = table_name_with_schema.table_name
+
+            ddl_create_target = ddl_create_target_map.get(key=schema)
+
+            if ddl_create_target.is_not_target(table_name=table_name):
+                continue
 
 
         return ddl_file_path_str
