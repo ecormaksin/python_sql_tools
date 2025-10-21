@@ -3,5 +3,18 @@
   "user": "<user>",
   "password": "<password>",
   "port": 3306,
-  "database": "<schema>"
+  "database": "<schema>",
+  "ddl_target": [
+    {
+      "schema": "<schema>",
+      "include_tables": [
+        "table_1",
+        "table_2"
+      ],
+      "exclude_tables": [
+        "table_3",
+        "table_4"
+      ]
+    }
+  ]
 }

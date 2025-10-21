@@ -5,8 +5,15 @@ from typing import Optional
 from shared_code.application.app_directory_creator import AppDirectoryCreator
 from shared_code.application.app_file_utils import AppFileUtils
 from shared_code.domain.ddl.create_target.map import DDLCreateTargetMap
+from shared_code.domain.table.table_type import TableType
 from shared_code.domain.table_dependency.map import TableDependencyMap
 from shared_code.infra.database.mysql.connector import MySQLConnector
+from shared_code.infra.database.mysql.create_table_statement_getter import (
+    CreateTableStatementGetter,
+)
+from shared_code.infra.database.mysql.create_view_statement_getter import (
+    CreateViewStatementGetter,
+)
 from shared_code.infra.database.mysql.table_dependency_map_base_getter import (
     TableDependencyMapBaseGetter,
 )
@@ -34,8 +41,8 @@ class DDLFileCreator:
         )
 
         ddl_dir_path_str = AppDirectoryCreator.execute(
-            module_name="dml_source_xlsx",
-            directory_type="xlsx output",
+            module_name="ddl",
+            directory_type="ddl output",
             directory_path_str=ddl_directory_path_str,
         )
 
@@ -54,11 +61,10 @@ class DDLFileCreator:
         table_dependency_map = TableDependencyMap.empty()
         for ddl_create_target in ddl_create_target_map.unmodifiable_elements.values():
             schema = ddl_create_target.schema
-            schema_value = schema.value
 
             with MySQLConnector(
                 config_json_file_path_str=db_config_file_path_str
-            ).override_database(database=schema_value) as db_connector:
+            ).override_database(schema=schema) as db_connector:
                 db_connection = db_connector.connect()
                 with db_connection.cursor(buffered=True, dictionary=True) as cursor:
                     table_dependency_map = TableDependencyMapBaseGetter.execute(
@@ -104,16 +110,48 @@ class DDLFileCreator:
             list(table_dependency_map.unmodifiable_elements.values())
         )
 
-        ddl_lines = []
+        ddl_lines: list[str] = list()
         for table_dependency in table_dependency_list:
             table_name_with_schema = table_dependency.table_name_with_schema
             schema = table_name_with_schema.schema
             table_name = table_name_with_schema.table_name
+            table_name_value = table_name.value
 
             ddl_create_target = ddl_create_target_map.get(key=schema)
 
             if ddl_create_target.is_not_target(table_name=table_name):
                 continue
 
+            with MySQLConnector(
+                config_json_file_path_str=db_config_file_path_str
+            ).override_database(schema=schema) as db_connector:
+                db_connection = db_connector.connect()
+                with db_connection.cursor(buffered=True, dictionary=True) as cursor:
+                    if table_dependency.table_type == TableType.BASE_TABLE:
+                        ddl_lines.append(
+                            f"DROP TABLE IF EXISTS `{table_name_value}` CASCADE;"
+                        )
+                        ddl_lines.append("")
+
+                        create_table_statement = CreateTableStatementGetter.execute(
+                            cursor=cursor, table_name=table_name
+                        )
+                        ddl_lines.extend(create_table_statement)
+                        ddl_lines.append("")
+
+                    if table_dependency.table_type == TableType.VIEW:
+                        ddl_lines.append(
+                            f"DROP VIEW IF EXISTS `{table_name_value}` CASCADE;"
+                        )
+                        ddl_lines.append("")
+
+                        create_view_statement = CreateViewStatementGetter.execute(
+                            cursor=cursor, view_name=table_name
+                        )
+                        ddl_lines.append(create_view_statement)
+                        ddl_lines.append("")
+
+        with open(ddl_file_path_str, "w", encoding="utf-8") as file_obj:
+            file_obj.write("\n".join(ddl_lines))
 
         return ddl_file_path_str

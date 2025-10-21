@@ -2,6 +2,9 @@
 
 以下4つの機能をPythonのスクリプトで作成しています。
 
+1. 接続先のデータベースからDDLファイルを作成する。（`create_ddl` モジュール）
+     - **【MySQLのみ対応】**</br></br>
+
 1. 接続先のデータベースからDMLの作成元となるxlsxファイルを作成する。（`create_dml_source_xlsx` モジュール）
      - **【MySQLのみ対応】**
      - [A5:SQL Mk-2](https://a5m2.mmatsubara.com/) のエンティティ定義CSVを出力する機能を参考にしました。</br></br>
@@ -47,10 +50,11 @@ poetry install --no-root
 
 | モジュール                  | 当スクリプト制御用設定ファイル | DB接続用設定ファイル |
 |------------------------|:---------------:|:-----------:|
+| create_ddl             | －               | ○           |
 | create_dml_source_xlsx | ○               | ○           |
-| create_dml             | ○               |             |
-| execute_sql            |                 | ○           |
-| export_dbunit_flatxml  |                 | ○           |
+| create_dml             | ○               | －           |
+| execute_sql            | －               | ○           |
+| export_dbunit_flatxml  | －               | ○           |
 
 #### 1.2.2. 当スクリプト制御用設定ファイル
 
@@ -68,6 +72,7 @@ poetry install --no-root
 
 それぞれ別紙を参照してください。
 
+- [接続先のデータベースからDDLファイルを作成する処理(`create_ddl` モジュール)](./doc/create_ddl.md)
 - [接続先のデータベースからDMLの作成元となるxlsxファイルを作成する処理（`create_dml_source_xlsx` モジュール）](./doc/create_dml_source_xlsx.md)
 - [xlsxファイルからDMLファイルを出力する処理(`create_dml`モジュール)](./doc/create_dml.md)
 - [指定フォルダー配下のSQLファイルを再帰的に実行する処理（`execute_sql` モジュール）](./doc/execute_sql.md)

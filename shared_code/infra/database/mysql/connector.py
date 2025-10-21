@@ -2,6 +2,8 @@ import json
 
 import mysql.connector
 
+from shared_code.domain.schema.entity import Schema
+
 
 class MySQLConnector:
     def __init__(self, config_json_file_path_str: str):
@@ -22,8 +24,8 @@ class MySQLConnector:
             self.__connection.close()
             self.__connection = None
 
-    def override_database(self, database: str):
-        self.__config["database"] = database
+    def override_database(self, schema: Schema):
+        self.__config["database"] = schema.value
         return self
 
     @property
