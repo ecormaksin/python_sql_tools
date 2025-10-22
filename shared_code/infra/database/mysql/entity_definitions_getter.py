@@ -68,7 +68,8 @@ class EntityDefinitionsGetter:
                         and sq_c.TABLE_NAME = sq_a.TABLE_NAME 
                         and sq_c.TABLE_TYPE = 'BASE TABLE'
                 where
-                    sq_a.TABLE_SCHEMA = %s {TARGET_TABLE_CLAUSE}
+                    sq_a.TABLE_SCHEMA = %s 
+                    and IFNULL(sq_a.GENERATION_EXPRESSION, '') ='' {TARGET_TABLE_CLAUSE}
                 order by
                     sq_a.table_name,
                     sq_a.ORDINAL_POSITION
