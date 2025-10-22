@@ -27,3 +27,6 @@ class TableNameWithSchema:
             return True
 
         return self.schema == other.schema and self.table_name < other.table_name
+
+    def __str__(self):
+        return self.schema.value + "." + self.table_name.value
