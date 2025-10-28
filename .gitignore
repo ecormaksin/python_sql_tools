@@ -5,3 +5,4 @@
 /tests/shared_code/application/dml/test_data/DMLValueBuilder/a.txt
 /tests/shared_code/application/dml/test_data/DMLValueBuilder/a.xlsx
 /db_config.json
+~$*.xlsx
