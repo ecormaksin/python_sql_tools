@@ -12,6 +12,7 @@ class AppConfigForTest:
     "column": 1
   },
   "column_name_row": 1,
+  "column_comment_row": 2,
   "column_default_row": 3,
   "nullable_column_flag_row": 4,
   "data_type_row": 5,

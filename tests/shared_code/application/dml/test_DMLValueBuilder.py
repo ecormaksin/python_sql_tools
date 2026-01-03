@@ -21,7 +21,11 @@ class Item:
     expected: str
 
 
-column_base_dict = {"column_name": "test_column", "key_position": 1}
+column_base_dict = {
+    "column_name": "test_column",
+    "column_comment": "test_column",
+    "key_position": 1,
+}
 
 
 @dataclass(frozen=True)

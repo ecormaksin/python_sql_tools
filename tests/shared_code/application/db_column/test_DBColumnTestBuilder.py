@@ -3,6 +3,7 @@ from typing import Optional
 
 import pytest
 
+from shared_code.domain.db_column.column_comment import ColumnComment
 from shared_code.domain.db_column.column_default import ColumnDefault
 from shared_code.domain.db_column.column_name import ColumnName
 from shared_code.domain.db_column.data_type import DataType
@@ -28,6 +29,7 @@ test_params = [
             db_column_source_str="""
             {
                 "column_name": "ID",
+                "column_comment": "ID",
                 "column_default": "None",
                 "nullable_column_flag": "NO",
                 "data_type": "@INT",
@@ -37,6 +39,7 @@ test_params = [
             """,
             expected_db_column=DBColumn(
                 column_name=ColumnName("ID"),
+                column_comment=ColumnComment("ID"),
                 column_default=None,
                 nullable_column_flag=NullableColumnFlag.NO,
                 data_type=DataType("@INT"),
@@ -51,6 +54,7 @@ test_params = [
             db_column_source_str="""
             {
                 "column_name": "required_varchar_column",
+                "column_comment": "required_varchar_column",
                 "column_default": "None",
                 "nullable_column_flag": "NO",
                 "data_type": "@VARCHAR(50)",
@@ -60,6 +64,7 @@ test_params = [
             """,
             expected_db_column=DBColumn(
                 column_name=ColumnName("required_varchar_column"),
+                column_comment=ColumnComment("required_varchar_column"),
                 column_default=None,
                 nullable_column_flag=NullableColumnFlag.NO,
                 data_type=DataType("@VARCHAR(50)"),
@@ -74,6 +79,7 @@ test_params = [
             db_column_source_str="""
             {
                 "column_name": "optional_varchar_column",
+                "column_comment": "optional_varchar_column",
                 "column_default": "test_default_value",
                 "nullable_column_flag": "YES",
                 "data_type": "@VARCHAR(50)",
@@ -83,6 +89,7 @@ test_params = [
             """,
             expected_db_column=DBColumn(
                 column_name=ColumnName("optional_varchar_column"),
+                column_comment=ColumnComment("optional_varchar_column"),
                 column_default=ColumnDefault("test_default_value"),
                 nullable_column_flag=NullableColumnFlag.YES,
                 data_type=DataType("@VARCHAR(50)"),

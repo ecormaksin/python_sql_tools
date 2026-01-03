@@ -1,6 +1,7 @@
 import json
 from typing import Any, Optional
 
+from shared_code.domain.db_column.column_comment import ColumnComment
 from shared_code.domain.db_column.column_default import ColumnDefault
 from shared_code.domain.db_column.column_name import ColumnName
 from shared_code.domain.db_column.data_type import DataType
@@ -24,6 +25,7 @@ class DBColumnTestBuilder:
 
         return DBColumn(
             column_name=ColumnName(dict_obj["column_name"]),
+            column_comment=ColumnComment(dict_obj["column_comment"]),
             column_default=ColumnDefault(column_default) if column_default else None,
             nullable_column_flag=NullableColumnFlag.from_str(
                 dict_obj["nullable_column_flag"]
