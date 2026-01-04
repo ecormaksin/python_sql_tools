@@ -13,7 +13,7 @@ from shared_code.domain.db_column.nullable_column_flag import NullableColumnFlag
 @dataclass(frozen=True)
 class DBColumn:
     column_name: ColumnName
-    column_comment: ColumnComment
+    column_comment: Optional[ColumnComment]
     column_default: Optional[ColumnDefault]
     nullable_column_flag: NullableColumnFlag
     data_type: DataType

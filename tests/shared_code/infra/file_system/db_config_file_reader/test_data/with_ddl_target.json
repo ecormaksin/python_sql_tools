@@ -1,0 +1,32 @@
+{
+  "database": "db1",
+  "ddl_target": [
+    {
+      "schema": "db2"
+    },
+    {
+      "schema": "db3",
+      "include_tables": [
+        "table1",
+        "table2"
+      ]
+    },
+    {
+      "schema": "db4",
+      "exclude_tables": [
+        "table3"
+      ]
+    },
+    {
+      "schema": "db5",
+      "include_tables": [
+        "table4",
+        "table5"
+      ],
+      "exclude_tables": [
+        "table6",
+        "table7"
+      ]
+    }
+  ]
+}

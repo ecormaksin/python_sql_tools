@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Any
+from typing import Any, Union
 
 from shared_code.domain.ddl.create_target.entity import DDLCreateTarget
 from shared_code.domain.schema.entity import Schema
@@ -9,8 +9,18 @@ from shared_code.domain.schema.entity import Schema
 class DDLCreateTargetMap:
     elements: dict[Schema, DDLCreateTarget]
 
+    def __eq__(self, other):
+        if not isinstance(other, DDLCreateTargetMap):
+            return NotImplemented
+        return self.__dict__ == other.__dict__
+
+    def __hash__(self):
+        return hash(tuple(sorted(self.__dict__.items())))
+
     @classmethod
-    def from_dict_list(cls, dict_list: list[dict[str, Any]]) -> "DDLCreateTargetMap":
+    def from_dict_list(
+        cls, dict_list: list[dict[str, Union[str, list[str]]]]
+    ) -> "DDLCreateTargetMap":
         elements = {}
         for a_dict in dict_list:
             element = DDLCreateTarget.from_dict(dict_obj=a_dict)

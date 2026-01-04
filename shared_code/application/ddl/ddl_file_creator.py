@@ -1,10 +1,8 @@
-import json
 from pathlib import Path
 from typing import Optional
 
 from shared_code.application.app_directory_creator import AppDirectoryCreator
 from shared_code.application.app_file_utils import AppFileUtils
-from shared_code.domain.ddl.create_target.map import DDLCreateTargetMap
 from shared_code.domain.table.table_type import TableType
 from shared_code.domain.table_dependency.map import TableDependencyMap
 from shared_code.infra.database.mysql.connector import MySQLConnector
@@ -23,9 +21,22 @@ from shared_code.infra.database.mysql.table_dependency_table_reference_getter im
 from shared_code.infra.database.mysql.table_dependency_view_reference_getter import (
     TableDependencyViewReferenceGetter,
 )
+from shared_code.infra.file_system.db_config_jsonc_file_reader import (
+    DBConfigJsoncFileReader,
+)
 
 
 class DDLFileCreator:
+    @classmethod
+    def __get_ddl_file_path_str(
+        cls, ddl_dir_path_str: str, ddl_file_name: Optional[str]
+    ) -> str:
+        a_ddl_file_name = ddl_file_name if ddl_file_name else "ddl.sql"
+
+        ddl_file_path = Path(ddl_dir_path_str).joinpath(a_ddl_file_name)
+        ddl_file_path_str = str(ddl_file_path)
+        return ddl_file_path_str
+
     @classmethod
     def execute(
         cls,
@@ -46,17 +57,13 @@ class DDLFileCreator:
             directory_path_str=ddl_directory_path_str,
         )
 
-        a_ddl_file_name = ddl_file_name if ddl_file_name else "ddl.sql"
+        ddl_file_path_str = cls.__get_ddl_file_path_str(
+            ddl_dir_path_str=ddl_dir_path_str, ddl_file_name=ddl_file_name
+        )
 
-        ddl_file_path = Path(ddl_dir_path_str).joinpath(a_ddl_file_name)
-        ddl_file_path_str = str(ddl_file_path)
-
-        with open(db_config_file_path_str, "r", encoding="utf-8") as file_obj:
-            dict_obj = json.load(file_obj)
-            ddl_targets = dict_obj.get("ddl_target", [{"schema": dict_obj["database"]}])
-            ddl_create_target_map = DDLCreateTargetMap.from_dict_list(
-                dict_list=ddl_targets
-            )
+        ddl_create_target_map = DBConfigJsoncFileReader.get_ddl_create_target_map(
+            db_config_file_path_str=db_config_file_path_str
+        )
 
         table_dependency_map = TableDependencyMap.empty()
         for ddl_create_target in ddl_create_target_map.unmodifiable_elements.values():

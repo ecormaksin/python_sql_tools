@@ -6,3 +6,5 @@
 /tests/shared_code/application/dml/test_data/DMLValueBuilder/a.xlsx
 /db_config.json
 ~$*.xlsx
+/tests/shared_code/temp.py
+/tests/shared_code/infra/database/test_mysql_temp.py
