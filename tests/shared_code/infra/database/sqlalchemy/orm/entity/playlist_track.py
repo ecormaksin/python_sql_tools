@@ -7,8 +7,8 @@ from .base import Base
 class PlayListTrack(Base):
     __tablename__ = "playlist_track"
 
-    play_list_id = mapped_column(ForeignKey("play_list.play_list_id"))
-    track_id = mapped_column(ForeignKey("track.track_id"))
+    play_list_id = mapped_column(ForeignKey("play_list.play_list_id"), primary_key=True)
+    track_id = mapped_column(ForeignKey("track.track_id"), primary_key=True)
 
     __table_args__ = (Index("playlist_track_IX1", "track_id"),)
 

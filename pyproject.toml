@@ -15,6 +15,7 @@ dependencies = [
     "python-ulid (>=3.1.0,<4.0.0)",
     "click (>=8.3.0,<9.0.0)",
     "sqlalchemy>=2.0.45",
+    "psycopg2>=2.9.11",
 ]
 
 [dependency-groups]
@@ -24,5 +25,5 @@ dev = [
     "pytest==9.0.2",
     "coverage (>=7.10.7,<8.0.0)",
     "pytest-cov>=7.0.0",
-    "testcontainers[mysql]>=4.13.3",
+    "testcontainers[db2,mssql,mysql,oracle-free,postgres]>=4.13.3",
 ]
