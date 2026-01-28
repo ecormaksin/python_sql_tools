@@ -25,5 +25,5 @@ dev = [
     "pytest==9.0.2",
     "coverage (>=7.10.7,<8.0.0)",
     "pytest-cov>=7.0.0",
-    "testcontainers[db2,mssql,mysql,oracle-free,postgres]>=4.13.3",
+    "testcontainers[db2,mssql,mysql,oracle-free,postgres]>=4.14.0",
 ]
