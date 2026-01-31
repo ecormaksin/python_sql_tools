@@ -2,7 +2,7 @@ from enum import Enum
 
 
 class RDBMSType(Enum):
-    MY_SQL = ("mysql", 3306)
+    MYSQL = ("mysql", 3306)
 
     @classmethod
     def from_key(cls, key: str):
