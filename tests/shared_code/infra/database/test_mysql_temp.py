@@ -8,7 +8,7 @@ class TestClass:
     def test(self):
         with MySqlContainer("mysql:9.5.0-oraclelinux9") as db_container:
             url = db_container.get_connection_url()
-            print(url)
+            print(url) # mysql://test:test@localhost:32769/test
 
             url = url.replace("mysql://", "mysql+pymysql://")
 

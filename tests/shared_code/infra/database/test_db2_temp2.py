@@ -14,5 +14,5 @@ class TestClass:
         EntityCreator.execute(engine=engine)
 
         with engine.connect() as connection:
-            result = connection.execute(text("SELECT TABNAME FROM SYSCAT.TABLES"))
+            result = connection.execute(text("SELECT TABNAME FROM SYSCAT.TABLES WHERE TABSCHEMA = 'DB2INST1'"))
             print(result.all())

@@ -4,24 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="14b6634f-6e88-48a3-9f8d-7bf6dfed753a" name="変更" comment="WIP">
+    <list default="true" id="4a513ee3-d226-4ae5-b368-0a98579a610b" name="変更" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/shared_code/infra/database/rdbms_type.py" beforeDir="false" afterPath="$PROJECT_DIR$/shared_code/infra/database/rdbms_type.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/pytest.ini" beforeDir="false" afterPath="$PROJECT_DIR$/tests/pytest.ini" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/shared_code/infra/database/test_db2_temp.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/shared_code/infra/database/test_db2_temp.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tests/shared_code/infra/database/test_db2_temp2.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/shared_code/infra/database/test_db2_temp2.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/shared_code/infra/database/test_mysql_temp.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/shared_code/infra/database/test_mysql_temp.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
-  </component>
-  <component name="FileTemplateManagerImpl">
-    <option name="RECENT_TEMPLATES">
-      <list>
-        <option value="Python Script" />
-      </list>
-    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -29,10 +21,7 @@
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 1
 }</component>
-  <component name="ProjectId" id="38ZW2IimTDOyNz6oMObXDzr2FQ5" />
-  <component name="ProjectLevelVcsManager">
-    <ConfirmationsSetting value="1" id="Add" />
-  </component>
+  <component name="ProjectId" id="393RNEdymzKidrvMXt0yAUM5NrL" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -41,22 +30,15 @@
   "keyToString": {
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "Python テスト.tests.shared_code.infra.database.test_db2_temp.TestClass の Python テスト.executor": "Run",
-    "Python テスト.tests.shared_code.infra.database.test_db2_temp.TestClass.test の Python テスト.executor": "Run",
     "Python テスト.tests.shared_code.infra.database.test_db2_temp2.TestClass の Python テスト.executor": "Run",
     "Python テスト.tests.shared_code.infra.database.test_db2_temp2.TestClass.test の Python テスト.executor": "Run",
-    "Python テスト.tests.shared_code.infra.database.test_h2_db2_temp.TestClass.test の Python テスト.executor": "Run",
-    "Python テスト.tests.shared_code.infra.database.test_mssql_temp.TestClass.test の Python テスト.executor": "Run",
     "Python テスト.tests.shared_code.infra.database.test_mysql_temp.TestClass.test の Python テスト.executor": "Run",
-    "Python テスト.tests.shared_code.infra.database.test_oracle_temp.TestClass の Python テスト.executor": "Run",
-    "Python テスト.tests.shared_code.infra.database.test_oracle_temp.TestClass.test の Python テスト.executor": "Run",
-    "Python テスト.tests.shared_code.infra.database.test_postgres_temp.TestClass.test の Python テスト.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
     "RunOnceActivity.git.unshallow": "true",
     "RunOnceActivity.typescript.service.memoryLimit.init": "true",
     "ai.playground.ignore.import.keys.banner.in.settings": "true",
     "git-widget-placeholder": "feature/v3.0.0",
-    "last_opened_file_path": "/home/ecor/ws/ghq/github.com/ecormaksin/python_sql_tools/tests/shared_code/infra/database",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -66,12 +48,7 @@
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
-  <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/tests/shared_code/infra/database" />
-    </key>
-  </component>
-  <component name="RunManager" selected="Python テスト.tests.shared_code.infra.database.test_oracle_temp.TestClass.test の Python テスト">
+  <component name="RunManager" selected="Python テスト.tests.shared_code.infra.database.test_mysql_temp.TestClass.test の Python テスト">
     <configuration name="tests.shared_code.infra.database.test_db2_temp2.TestClass の Python テスト" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
       <module name="python_sql_tools" />
       <option name="ENV_FILES" value="" />
@@ -83,8 +60,8 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="RUN_TOOL" value="" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="RUN_TOOL" value="true" />
+      <option name="_new_additionalArguments" value="&quot;--run-db2&quot;" />
       <option name="_new_target" value="&quot;tests.shared_code.infra.database.test_db2_temp2.TestClass&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
@@ -123,7 +100,7 @@
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="tests.shared_code.infra.database.test_mssql_temp.TestClass.test の Python テスト" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+    <configuration name="tests.shared_code.infra.database.test_mysql_temp.TestClass.test の Python テスト" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
       <module name="python_sql_tools" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -136,96 +113,44 @@
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="RUN_TOOL" value="" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;tests.shared_code.infra.database.test_mssql_temp.TestClass.test&quot;" />
-      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
-      <method v="2" />
-    </configuration>
-    <configuration name="tests.shared_code.infra.database.test_oracle_temp.TestClass の Python テスト" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
-      <module name="python_sql_tools" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="RUN_TOOL" value="" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;tests.shared_code.infra.database.test_oracle_temp.TestClass&quot;" />
-      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
-      <method v="2" />
-    </configuration>
-    <configuration name="tests.shared_code.infra.database.test_oracle_temp.TestClass.test の Python テスト" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
-      <module name="python_sql_tools" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="RUN_TOOL" value="" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;tests.shared_code.infra.database.test_oracle_temp.TestClass.test&quot;" />
+      <option name="_new_target" value="&quot;tests.shared_code.infra.database.test_mysql_temp.TestClass.test&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python テスト.tests.shared_code.infra.database.test_oracle_temp.TestClass.test の Python テスト" />
-        <item itemvalue="Python テスト.tests.shared_code.infra.database.test_oracle_temp.TestClass の Python テスト" />
+        <item itemvalue="Python テスト.tests.shared_code.infra.database.test_mysql_temp.TestClass.test の Python テスト" />
         <item itemvalue="Python テスト.tests.shared_code.infra.database.test_db2_temp2.TestClass の Python テスト" />
-        <item itemvalue="Python テスト.tests.shared_code.infra.database.test_db2_temp.TestClass の Python テスト" />
         <item itemvalue="Python テスト.tests.shared_code.infra.database.test_db2_temp2.TestClass.test の Python テスト" />
+        <item itemvalue="Python テスト.tests.shared_code.infra.database.test_db2_temp.TestClass の Python テスト" />
       </list>
     </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-js-predefined-d6986cc7102b-9b0f141eb926-JavaScript-PY-253.29346.308" />
-        <option value="bundled-python-sdk-ca5e2b39c7df-6e1f45a539f7-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-253.29346.308" />
+        <option value="bundled-js-predefined-d6986cc7102b-9b0f141eb926-JavaScript-PY-253.30387.127" />
+        <option value="bundled-python-sdk-3944b0c99280-6d6dccd035ac-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-253.30387.127" />
       </set>
     </attachedChunks>
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="デフォルトタスク">
-      <changelist id="14b6634f-6e88-48a3-9f8d-7bf6dfed753a" name="変更" comment="" />
-      <created>1769007364455</created>
+      <changelist id="4a513ee3-d226-4ae5-b368-0a98579a610b" name="変更" comment="" />
+      <created>1769922726566</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1769007364455</updated>
-      <workItem from="1769007365538" duration="690000" />
-      <workItem from="1769083658132" duration="4588000" />
-      <workItem from="1769524666819" duration="3184000" />
-      <workItem from="1769602553041" duration="3495000" />
-      <workItem from="1769611272201" duration="940000" />
-      <workItem from="1769831130012" duration="1473000" />
-      <workItem from="1769832761277" duration="4253000" />
+      <updated>1769922726566</updated>
+      <workItem from="1769922727611" duration="82000" />
+      <workItem from="1769922838740" duration="648000" />
+      <workItem from="1769939630889" duration="2998000" />
     </task>
-    <task id="LOCAL-00001" summary="WIP">
-      <option name="closed" value="true" />
-      <created>1769609973576</created>
-      <option name="number" value="00001" />
-      <option name="presentableId" value="LOCAL-00001" />
-      <option name="project" value="LOCAL" />
-      <updated>1769609973576</updated>
-    </task>
-    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
-  <component name="VcsManagerConfiguration">
-    <MESSAGE value="WIP" />
-    <option name="LAST_COMMIT_MESSAGE" value="WIP" />
-  </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/python_sql_tools$.coverage" NAME=" のカバレッジ結果" MODIFIED="1769841544964" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/python_sql_tools$.coverage" NAME=" のカバレッジ結果" MODIFIED="1769941057240" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>
