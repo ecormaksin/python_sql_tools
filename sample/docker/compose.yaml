@@ -1,0 +1,18 @@
+services:
+  mysql:
+    build: 
+      context: mysql
+    ports:
+      - ${CUSTOM_MYSQL_HOST_PORT:-3306}:3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=secret
+      - TZ=Asia/Tokyo
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - mysql-conf:/etc/mysql/conf.d
+      - ./mysql/init:/docker-entrypoint-initdb.d
+      - ./mysql/work:/work
+
+volumes:
+  mysql-data:
+  mysql-conf:
