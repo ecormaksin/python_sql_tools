@@ -32,8 +32,14 @@
 ライブラリの管理に [uv](https://docs.astral.sh/uv/) を使っています。  
 以下のコマンドを実行してください。
 
-```sh, powershell
+```bash, powershell
 uv sync
+```
+
+Debian、Ubuntuの場合、`libpq-dev` のインストールが必要な可能性があります。
+
+```bash
+sudo apt -y install libpq-dev
 ```
 
 - Windowsの場合
@@ -44,7 +50,7 @@ uv sync
 
 - Linux, macOSの場合
 
-```sh
+```bash
 .venv/Scripts/activate
 ```
 
