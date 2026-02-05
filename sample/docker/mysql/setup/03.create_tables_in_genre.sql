@@ -1,6 +1,3 @@
--- genre
-DROP TABLE if exists genre CASCADE;
-
 CREATE TABLE genre (
   genre_id INT NOT NULL COMMENT 'genre_id'
   , name VARCHAR(255) NOT NULL COMMENT 'name'

@@ -1,0 +1,11 @@
+DROP TABLE IF EXISTS invoice.invoice_line;
+DROP TABLE IF EXISTS invoice.invoice;
+DROP TABLE IF EXISTS customer.customer;
+DROP TABLE IF EXISTS employee.employee;
+DROP TABLE IF EXISTS play_list.playlist_track;
+DROP TABLE IF EXISTS play_list.play_list;
+DROP TABLE IF EXISTS album.track;
+DROP TABLE IF EXISTS album.album;
+DROP TABLE IF EXISTS media_type.media_type;
+DROP TABLE IF EXISTS genre.genre;
+DROP TABLE IF EXISTS artist.artist;
