@@ -5,7 +5,7 @@ select
   tbl_2.album_id,
   tbl_2.title as album_title
 from
-  artist tbl_1
+  artist.artist tbl_1
   inner join album tbl_2
     on 
     tbl_2.artist_id = tbl_1.artist_id
@@ -32,10 +32,10 @@ from
   inner join track tbl_2
     on 
     tbl_2.album_id = tbl_1.album_id
-  inner join media_type tbl_3
+  inner join media_type.media_type tbl_3
     on 
     tbl_3.media_type_id = tbl_2.media_type_id
-  inner join genre tbl_4
+  inner join genre.genre tbl_4
     on
     tbl_4.genre_id = tbl_2.genre_id
 ;
