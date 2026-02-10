@@ -1,7 +1,7 @@
-﻿# A5:ER FORMAT:19
+﻿# A5:ER FORMAT:21
 # A5:ER ENCODING:UTF8
 # A5:ER Mk-1 Copyright © 2007 m.matsubara
-# A5:SQL Mk-2 Version 2.20.4 Copyright © 1997 - 2025 m.matsubara
+# A5:SQL Mk-2 Version 2.21.0 Copyright © 1997 - 2026 m.matsubara
 #  https://a5m2.mmatsubara.com
 
 [Manager]
@@ -9,8 +9,8 @@ ProjectName=DBeaver Sample Database
 Author=
 MaxEntityRowShow=1000
 ReadOnlyRecommend=0
-Page=Main
 PageInfo="Main",4,"A1Landscape",$FFFFFF
+PageInfo="View",2,"A3Landscape",$FFFFFF
 Domain=artist_id=BIGINT
 DomainInfo="artist_id","BIGINT","",""
 Domain=artist_name=@VARCHAR(120)
@@ -69,8 +69,6 @@ Domain=invoice_line_id=@INT
 DomainInfo="invoice_line_id","@INT","",""
 LogicalView=1
 DecodeDomain=0
-ViewModePageIndividually=1
-ViewMode=4
 ViewFormat=0
 UseNondependenceDashLine=0
 FontName=Tahoma
@@ -100,6 +98,7 @@ UpperCaseKeyword=1
 CreateOrder=Dependent
 ShowTag=1
 ShowCommonAttributes=0
+ShowDisableAttributes=0
 BugFixEntityWidth=1
 
 [Entity]
@@ -117,7 +116,7 @@ EffectMode=None
 Color=$000000
 BkColor=$FFFFFF
 ModifiedDateTime=20250814211925
-Position="MAIN",100,200
+Position="Main",100,200
 ZOrder=1
 
 [Entity]
@@ -132,12 +131,13 @@ Top=200
 Field="album_id","album_id","*album_id","NOT NULL",0,"","",$FFFFFFFF,""
 Field="title","title","*album_title","NOT NULL",,"","",$FFFFFFFF,""
 Field="artist_id","artist_id","*artist_id","NOT NULL",,"","",$FFFFFFFF,""
+IndexInfo="",0,"artist_id",""
 Index==0,artist_id
 EffectMode=None
 Color=$000000
 BkColor=$FFFFFF
 ModifiedDateTime=20250823133345
-Position="MAIN",1000,200
+Position="Main",1000,200
 ZOrder=2
 
 [Relation]
@@ -177,7 +177,7 @@ EffectMode=None
 Color=$000000
 BkColor=$FFFFFF
 ModifiedDateTime=20250814211918
-Position="MAIN",100,550
+Position="Main",100,550
 ZOrder=4
 
 [Entity]
@@ -195,7 +195,7 @@ EffectMode=None
 Color=$000000
 BkColor=$FFFFFF
 ModifiedDateTime=20250823141721
-Position="MAIN",100,850
+Position="Main",100,850
 ZOrder=5
 
 [Entity]
@@ -216,16 +216,21 @@ Field="composer","composer","*composer",,,"","",$FFFFFFFF,""
 Field="milliseconds","milliseconds","@INT","NOT NULL",,"","",$FFFFFFFF,""
 Field="bytes","bytes","@INT",,,"","",$FFFFFFFF,""
 Field="unit_price","unit_price","*unit_price","NOT NULL",,"","",$FFFFFFFF,""
+IndexInfo="",0,"name",""
 Index==0,name
+IndexInfo="",0,"album_id",""
 Index==0,album_id
+IndexInfo="",0,"genre_id",""
 Index==0,genre_id
+IndexInfo="",0,"media_type_id",""
 Index==0,media_type_id
+IndexInfo="",0,"composer",""
 Index==0,composer
 EffectMode=None
 Color=$000000
 BkColor=$FFFFFF
 ModifiedDateTime=20250815112215
-Position="MAIN",1800,550
+Position="Main",1800,550
 ZOrder=6
 
 [Relation]
@@ -308,7 +313,7 @@ EffectMode=None
 Color=$000000
 BkColor=$FFFFFF
 ModifiedDateTime=20250814231100
-Position="MAIN",1800,200
+Position="Main",1800,200
 ZOrder=10
 
 [Entity]
@@ -322,12 +327,13 @@ Left=2900
 Top=750
 Field="play_list_id","play_list_id","*play_list_id","NOT NULL",0,"","",$FFFFFFFF,""
 Field="track_id","track_id","*track_id","NOT NULL",1,"","",$FFFFFFFF,""
+IndexInfo="",0,"track_id",""
 Index==0,track_id
 EffectMode=None
 Color=$000000
 BkColor=$FFFFFF
 ModifiedDateTime=20250815112115
-Position="MAIN",2900,750
+Position="Main",2900,750
 ZOrder=11
 
 [Relation]
@@ -394,15 +400,19 @@ Field="phone","phone","*phone_number",,,"","",$FFFFFFFF,""
 Field="fax","fax","*phone_number",,,"","",$FFFFFFFF,""
 Field="email","email","*email_address","NOT NULL",,"","",$FFFFFFFF,""
 Field="support_rep_id","support_rep_id","*employee_id",,,"","",$FFFFFFFF,""
+IndexInfo="",0,"first_name",""
 Index==0,first_name
+IndexInfo="",0,"last_name",""
 Index==0,last_name
+IndexInfo="",0,"email",""
 Index==0,email
+IndexInfo="",0,"support_rep_id",""
 Index==0,support_rep_id
 EffectMode=None
 Color=$000000
 BkColor=$FFFFFF
 ModifiedDateTime=20250815111727
-Position="MAIN",100,1300
+Position="Main",100,1300
 ZOrder=14
 
 [Entity]
@@ -429,15 +439,19 @@ Field="postal_code","postal_code","*postal_code",,,"","",$FFFFFFFF,""
 Field="phone","phone","*phone_number",,,"","",$FFFFFFFF,""
 Field="fax","fax","*phone_number",,,"","",$FFFFFFFF,""
 Field="email","email","*email_address","NOT NULL",,"","",$FFFFFFFF,""
+IndexInfo="",0,"last_name",""
 Index==0,last_name
+IndexInfo="",0,"first_name",""
 Index==0,first_name
+IndexInfo="",0,"email",""
 Index==0,email
+IndexInfo="",0,"reports_to",""
 Index==0,reports_to
 EffectMode=None
 Color=$000000
 BkColor=$FFFFFF
 ModifiedDateTime=20250815111921
-Position="MAIN",1000,1550
+Position="Main",1000,1550
 ZOrder=15
 
 [Relation]
@@ -502,13 +516,15 @@ Field="billing_state","billing_state","*state",,,"","",$FFFFFFFF,""
 Field="billing_country","billing_country","*country",,,"","",$FFFFFFFF,""
 Field="billing_postal_code","billing_postal_code","*postal_code",,,"","",$FFFFFFFF,""
 Field="total","total","@INT","NOT NULL",,"","",$FFFFFFFF,""
+IndexInfo="",0,"customer_id",""
 Index==0,customer_id
+IndexInfo="",0,"invoice_date",""
 Index==0,invoice_date
 EffectMode=None
 Color=$000000
 BkColor=$FFFFFF
 ModifiedDateTime=20250815105916
-Position="MAIN",1800,1200
+Position="Main",1800,1200
 ZOrder=18
 
 [Entity]
@@ -525,13 +541,15 @@ Field="invoice_id","invoice_id","*invoice_id","NOT NULL",,"","",$FFFFFFFF,""
 Field="track_id","track_id","*track_id","NOT NULL",,"","",$FFFFFFFF,""
 Field="unit_price","unit_price","*unit_price","NOT NULL",,"","",$FFFFFFFF,""
 Field="quantity","quantity","@INT","NOT NULL",,"","",$FFFFFFFF,""
+IndexInfo="",0,"invoice_id",""
 Index==0,invoice_id
+IndexInfo="",0,"track_id",""
 Index==0,track_id
 EffectMode=None
 Color=$000000
 BkColor=$FFFFFF
 ModifiedDateTime=20250815110304
-Position="MAIN",2900,1300
+Position="Main",2900,1300
 ZOrder=19
 
 [Relation]
@@ -599,3 +617,31 @@ Bar3=69
 TermPos1=R
 TermPos2=R
 ZOrder=22
+
+[View]
+PName=album_view
+LName=album_view
+Comment=
+Query=select \n  tbl_1.artist_id,\n  tbl_1.name as artist_name,\n  tbl_2.album_id,\n  tbl_2.title as album_title\nfrom\n  artist tbl_1\n  inner join album tbl_2\n    on \n    tbl_2.artist_id = tbl_1.artist_id
+LNameByComment=1
+Color=$000000
+BkColor=$FFFFFF
+Position="View",300,700
+ZOrder=23
+Page=View
+Left=300
+Top=700
+
+[View]
+PName=track_view
+LName=track_view
+Comment=
+Query=select \n  tbl_1.artist_id,\n  tbl_1.artist_name,\n  tbl_1.album_id,\n  tbl_1.album_title,\n  tbl_2.track_id,\n  tbl_2.name as track_name,\n  tbl_2.media_type_id,\n  tbl_3.name as media_type_name,\n  tbl_2.genre_id,\n  tbl_4.name as genre_name,\n  tbl_2.composer,\n  tbl_2.milliseconds,\n  tbl_2.bytes,\n  tbl_2.unit_price\nfrom\n  album_view tbl_1\n  inner join track tbl_2\n    on \n    tbl_2.album_id = tbl_1.album_id\n  inner join media_type tbl_3\n    on \n    tbl_3.media_type_id = tbl_2.media_type_id\n  inner join genre tbl_4\n    on\n    tbl_4.genre_id = tbl_2.genre_id
+LNameByComment=1
+Color=$000000
+BkColor=$FFFFFF
+Position="View",800,700
+ZOrder=24
+Page=View
+Left=800
+Top=700
