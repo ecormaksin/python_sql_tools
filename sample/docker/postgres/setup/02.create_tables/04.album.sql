@@ -29,7 +29,7 @@ CREATE TABLE album.track (
   , unit_price numeric(9, 2) NOT NULL
   , CONSTRAINT track_PKC PRIMARY KEY (track_id)
   , CONSTRAINT track_FK1 FOREIGN KEY (album_id)
-    REFERENCES album (album_id)
+    REFERENCES album.album (album_id)
     ON DELETE CASCADE
     ON UPDATE NO ACTION
   , CONSTRAINT track_FK2 FOREIGN KEY (media_type_id)
