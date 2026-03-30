@@ -31,6 +31,10 @@ CREATE TABLE track (
     REFERENCES media_type.media_type (media_type_id)
     ON DELETE RESTRICT
     ON UPDATE NO ACTION
+  , CONSTRAINT track_FK3 FOREIGN KEY (genre_id)
+    REFERENCES genre.genre (genre_id)
+    ON DELETE RESTRICT
+    ON UPDATE NO ACTION
 ) COMMENT 'track' ;
 
 CREATE INDEX track_IX1
