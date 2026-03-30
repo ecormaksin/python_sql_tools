@@ -1,6 +1,6 @@
 from sqlalchemy import Engine
 
-from tests.shared_code.infra.database.sqlalchemy.orm.entity.album import (
+from tests.shared_code.infra.database.sqlalchemy.orm.entity.album.album import (
     Album,  # noqa: F401
 )
 from tests.shared_code.infra.database.sqlalchemy.orm.entity.artist import (
