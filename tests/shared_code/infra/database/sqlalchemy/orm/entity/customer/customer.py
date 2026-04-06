@@ -4,7 +4,7 @@ from typing import Optional
 from sqlalchemy import Date, ForeignKey, Index, String
 from sqlalchemy.orm import Mapped, mapped_column
 
-from .base import Base
+from tests.shared_code.infra.database.sqlalchemy.orm.entity.base import Base
 
 
 class Customer(Base):

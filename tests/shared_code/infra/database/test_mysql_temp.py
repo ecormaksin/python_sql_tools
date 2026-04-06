@@ -6,7 +6,7 @@ from tests.shared_code.infra.database.sqlalchemy.orm.entity_creator import Entit
 
 class TestClass:
     def test(self):
-        with MySqlContainer("mysql:9.5.0-oraclelinux9") as db_container:
+        with MySqlContainer() as db_container:
             url = db_container.get_connection_url()
             print(url) # mysql://test:test@localhost:32769/test
 

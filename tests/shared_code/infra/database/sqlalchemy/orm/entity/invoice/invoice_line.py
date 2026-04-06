@@ -1,7 +1,7 @@
 from sqlalchemy import DECIMAL, ForeignKey, Index, Integer
 from sqlalchemy.orm import Mapped, mapped_column
 
-from .base import Base
+from tests.shared_code.infra.database.sqlalchemy.orm.entity.base import Base
 
 
 class InvoiceLine(Base):
