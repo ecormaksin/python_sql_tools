@@ -9,5 +9,5 @@ from tests.shared_code.infra.database.sqlalchemy.orm.entity.invoice.invoice_line
 )
 
 
-class GenreDbEntityCreator(AbstractDbEntityCreator):
+class InvoiceDbEntityCreator(AbstractDbEntityCreator):
     pass
