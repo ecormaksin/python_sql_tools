@@ -3,10 +3,12 @@ from typing import Optional
 from sqlalchemy import DECIMAL, ForeignKey, Index, Integer, String
 from sqlalchemy.orm import Mapped, mapped_column
 
-from tests.shared_code.infra.database.sqlalchemy.orm.entity.base import Base
+from tests.shared_code.infra.database.sqlalchemy.orm.entity.album.album_db_base import (
+    AlbumDbBase,
+)
 
 
-class Track(Base):
+class Track(AlbumDbBase):
     __tablename__ = "track"
 
     track_id: Mapped[int] = mapped_column(primary_key=True)

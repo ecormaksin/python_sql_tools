@@ -1,10 +1,12 @@
 from sqlalchemy import String
 from sqlalchemy.orm import Mapped, mapped_column
 
-from tests.shared_code.infra.database.sqlalchemy.orm.entity.base import Base
+from tests.shared_code.infra.database.sqlalchemy.orm.entity.artist.artist_db_base import (
+    ArtistDbBase,
+)
 
 
-class Artist(Base):
+class Artist(ArtistDbBase):
     __tablename__ = "artist"
 
     artist_id: Mapped[int] = mapped_column(primary_key=True)

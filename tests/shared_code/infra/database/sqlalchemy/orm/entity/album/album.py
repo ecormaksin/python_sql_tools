@@ -1,10 +1,12 @@
 from sqlalchemy import ForeignKey, Index, String
 from sqlalchemy.orm import Mapped, mapped_column
 
-from tests.shared_code.infra.database.sqlalchemy.orm.entity.base import Base
+from tests.shared_code.infra.database.sqlalchemy.orm.entity.album.album_db_base import (
+    AlbumDbBase,
+)
 
 
-class Album(Base):
+class Album(AlbumDbBase):
     __tablename__ = "album"
 
     album_id: Mapped[int] = mapped_column(primary_key=True)

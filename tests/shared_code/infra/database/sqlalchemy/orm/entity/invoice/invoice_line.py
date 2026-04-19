@@ -1,10 +1,12 @@
 from sqlalchemy import DECIMAL, ForeignKey, Index, Integer
 from sqlalchemy.orm import Mapped, mapped_column
 
-from tests.shared_code.infra.database.sqlalchemy.orm.entity.base import Base
+from tests.shared_code.infra.database.sqlalchemy.orm.entity.invoice.invoice_db_base import (
+    InvoiceDbBase,
+)
 
 
-class InvoiceLine(Base):
+class InvoiceLine(InvoiceDbBase):
     __tablename__ = "invoice_line"
 
     invoice_line_id: Mapped[int] = mapped_column(primary_key=True)

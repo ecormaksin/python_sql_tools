@@ -1,10 +1,12 @@
 from sqlalchemy import ForeignKey, Index, String
 from sqlalchemy.orm import Mapped, mapped_column
 
-from tests.shared_code.infra.database.sqlalchemy.orm.entity.base import Base
+from tests.shared_code.infra.database.sqlalchemy.orm.entity.play_list.play_list_db_base import (
+    PlayListDbBase,
+)
 
 
-class PlayListTrack(Base):
+class PlayListTrack(PlayListDbBase):
     __tablename__ = "playlist_track"
 
     play_list_id = mapped_column(ForeignKey("play_list.play_list_id"), primary_key=True)

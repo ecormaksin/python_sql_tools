@@ -4,10 +4,12 @@ from typing import Optional
 from sqlalchemy import Date, ForeignKey, Index, String
 from sqlalchemy.orm import Mapped, mapped_column
 
-from tests.shared_code.infra.database.sqlalchemy.orm.entity.base import Base
+from tests.shared_code.infra.database.sqlalchemy.orm.entity.employee.employee_db_base import (
+    EmployeeDbBase,
+)
 
 
-class Employee(Base):
+class Employee(EmployeeDbBase):
     __tablename__ = "employee"
 
     employee_id: Mapped[int] = mapped_column(primary_key=True)

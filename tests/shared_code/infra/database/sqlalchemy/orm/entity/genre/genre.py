@@ -1,10 +1,12 @@
 from sqlalchemy import String
 from sqlalchemy.orm import Mapped, mapped_column
 
-from tests.shared_code.infra.database.sqlalchemy.orm.entity.base import Base
+from tests.shared_code.infra.database.sqlalchemy.orm.entity.genre.genre_db_base import (
+    GenreDbBase,
+)
 
 
-class Genre(Base):
+class Genre(GenreDbBase):
     __tablename__ = "genre"
 
     genre_id: Mapped[int] = mapped_column(primary_key=True)

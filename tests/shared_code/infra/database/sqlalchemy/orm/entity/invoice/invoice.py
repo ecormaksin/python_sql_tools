@@ -4,10 +4,12 @@ from typing import Optional
 from sqlalchemy import Date, ForeignKey, Index, Integer, String
 from sqlalchemy.orm import Mapped, mapped_column
 
-from tests.shared_code.infra.database.sqlalchemy.orm.entity.base import Base
+from tests.shared_code.infra.database.sqlalchemy.orm.entity.invoice.invoice_db_base import (
+    InvoiceDbBase,
+)
 
 
-class Invoice(Base):
+class Invoice(InvoiceDbBase):
     __tablename__ = "invoice"
 
     invoice_id: Mapped[int] = mapped_column(primary_key=True)

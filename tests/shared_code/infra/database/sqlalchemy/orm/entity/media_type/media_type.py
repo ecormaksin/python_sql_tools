@@ -1,10 +1,12 @@
 from sqlalchemy import String
 from sqlalchemy.orm import Mapped, mapped_column
 
-from tests.shared_code.infra.database.sqlalchemy.orm.entity.base import Base
+from tests.shared_code.infra.database.sqlalchemy.orm.entity.media_type.media_type_db_base import (
+    MediaTypeDbBase,
+)
 
 
-class MediaType(Base):
+class MediaType(MediaTypeDbBase):
     __tablename__ = "media_type"
 
     media_type_id: Mapped[int] = mapped_column(primary_key=True)
