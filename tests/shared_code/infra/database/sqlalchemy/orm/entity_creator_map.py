@@ -31,7 +31,7 @@ from tests.shared_code.infra.database.sqlalchemy.orm.entity.play_list.play_list_
 
 class EntityCreatorMap:
     @classmethod
-    def get(cls) -> dict[str, Any]:
+    def get(cls) -> dict[str, AbstractDbEntityCreator]:
         return {
             "artist": ArtistDbEntityCreator,
             "genre": GenreDbEntityCreator,
