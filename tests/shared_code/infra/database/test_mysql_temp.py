@@ -1,17 +1,9 @@
-import dataclasses
-import re
 from typing import Optional
 
-from sqlalchemy import create_engine, text
-from sqlalchemy_utils import create_database, database_exists
 from testcontainers.mysql import MySqlContainer
 
 from shared_code.infra.database.mysql.mysql_sql_file_executor import MySQLFileExecutor
-from shared_code.infra.database.sql_splitter import SQLSplitter
 from tests.project_root_resolver import ProjectRootResolver
-from tests.shared_code.infra.database.sqlalchemy.orm.entity_creator_map import (
-    EntityCreatorMap,
-)
 
 from pathlib import Path
 from mysql.connector import connect

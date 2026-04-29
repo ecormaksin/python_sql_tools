@@ -1,0 +1,1 @@
+CREATE SCHEMA play_list;
