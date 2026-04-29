@@ -6,6 +6,8 @@ from sqlalchemy import create_engine, text
 from sqlalchemy_utils import create_database, database_exists
 from testcontainers.mysql import MySqlContainer
 
+from shared_code.infra.database.mysql.mysql_sql_file_executor import MySQLFileExecutor
+from shared_code.infra.database.sql_splitter import SQLSplitter
 from tests.project_root_resolver import ProjectRootResolver
 from tests.shared_code.infra.database.sqlalchemy.orm.entity_creator_map import (
     EntityCreatorMap,
@@ -86,6 +88,7 @@ class TestClass:
 
             for index, ctrl_entity in enumerate(DDLFileNameControlEntityList.get(), start=1):
                 schema_name = ctrl_entity.schema_name
+                print("")
                 print(f"====={schema_name}")
 
                 with test_db_conn.cursor(buffered=True, dictionary=True) as test_db_cursor:
@@ -102,25 +105,41 @@ class TestClass:
 
                     ddl_file_name = ctrl_entity.get_file_name(serial_number=index)
 
-                    if len(schema_names_result):
-                        print(f"データベース「{schema_name}」は存在しています。")
-                    else:
-                        print(f"データベース「{schema_name}」は存在していません。")
-
+                    if not len(schema_names_result):
                         schema_ddl_file = schema_ddl_dir.joinpath(ddl_file_name)
-                        with open(schema_ddl_file) as f:
-                            ddl = f.read()
-                            test_db_cursor.execute(ddl)
+                        MySQLFileExecutor.execute(file_path=schema_ddl_file, db_cursor=test_db_cursor)
 
                     db_config_dict = dict(test_db_config_dict)
                     db_config_dict["database"] = schema_name
                     db_conn = connect(**db_config_dict)
 
                     with db_conn.cursor(buffered=True, dictionary=True) as db_cursor:
-
                         table_ddl_file = table_ddl_dir.joinpath(ddl_file_name)
-                        with open(table_ddl_file) as f:
-                            file_content = f.read()
-                            ddl_list = re.split(r"[; ]+(?:\r?\n)*", file_content)
-                            for ddl in ddl_list:
-                                db_cursor.execute(ddl)
+                        MySQLFileExecutor.execute(file_path=table_ddl_file, db_cursor=db_cursor)
+
+                        if ctrl_entity.view:
+                            view_ddl_file_name = ctrl_entity.get_view_file_name()
+                            view_ddl_file = view_ddl_dir.joinpath(view_ddl_file_name)
+                            MySQLFileExecutor.execute(file_path=view_ddl_file, db_cursor=db_cursor)
+
+                        query = """
+                        SELECT 
+                            TABLE_NAME as table_name,
+                            TABLE_TYPE as table_type
+                        FROM 
+                            information_schema.TABLES
+                        where 
+                            TABLE_SCHEMA = %(schema_name)s
+                        order by 
+                            case 
+                                when TABLE_TYPE = 'BASE TABLE' then 1
+                                when TABLE_TYPE = 'VIEW' then 2
+                                else 3
+                            end,
+                            TABLE_NAME
+                        """
+
+                        db_cursor.execute(query, {"schema_name": schema_name})
+                        rows = db_cursor.fetchall()
+                        for row in rows:
+                            print(str(row["table_type"]) + " " + str(row["table_name"]))
