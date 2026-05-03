@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <diagram version="1" name="postgres.erd">
 	<entities>
-		<data-source id="postgres-jdbc-19c47a460f7-44e6a85b928723f4">
-			<entity id="1" name="artist" fq-name="artist.artist" order="0" font="Segoe UI:9:0" x="648" y="130">
+		<data-source id="postgres-jdbc-19dd9221cb7-6a984dfc0a83c672">
+			<entity id="1" name="artist" fq-name="artist.artist" order="0" font="Segoe UI:9:0" x="648" y="74">
 				<path name="artist"/>
 				<path name="postgres"/>
 			</entity>
-			<entity id="2" name="genre" fq-name="genre.genre" order="1" color-bg="204,192,184" font="Segoe UI:9:0" x="40" y="619">
+			<entity id="2" name="genre" fq-name="genre.genre" order="1" color-bg="204,192,184" font="Segoe UI:9:0" x="453" y="228">
 				<path name="genre"/>
 				<path name="postgres"/>
 			</entity>
-			<entity id="3" name="media_type" fq-name="media_type.media_type" order="2" color-bg="228,255,181" font="Segoe UI:9:0" x="453" y="284">
+			<entity id="3" name="media_type" fq-name="media_type.media_type" order="2" color-bg="228,255,181" font="Segoe UI:9:0" x="453" y="372">
 				<path name="media_type"/>
 				<path name="postgres"/>
 			</entity>
-			<entity id="4" name="album" fq-name="album.album" order="3" color-bg="255,255,255" font="Segoe UI:9:0" x="453" y="120">
+			<entity id="4" name="album" fq-name="album.album" order="3" color-bg="255,255,255" font="Segoe UI:9:0" x="453" y="64">
 				<path name="album"/>
 				<path name="postgres"/>
 			</entity>
@@ -30,11 +30,11 @@
 				<path name="play_list"/>
 				<path name="postgres"/>
 			</entity>
-			<entity id="8" name="employee" fq-name="employee.employee" order="7" color-bg="248,214,205" font="Segoe UI:9:0" x="648" y="408">
+			<entity id="8" name="employee" fq-name="employee.employee" order="7" color-bg="248,214,205" font="Segoe UI:9:0" x="648" y="496">
 				<path name="employee"/>
 				<path name="postgres"/>
 			</entity>
-			<entity id="9" name="customer" fq-name="customer.customer" order="8" color-bg="251,216,166" font="Segoe UI:9:0" x="453" y="428">
+			<entity id="9" name="customer" fq-name="customer.customer" order="8" color-bg="251,216,166" font="Segoe UI:9:0" x="453" y="516">
 				<path name="customer"/>
 				<path name="postgres"/>
 			</entity>
@@ -50,16 +50,17 @@
 	</entities>
 	<relations>
 		<relation name="album_fk1" fq-name="album.album.album_fk1" type="fk" pk-ref="1" fk-ref="4"/>
+		<relation name="track_fk3" fq-name="album.track.track_fk3" type="fk" pk-ref="2" fk-ref="5"/>
 		<relation name="track_fk2" fq-name="album.track.track_fk2" type="fk" pk-ref="3" fk-ref="5"/>
 		<relation name="track_fk1" fq-name="album.track.track_fk1" type="fk" pk-ref="4" fk-ref="5"/>
 		<relation name="playlist_track_fk2" fq-name="play_list.playlist_track.playlist_track_fk2" type="fk" pk-ref="5" fk-ref="7"/>
 		<relation name="invoice_line_fk2" fq-name="invoice.invoice_line.invoice_line_fk2" type="fk" pk-ref="5" fk-ref="11"/>
 		<relation name="playlist_track_fk1" fq-name="play_list.playlist_track.playlist_track_fk1" type="fk" pk-ref="6" fk-ref="7"/>
 		<relation name="employee_fk1" fq-name="employee.employee.employee_fk1" type="fk" pk-ref="8" fk-ref="8">
-			<bend type="rel" x="793" y="604"/>
-			<bend type="rel" x="822" y="589"/>
-			<bend type="rel" x="822" y="560"/>
-			<bend type="rel" x="793" y="546"/>
+			<bend type="rel" x="793" y="692"/>
+			<bend type="rel" x="822" y="677"/>
+			<bend type="rel" x="822" y="648"/>
+			<bend type="rel" x="793" y="634"/>
 		</relation>
 		<relation name="customer_fk1" fq-name="customer.customer.customer_fk1" type="fk" pk-ref="8" fk-ref="9"/>
 		<relation name="invoice_fk1" fq-name="invoice.invoice.invoice_fk1" type="fk" pk-ref="9" fk-ref="10"/>

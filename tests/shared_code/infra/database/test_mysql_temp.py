@@ -1,24 +1,30 @@
-from typing import Optional
+import logging
+import re
+from pathlib import Path
 
+from sqlalchemy import create_engine, text
+from sqlalchemy_utils import database_exists
 from testcontainers.mysql import MySqlContainer
 
-from shared_code.infra.database.mysql.mysql_sql_file_executor import MySQLFileExecutor
+from shared_code.infra.database.sqlalchemy_sql_file_executor import SQLAlchemySQLFileExecutor
 from tests.project_root_resolver import ProjectRootResolver
-
-from pathlib import Path
-from mysql.connector import connect
-
 from tests.shared_code.infra.database.ddl_file_name_control_entity import DDLFileNameControlEntityList
+from tests.shared_code.infra.database.rdbms_type_for_test import RDBMSTypeForTest
 
 
 class TestClass:
-    USER_NAME = "root"
-    ROOT_PASSWORD = "test"
-
     def test(self):
+        logger = logging.getLogger(__name__)
+        ch = logging.StreamHandler()
+        ch.setLevel(logging.INFO)
+        logger.addHandler(ch)
+
         project_root = ProjectRootResolver.execute(Path(__file__).resolve())
 
-        common_relative_dirs = ["sample", "docker", "mysql", "setup"]
+        rdbms_type_for_test = RDBMSTypeForTest.MYSQL
+        rdbms_type = rdbms_type_for_test.rdbms_type
+
+        common_relative_dirs = ["sample", "docker", rdbms_type.key, "setup"]
 
         schema_ddl_relative_dirs = list(common_relative_dirs)
         schema_ddl_relative_dirs.append("01.create_databases")
@@ -33,73 +39,41 @@ class TestClass:
         view_ddl_dir = project_root.joinpath(*view_ddl_relative_dirs)
 
         with MySqlContainer(
-            image="mysql:9.5.0-oraclelinux9", username=TestClass.USER_NAME, root_password=TestClass.ROOT_PASSWORD
+                image="mysql:9.5.0-oraclelinux9", username=rdbms_type_for_test.root_username,
+                root_password=rdbms_type_for_test.root_password
         ) as db_container:
-            original_url = db_container.get_connection_url()
+            test_db_url = db_container.get_connection_url()
+            logger.info(test_db_url)  # mysql://test:test@localhost:32769/test
+            test_db_scheme_replaced_url = rdbms_type.replace_scheme(url=test_db_url)
 
-            test_db_config_dict = {
-                "host": "localhost",
-                "user": TestClass.USER_NAME,
-                "password": TestClass.ROOT_PASSWORD,
-                "port": db_container.get_exposed_port(3306),
-                "database": db_container.dbname,
-            }
-            test_db_conn = connect(**test_db_config_dict)
-
-            for index, ctrl_entity in enumerate(DDLFileNameControlEntityList.get(), start=1):
+            for serial_number, ctrl_entity in enumerate(DDLFileNameControlEntityList.get(), start=1):
                 schema_name = ctrl_entity.schema_name
-                print("")
-                print(f"====={schema_name}")
+                logger.info("")
+                logger.info(f"====={schema_name}")
 
-                with test_db_conn.cursor(buffered=True, dictionary=True) as test_db_cursor:
-                    query = """
-                    select 
-                      SCHEMA_NAME as schema_name
-                    from 
-                      INFORMATION_SCHEMA.SCHEMATA
-                    where 
-                      SCHEMA_NAME = %(schema_name)s
-                    """
-                    test_db_cursor.execute(query, {"schema_name": schema_name})
-                    schema_names_result = test_db_cursor.fetchall()
+                ddl_file_name = ctrl_entity.get_file_name(serial_number=serial_number)
 
-                    ddl_file_name = ctrl_entity.get_file_name(serial_number=index)
+                url = re.sub("/test$", f"/{schema_name}", test_db_url)
+                scheme_replaced_url = rdbms_type.replace_scheme(url=url)
 
-                    if not len(schema_names_result):
+                if not database_exists(scheme_replaced_url):
+                    original_db_engine = create_engine(test_db_scheme_replaced_url)
+                    with original_db_engine.connect() as connection:
                         schema_ddl_file = schema_ddl_dir.joinpath(ddl_file_name)
-                        MySQLFileExecutor.execute(file_path=schema_ddl_file, db_cursor=test_db_cursor)
+                        SQLAlchemySQLFileExecutor.execute(file_path=schema_ddl_file, connection=connection)
 
-                    db_config_dict = dict(test_db_config_dict)
-                    db_config_dict["database"] = schema_name
-                    db_conn = connect(**db_config_dict)
+                engine = create_engine(scheme_replaced_url)
 
-                    with db_conn.cursor(buffered=True, dictionary=True) as db_cursor:
-                        table_ddl_file = table_ddl_dir.joinpath(ddl_file_name)
-                        MySQLFileExecutor.execute(file_path=table_ddl_file, db_cursor=db_cursor)
+                with engine.connect() as connection:
+                    table_ddl_file = table_ddl_dir.joinpath(ddl_file_name)
+                    SQLAlchemySQLFileExecutor.execute(file_path=table_ddl_file, connection=connection)
 
-                        if ctrl_entity.view:
-                            view_ddl_file_name = ctrl_entity.get_view_file_name()
-                            view_ddl_file = view_ddl_dir.joinpath(view_ddl_file_name)
-                            MySQLFileExecutor.execute(file_path=view_ddl_file, db_cursor=db_cursor)
+                    if ctrl_entity.view:
+                        view_ddl_file_name = ctrl_entity.get_view_file_name()
+                        view_ddl_file = view_ddl_dir.joinpath(view_ddl_file_name)
+                        SQLAlchemySQLFileExecutor.execute(file_path=view_ddl_file, connection=connection)
 
-                        query = """
-                        SELECT 
-                            TABLE_NAME as table_name,
-                            TABLE_TYPE as table_type
-                        FROM 
-                            information_schema.TABLES
-                        where 
-                            TABLE_SCHEMA = %(schema_name)s
-                        order by 
-                            case 
-                                when TABLE_TYPE = 'BASE TABLE' then 1
-                                when TABLE_TYPE = 'VIEW' then 2
-                                else 3
-                            end,
-                            TABLE_NAME
-                        """
-
-                        db_cursor.execute(query, {"schema_name": schema_name})
-                        rows = db_cursor.fetchall()
-                        for row in rows:
-                            print(str(row["table_type"]) + " " + str(row["table_name"]))
+                    query = rdbms_type_for_test.entities_get_query
+                    result = connection.execute(text(query), {"schema_name": schema_name})
+                    for row in result:
+                        logger.info(f"{row.table_type}: {row.table_name}")
