@@ -1,19 +1,10 @@
-from sqlalchemy import create_engine, text
-from testcontainers.postgres import PostgresContainer
+from shared_code.infra.database.rdbms_type import RDBMSType
+from tests.shared_code.infra.database.db_container_for_test import DbContainerForTest
 
 
 class TestClass:
     def test(self):
-        with PostgresContainer("postgres:18.1") as db_container:
-            url = db_container.get_connection_url()
-            print(url)  # postgresql+psycopg2://test:test@127.0.0.1:<port>>/test
+        rdbms_type = RDBMSType.POSTGRES
 
-            engine = create_engine(url, echo=True)
-
-            with engine.connect() as connection:
-                result = connection.execute(
-                    text(
-                        "SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'public'"
-                    )
-                )
-                print(result.all())
+        with DbContainerForTest(rdbms_type=rdbms_type) as test_container:
+            print("test")
